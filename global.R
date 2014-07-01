@@ -10,3 +10,10 @@ if (require(tRakt)){
 
 library(shiny)
 library(ggvis)
+
+## Set API key ##
+if (!file.exists("key.json")){
+  stop("Place your key.json in the root of this directory")
+} else {
+  options(trakt.apikey = jsonlite::fromJSON("key.json")$apikey)
+}

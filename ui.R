@@ -5,11 +5,12 @@ shinyUI(fluidPage(pageWithSidebar(
   
   sidebarPanel(
     h2("Show selection"),
-    textInput(inputId = "show.query", label = "Show name", value = NULL),
-    actionButton(inputId = "get.show", label = "Get data")),
+    textInput(inputId = "show.query", label = "Show name", value = "FLCL"),
+    actionButton(inputId = "get.show", label = "Get data")
+    ),
   
   mainPanel(
-    uiOutput("ggvis_ui"),
+    textOutput("debug.show.name"),
     ggvisOutput("ggvis")
     )
 )))
