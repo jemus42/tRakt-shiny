@@ -27,7 +27,7 @@ shinyServer(function(input, output, sessions){
     add_axis("x", title = "Airdate") %>%
     add_axis("y", title = "Rating") %>%
     add_legend("fill", title = "Season") %>%
-    add_tooltip(function(data){paste0("Rating: ", data$rating)}, "hover") %>% 
+    add_tooltip(all_values, "click") %>% 
     bind_shiny(plot_id = "ggvis")
   })
 })

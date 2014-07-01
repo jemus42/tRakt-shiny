@@ -17,3 +17,9 @@ if (!file.exists("key.json")){
 } else {
   options(trakt.apikey = jsonlite::fromJSON("key.json")$apikey)
 }
+
+#### Helper functions ####
+all_values <- function(x) {
+  if(is.null(x)) return(NULL)
+  paste0(names(x), ": ", format(x), collapse = "<br />")
+}
