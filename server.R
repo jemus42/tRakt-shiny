@@ -1,3 +1,6 @@
 #### Shiny Server ####
 
-shinyServer()
+shinyServer(function(input, output, sessions){
+  
+  # %>% bind_shiny("ggvis", "ggvis_ui")
+})
