@@ -2,13 +2,13 @@
 
 shinyServer(function(input, output, sessions){
   output$debug.show.name <- renderText({
-    if (input$get.show){
-      show <- trakt.search(input$show.query)
-      return(show$title)
-    }
+    if (input$get.show == 0){return(NULL)}
+    show <- trakt.search(input$show.query)
+    return(show$title)
   })
   
   show.episodes <- reactive({
+    if (input$get.show == 0){return(NULL)}
     show          <- trakt.search(input$show.query)
     show.summary  <- trakt.show.summary(show$tvdb_id)
     show.stats    <- trakt.show.stats(show$tvdb_id)
@@ -18,6 +18,7 @@ shinyServer(function(input, output, sessions){
   })
   
   observe({
+    if (input$get.show == 0){return(NULL)}
     show.episodes() %>% 
     ggvis(x = ~firstaired.posix, 
           y = ~rating, 
@@ -27,6 +28,6 @@ shinyServer(function(input, output, sessions){
     add_axis("y", title = "Rating") %>%
     add_legend("fill", title = "Season") %>%
     add_tooltip(function(data){paste0("Rating: ", data$rating)}, "hover") %>% 
-    bind_shiny("ggvis")
+    bind_shiny(plot_id = "ggvis")
   })
 })

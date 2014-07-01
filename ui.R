@@ -11,6 +11,6 @@ shinyUI(fluidPage(pageWithSidebar(
   
   mainPanel(
     textOutput("debug.show.name"),
-    ggvisOutput("ggvis")
+    ggvisOutput(plot_id = "ggvis")
     )
 )))

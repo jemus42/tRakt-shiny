@@ -4,7 +4,8 @@ tRakt-shiny
 This is `tRakt-shiny` (dummy name) version <del>`0.0.0` ([semver](http://semver.org))</del> (soon)  
 
 Using trakt to graph show data and whatevs.  
-To run it, use `shiny::runGitHub("jemus42/tRakt-shiny")`
+To run it, use `shiny::runGitHub(username = "jemus42", repo = "tRakt-shiny")`.  
+Note that this only works with a `key.json` file containing your trakt.tv API key. Whoopsie.
 
 ## Dependencies
 * [shiny](http://shiny.rstudio.com)
