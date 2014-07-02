@@ -26,11 +26,11 @@ shinyServer(function(input, output, sessions){
           y = ~rating, 
           fill = ~season,
           key := ~id) %>% 
-    layer_points() %>%
+    layer_points(size.hover := 200) %>%
     add_axis("x", title = "Airdate") %>%
     add_axis("y", title = "Rating") %>%
     add_legend("fill", title = "Season") %>%
-    add_tooltip(all_values, "click") %>% 
+    add_tooltip(all_values, "hover") %>% 
     bind_shiny(plot_id = "ggvis")
   })
 })
