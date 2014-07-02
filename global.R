@@ -10,6 +10,7 @@ if (require(tRakt)){
 
 library(shiny)
 library(ggvis)
+library(rmarkdown)
 
 ## Set API key ##
 if (!file.exists("key.json")){
