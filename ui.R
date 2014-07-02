@@ -8,11 +8,11 @@ shinyUI(fluidPage(
     sidebarPanel(
       h2("Show selection"),
       textInput(inputId = "show.query", label = "Show name", value = "FLCL"),
-      actionButton(inputId = "get.show", label = "Get data")
+      actionButton(inputId = "get.show", label = "PLOTERIZZLE")
       ),
     
     mainPanel(
-      textOutput("debug.show.name"),
+      h2(htmlOutput("debug.show.name")),
       ggvisOutput(plot_id = "ggvis")
       )
   ),

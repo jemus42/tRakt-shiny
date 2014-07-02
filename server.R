@@ -4,9 +4,10 @@ shinyServer(function(input, output, sessions){
   output$debug.show.name <- renderText({
     if (input$get.show == 0){return(NULL)}
     show <- trakt.search(input$show.query)
-    return(show$title)
+    showurl <- paste0("<a href=", show$url, ">", show$title, "</a>", " (", show$year, ")")
+    return(showurl)
   })
-  
+    
   show.episodes <- reactive({
     if (input$get.show == 0){return(NULL)}
     show          <- trakt.search(input$show.query)
