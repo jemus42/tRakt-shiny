@@ -17,8 +17,8 @@ library(ggvis)
 if (!'ggplot2' %in% installed.packages()) install.packages("ggplot2", dependencies=TRUE)
 library(ggplot2)
 # "Warning in install.packages : package ‘rmarkdown’ is not available (for R version 3.1.0)"
-# if (!'rmarkdown' %in% installed.packages()) install.packages("rmarkdown", dependencies=TRUE)
-# library(rmarkdown)
+if (!'rmarkdown' %in% installed.packages()) install_github("rstudio/rmarkdown", dependencies=TRUE)
+library(rmarkdown)
 
 ## Set API key ##
 if (!file.exists("key.json")){
