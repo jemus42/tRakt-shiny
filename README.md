@@ -8,9 +8,10 @@ To run it, use `shiny::runGitHub(username = "jemus42", repo = "tRakt-shiny")`.
 Note that this only works with a `key.json` file containing your trakt.tv API key. Whoopsie.
 
 ## Dependencies
-* [shiny](http://shiny.rstudio.com)
 * The [tRakt](https://github.com/jemus42/tRakt-package)-package
+* [shiny](http://shiny.rstudio.com)
 * [ggvis](http://ggvis.rstudio.com)
+* [rmarkdown](http://rmarkdown.rstudio.com)
 
 ## What this should be soon:
 [graphtv.kevinformatics.com](http://graphtv.kevinformatics.com), but with more R, more [trakt.tv](http://trakt.tv), and such and such.
