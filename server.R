@@ -22,17 +22,13 @@ shinyServer(function(input, output, sessions){
     if (input$get.show == 0){return(NULL)}
     epdata <- transform(show.episodes(), id = paste0(epid, " - ", title))
     
-      if (input$btn.scale.x == "firstaired.posix"){
-        plot <- epdata %>% ggvis(x = ~firstaired.posix, y = ~rating, fill = ~season, key := ~id)
-      } else if (input$btn.scale.x == "epnum"){
-        plot <- epdata %>% ggvis(x = ~epnum, y = ~rating, fill = ~season, key := ~id)
-      }
-    
-    plot %>% layer_points(size.hover := 200) %>%
-    add_axis("x", title = "Airdate") %>%
-    add_axis("y", title = "Rating") %>%
-    add_legend("fill", title = "Season") %>%
-    add_tooltip(show_tooltip, "hover") %>% 
-    bind_shiny(plot_id = "ggvis")
+    epdata %>% 
+      ggvis(y = ~rating, fill = ~season, key := ~id) %>%
+      layer_points(prop("x", as.name(input$btn.scale.x)), size.hover := 200) %>%
+      add_axis("x", title = "Airdate") %>%
+      add_axis("y", title = "Rating") %>%
+      add_legend("fill", title = "Season") %>%
+      add_tooltip(show_tooltip, "hover") %>% 
+      bind_shiny(plot_id = "ggvis")
   })
 })
