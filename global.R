@@ -2,7 +2,8 @@
 # According to http://permalink.gmane.org/gmane.science.biology.informatics.conductor/28248
 # via http://stackoverflow.com/questions/3548090/facet-grid-problem-input-string-1-is-invalid-in-this-locale
 # this fixes an error that wat'ed me right in the face.
-Sys.setlocale(locale="C") 
+# Revert via Sys.setlocale("LC_CTYPE", "en_US.UTF-8")
+# Sys.setlocale(locale="C")
 
 #### Loading libraries ####
 
@@ -19,6 +20,8 @@ library(ggplot2)
 # "Warning in install.packages : package ‘rmarkdown’ is not available (for R version 3.1.0)"
 if (!'rmarkdown' %in% installed.packages()) install_github("rstudio/rmarkdown", dependencies=TRUE)
 library(rmarkdown)
+if (!'shinyIncubator' %in% installed.packages()) install_github("rstudio/shiny-incubator", dependencies=TRUE)
+library(shinyIncubator)
 
 ## Set API key ##
 if (!file.exists("key.json")){

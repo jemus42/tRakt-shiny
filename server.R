@@ -2,7 +2,6 @@
 
 shinyServer(function(input, output, session){
   
-
   show.overview <- reactive({
     input$get.show
     if (input$get.show == 0){return(NULL)}
@@ -12,15 +11,26 @@ shinyServer(function(input, output, session){
     return(show)
   })
 
-  
   show.episodes <- reactive({
+    withProgress(session, min = 0, max = 5, {
     if (input$get.show == 0){return(NULL)}
-    show          <- show.overview()
-    #show.summary  <- trakt.show.summary(show$tvdb_id)
-    #show.stats    <- trakt.show.stats(show$tvdb_id)
-    show.seasons  <- trakt.getSeasons(show$tvdb_id)
-    show.episodes <- initializeEpisodes(show.seasons)
-    show.episodes <- trakt.getEpisodeData(show$tvdb_id, show.episodes)
+      setProgress(message = "Fetching data from Trakt.tv…",
+                  detail = "Getting general show information…",
+                  value = 1)
+      show          <- show.overview()
+      setProgress(detail = "Getting season data…",
+                  value = 2)
+      show.seasons  <- trakt.getSeasons(show$tvdb_id)
+      setProgress(detail = "Initializing episode dataset…",
+                  value = 3)
+      show.episodes <- initializeEpisodes(show.seasons)
+      setProgress(detail = "Getting episode data (this takes a while…)",
+                  value = 4)
+      show.episodes <- trakt.getEpisodeData(show$tvdb_id, show.episodes)
+      setProgress(detail = "Done!",
+                  value = 5)
+      return(show.episodes)
+    })
   })
   
   observe({
