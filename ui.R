@@ -3,7 +3,7 @@
 shinyUI(fluidPage(
   
   pageWithSidebar(
-    headerPanel(title = "tRakt v0.1.2"),
+    headerPanel(title = "tRakt v0.1.3"),
     
     sidebarPanel(
       h2("Show Selection"),

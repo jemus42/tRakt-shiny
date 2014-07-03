@@ -2,11 +2,16 @@
 
 shinyServer(function(input, output, session){
   
+
   show.overview <- reactive({
+    input$get.show
     if (input$get.show == 0){return(NULL)}
-    show <- trakt.search(input$show.query)
+    isolate({
+      show <- trakt.search(input$show.query)
+    })
     return(show)
   })
+
   
   show.episodes <- reactive({
     if (input$get.show == 0){return(NULL)}
