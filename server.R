@@ -30,7 +30,7 @@ shinyServer(function(input, output, sessions){
     add_axis("x", title = "Airdate") %>%
     add_axis("y", title = "Rating") %>%
     add_legend("fill", title = "Season") %>%
-    add_tooltip(all_values, "hover") %>% 
+    add_tooltip(show_tooltip, "hover") %>% 
     bind_shiny(plot_id = "ggvis")
   })
 })
