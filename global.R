@@ -35,6 +35,7 @@ show_tooltip <- function(show, idvars = NULL) {
   names(show) <- sub("rating", "Rating", names(show))
   names(show) <- sub("season", "Season", names(show))
   names(show) <- sub("id", "Title", names(show))
+  names(show) <- sub("epnum", "Episode Number", names(show))
   
   paste0("<strong>", names(show), "</strong>: ", format(show), collapse = "<br />")  
 }

@@ -7,8 +7,13 @@ shinyUI(fluidPage(
     
     sidebarPanel(
       h2("Show selection"),
-      textInput(inputId = "show.query", label = "Show name", value = "FLCL"),
-      actionButton(inputId = "get.show", label = "PLOTERIZZLE")
+      textInput(inputId = "show.query", label = "Enter the name of a show", value = "FLCL"),
+      actionButton(inputId = "get.show", label = "PLOTERIZZLE"),
+      h3("Plot options"),
+      radioButtons(inputId = "btn.scale.x", label = "x-axis scale",
+                   choices = c("Episode Number" = "epnum",
+                               "Airdate" = "firstaired.posix"),
+                   selected = "epnum")
       ),
     
     mainPanel(
