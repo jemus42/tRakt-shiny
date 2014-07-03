@@ -1,3 +1,9 @@
+#### Wat ####
+# According to http://permalink.gmane.org/gmane.science.biology.informatics.conductor/28248
+# via http://stackoverflow.com/questions/3548090/facet-grid-problem-input-string-1-is-invalid-in-this-locale
+# this fixes an error that wat'ed me right in the face.
+Sys.setlocale(locale="C") 
+
 #### Loading libraries ####
 
 if (!'devtools' %in% installed.packages()) install.packages("devtools", dependencies=TRUE)
@@ -20,6 +26,11 @@ if (!file.exists("key.json")){
 } else {
   options(trakt.apikey = jsonlite::fromJSON("key.json")$apikey)
 }
+
+#### Setting some values ####
+btn.scale.x.choices <- c("Total Episode Numbers" = "epnum",
+                         "Airdate"               = "firstaired.posix")
+
 
 #### Helper functions ####
 all_values <- function(x) {

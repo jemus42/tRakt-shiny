@@ -3,7 +3,7 @@
 shinyUI(fluidPage(
   
   pageWithSidebar(
-    headerPanel(title = "tRakt"),
+    headerPanel(title = "tRakt v0.1.3"),
     
     sidebarPanel(
       h2("Show Selection"),
@@ -11,13 +11,13 @@ shinyUI(fluidPage(
       actionButton(inputId = "get.show", label = "PLOTERIZZLE"),
       h3("Plot Options"),
       radioButtons(inputId = "btn.scale.x", label = "Scale: x-Axis",
-                   choices = c("Totoal Episode Numbers" = "epnum",
-                               "Airdate" = "firstaired.posix"),
+                   choices = btn.scale.x.choices,
                    selected = "epnum")
       ),
     
     mainPanel(
-      h2(htmlOutput("debug.show.name")),
+      h2(htmlOutput("show.name")),
+      textOutput("show.overview"),
       ggvisOutput(plot_id = "ggvis")
       )
   ),
