@@ -11,8 +11,7 @@ shinyUI(fluidPage(
       actionButton(inputId = "get.show", label = "PLOTERIZZLE"),
       h3("Plot Options"),
       radioButtons(inputId = "btn.scale.x", label = "Scale: x-Axis",
-                   choices = c("Totoal Episode Numbers" = "epnum",
-                               "Airdate" = "firstaired.posix"),
+                   choices = btn.scale.x.choices,
                    selected = "epnum")
       ),
     

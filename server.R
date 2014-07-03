@@ -1,6 +1,6 @@
 #### Shiny Server ####
 
-shinyServer(function(input, output, sessions){
+shinyServer(function(input, output, session){
   output$debug.show.name <- renderText({
     if (input$get.show == 0){return(NULL)}
     show <- trakt.search(input$show.query)
@@ -25,9 +25,9 @@ shinyServer(function(input, output, sessions){
     epdata %>% 
       ggvis(y = ~rating, fill = ~season, key := ~id) %>%
       layer_points(prop("x", as.name(input$btn.scale.x)), size.hover := 200) %>%
-      add_axis("x", title = "Airdate") %>%
+      add_axis("x", title = names(btn.scale.x.choices[btn.scale.x.choices == input$btn.scale.x])) %>%
       add_axis("y", title = "Rating") %>%
-      add_legend("fill", title = "Season") %>%
+      add_legend("fill", title = "Season", orient = "left") %>%
       add_tooltip(show_tooltip, "hover") %>% 
       bind_shiny(plot_id = "ggvis")
   })

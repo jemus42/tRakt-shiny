@@ -19,6 +19,11 @@ if (!file.exists("key.json")){
   options(trakt.apikey = jsonlite::fromJSON("key.json")$apikey)
 }
 
+#### Setting some values ####
+btn.scale.x.choices <- c("Total Episode Numbers" = "epnum",
+                         "Airdate"               = "firstaired.posix")
+
+
 #### Helper functions ####
 all_values <- function(x) {
   if(is.null(x)) return(NULL)
