@@ -1,16 +1,18 @@
 #### Loading libraries ####
 
-if (require(tRakt)){
-  message("tRakt package is installed")
-} else {
-  message("tRakt package not installed, doing so…")
-  library(devtools)
-  install_github("jemus42/tRakt-package")
-}
-
+if (!'devtools' %in% installed.packages()) install.packages("devtools", dependencies=TRUE)
+library(devtools)
+if (!'tRakt' %in% installed.packages()) install_github("jemus42/tRakt-package", dependencies=TRUE)
+library(tRakt)
+if (!'shiny' %in% installed.packages()) install.packages("shiny", dependencies=TRUE)
 library(shiny)
+if (!'ggvis' %in% installed.packages()) install.packages("ggvis", dependencies=TRUE)
 library(ggvis)
-library(rmarkdown)
+if (!'ggplot2' %in% installed.packages()) install.packages("ggplot2", dependencies=TRUE)
+library(ggplot2)
+# "Warning in install.packages : package ‘rmarkdown’ is not available (for R version 3.1.0)"
+# if (!'rmarkdown' %in% installed.packages()) install.packages("rmarkdown", dependencies=TRUE)
+# library(rmarkdown)
 
 ## Set API key ##
 if (!file.exists("key.json")){
@@ -39,4 +41,3 @@ show_tooltip <- function(show, idvars = NULL) {
   
   paste0("<strong>", names(show), "</strong>: ", format(show), collapse = "<br />")  
 }
-
