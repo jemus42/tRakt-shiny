@@ -11,9 +11,10 @@ shinyUI(fluidPage(
       textInput(inputId = "show.query", label = "Enter the name of a show", value = "Firefly"),
       actionButton(inputId = "get.show", label = "PLOTERIZZLE"),
       h3("Plot Options"),
-      radioButtons(inputId = "btn.scale.x", label = "Scale: x-Axis",
-                   choices = btn.scale.x.choices,
-                   selected = "epnum")
+      selectInput(inputId = "btn.scale.x", label = "Select timeline format:",
+                  choices = btn.scale.x.choices, selected = "epnum"),
+      selectInput(inputId = "btn.scale.y", label = "Select ratings range:",
+                  choices = btn.scale.y.choices)
       ),
     
     mainPanel(

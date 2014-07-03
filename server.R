@@ -40,6 +40,7 @@ shinyServer(function(input, output, session){
     epdata %>% 
       ggvis(y = ~rating, fill = ~season, key := ~id) %>%
       layer_points(prop("x", as.name(input$btn.scale.x)), size.hover := 200) %>%
+#      scale_numeric("y", parse(text = input$btn.scale.y)[[1]]) %>%
       add_axis("x", title = names(btn.scale.x.choices[btn.scale.x.choices == input$btn.scale.x])) %>%
       add_axis("y", title = "Rating") %>%
       add_legend("fill", title = "Season", orient = "left") %>%
