@@ -1,16 +1,16 @@
 #### Shiny Server ####
 
 shinyServer(function(input, output, session){
-  output$debug.show.name <- renderText({
+  
+  show.overview <- reactive({
     if (input$get.show == 0){return(NULL)}
     show <- trakt.search(input$show.query)
-    showurl <- paste0("<a href=", show$url, ">", show$title, "</a>", " (", show$year, ")")
-    return(showurl)
+    return(show)
   })
-    
+  
   show.episodes <- reactive({
     if (input$get.show == 0){return(NULL)}
-    show          <- trakt.search(input$show.query)
+    show          <- show.overview()
     #show.summary  <- trakt.show.summary(show$tvdb_id)
     #show.stats    <- trakt.show.stats(show$tvdb_id)
     show.seasons  <- trakt.getSeasons(show$tvdb_id)
@@ -30,5 +30,18 @@ shinyServer(function(input, output, session){
       add_legend("fill", title = "Season", orient = "left") %>%
       add_tooltip(show_tooltip, "hover") %>% 
       bind_shiny(plot_id = "ggvis")
+  })
+  #### Output Assignments ####
+  output$show.name <- renderText({
+    if (input$get.show == 0){return(NULL)}
+    show    <- show.overview()
+    showurl <- paste0("<a href=", show$url, ">", show$title, "</a>", " (", show$year, ")")
+    return(showurl)
+  })
+  
+  output$show.overview <- renderText({
+    if (input$get.show == 0){return(NULL)}
+    show <- show.overview()
+    return(show$overview)
   })
 })

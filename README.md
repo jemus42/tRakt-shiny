@@ -1,7 +1,7 @@
 tRakt-shiny
 ===========
 
-This is `tRakt-shiny` (dummy name) version `0.1.1` ([semver](http://semver.org)). 
+This is `tRakt-shiny` (dummy name) version `0.1.2` ([semver](http://semver.org)). 
 
 Using trakt to graph show data and whatevs.  
 To run it, use `shiny::runGitHub(username = "jemus42", repo = "tRakt-shiny")`.  

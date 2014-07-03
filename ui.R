@@ -3,7 +3,7 @@
 shinyUI(fluidPage(
   
   pageWithSidebar(
-    headerPanel(title = "tRakt v0.1.1"),
+    headerPanel(title = "tRakt v0.1.2"),
     
     sidebarPanel(
       h2("Show Selection"),
@@ -16,7 +16,8 @@ shinyUI(fluidPage(
       ),
     
     mainPanel(
-      h2(htmlOutput("debug.show.name")),
+      h2(htmlOutput("show.name")),
+      textOutput("show.overview"),
       ggvisOutput(plot_id = "ggvis")
       )
   ),
