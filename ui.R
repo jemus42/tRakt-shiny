@@ -6,12 +6,12 @@ shinyUI(fluidPage(
     headerPanel(title = "tRakt"),
     
     sidebarPanel(
-      h2("Show selection"),
+      h2("Show Selection"),
       textInput(inputId = "show.query", label = "Enter the name of a show", value = "FLCL"),
       actionButton(inputId = "get.show", label = "PLOTERIZZLE"),
-      h3("Plot options"),
-      radioButtons(inputId = "btn.scale.x", label = "x-axis scale",
-                   choices = c("Episode Number" = "epnum",
+      h3("Plot Options"),
+      radioButtons(inputId = "btn.scale.x", label = "Scale: x-Axis",
+                   choices = c("Totoal Episode Numbers" = "epnum",
                                "Airdate" = "firstaired.posix"),
                    selected = "epnum")
       ),
