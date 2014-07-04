@@ -13,8 +13,8 @@ shinyUI(fluidPage(
       h3("Plot Options"),
       selectInput(inputId = "btn.scale.x", label = "Select timeline format:",
                   choices = btn.scale.x.choices, selected = "epnum"),
-      selectInput(inputId = "btn.scale.y", label = "Select ratings range:",
-                  choices = btn.scale.y.choices)
+      checkboxInput(inputId = "btn.scale.y", label = "Scale Ratings 0 - 100%",
+                  value = FALSE)
       ),
     
     mainPanel(

@@ -33,9 +33,6 @@ if (!file.exists("key.json")){
 #### Setting some values ####
 btn.scale.x.choices <- c("Total Episode Numbers" = "epnum",
                          "Airdate"               = "firstaired.posix")
-btn.scale.y.choices <- c("Automatic"              = "domain = c(0, 100)",
-                         "Full range (0 - 100 %)" = "nice = FALSE")
-
 
 #### Helper functions ####
 all_values <- function(x) {

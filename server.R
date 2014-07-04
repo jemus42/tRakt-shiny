@@ -37,15 +37,16 @@ shinyServer(function(input, output, session){
     if (input$get.show == 0){return(NULL)}
     epdata <- transform(show.episodes(), id = paste0(epid, " - ", title))
     
-    epdata %>% 
-      ggvis(y = ~rating, fill = ~season, key := ~id) %>%
-      layer_points(prop("x", as.name(input$btn.scale.x)), size.hover := 200) %>%
-#      scale_numeric("y", parse(text = input$btn.scale.y)[[1]]) %>%
-      add_axis("x", title = names(btn.scale.x.choices[btn.scale.x.choices == input$btn.scale.x])) %>%
-      add_axis("y", title = "Rating") %>%
-      add_legend("fill", title = "Season", orient = "left") %>%
-      add_tooltip(show_tooltip, "hover") %>% 
-      bind_shiny(plot_id = "ggvis")
+    plot <- epdata %>% ggvis(y = ~rating, fill = ~season, key := ~id)
+    plot <- plot %>%  layer_points(prop("x", as.name(input$btn.scale.x)), size.hover := 200)
+    if (input$btn.scale.y == TRUE){
+      plot <- plot %>% scale_numeric("y", domain = c(0, 100))
+    }  
+    plot <- plot %>% add_axis("x", title = names(btn.scale.x.choices[btn.scale.x.choices == input$btn.scale.x]))
+    plot <- plot %>% add_axis("y", title = "Rating")
+    plot <- plot %>% add_legend("fill", title = "Season", orient = "left")
+    plot <- plot %>% add_tooltip(show_tooltip, "hover")
+    plot <- plot %>% bind_shiny(plot_id = "ggvis")
   })
   #### Output Assignments ####
   output$show.name <- renderText({
