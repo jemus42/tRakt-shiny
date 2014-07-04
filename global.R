@@ -24,10 +24,14 @@ if (!'shinyIncubator' %in% installed.packages()) install_github("rstudio/shiny-i
 library(shinyIncubator)
 
 ## Set API key ##
-if (!file.exists("key.json")){
-  stop("Place your key.json in the root of this directory")
-} else {
+if (file.exists("key.json")){
+  message("Reading API key from key.json")
   options(trakt.apikey = jsonlite::fromJSON("key.json")$apikey)
+} else if (file.exists("key.txt")){
+  message("Reading API key from key.json")
+  options(trakt.apikey = read.table("key.txt", stringsAsFactors = F)[1,1])
+} else {
+  stop("Place your key.json or key.txt in the root of this directory")
 }
 
 #### Setting some values ####
