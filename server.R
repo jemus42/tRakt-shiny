@@ -2,8 +2,9 @@
 
 shinyServer(function(input, output, session){
   
+  #### Data pulls ####
+  # Need to depend on actionButton, hence the isolate() ¯\_(ツ)_/¯
   show.overview <- reactive({
-    input$get.show
     if (input$get.show == 0){return(NULL)}
     isolate({
       show <- trakt.search(input$show.query)
@@ -33,6 +34,8 @@ shinyServer(function(input, output, session){
     })
   })
   
+  #### Actual plotting ####
+  # This is done in observe(), for some actionButton reactivity reason
   observe({
     if (input$get.show == 0){return(NULL)}
     epdata <- transform(show.episodes(), id = paste0(epid, " - ", title))
@@ -48,6 +51,7 @@ shinyServer(function(input, output, session){
     plot <- plot %>% add_tooltip(show_tooltip, "hover")
     plot <- plot %>% bind_shiny(plot_id = "ggvis")
   })
+  
   #### Output Assignments ####
   output$show.name <- renderText({
     if (input$get.show == 0){return(NULL)}
@@ -58,7 +62,8 @@ shinyServer(function(input, output, session){
   
   output$show.overview <- renderText({
     if (input$get.show == 0){return(NULL)}
-    show <- show.overview()
-    return(show$overview)
+    show     <- show.overview()
+    overview <- paste0("<div class='well'><p>", show$overview, '</p></div>')
+    return(overview)
   })
 })
