@@ -32,6 +32,7 @@ if (!file.exists("key.json")){
 
 #### Setting some values ####
 btn.scale.x.choices <- c("Total Episode Numbers" = "epnum",
+                         "Episodes per Season"   = "episode",
                          "Airdate"               = "firstaired.posix")
 
 #### Helper functions ####
