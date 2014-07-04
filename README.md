@@ -14,6 +14,7 @@ Maybe you'd rather look at [jemus42.shinyapps.io/tRakt](https://jemus42.shinyapp
 * [shiny](http://shiny.rstudio.com)
 * [ggvis](http://ggvis.rstudio.com)
 * [rmarkdown](http://rmarkdown.rstudio.com)
+* [shinyIncubator](https://github.com/rstudio/shiny-incubator)
 
 ## What this should be soon:
 [graphtv.kevinformatics.com](http://graphtv.kevinformatics.com), but with more R, more [trakt.tv](http://trakt.tv), and such and such.
