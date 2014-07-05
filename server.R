@@ -65,7 +65,9 @@ shinyServer(function(input, output, session){
     show           <- show.overview()
     banner         <- show$images$banner
     imageContainer <- tags$div(align = "center", tags$img(src = banner))
-    overview       <- wellPanel(imageContainer, p(show$overview))
-    return(overview)
+    overview       <- p(show$overview)
+    output         <- wellPanel(imageContainer, 
+                                h3("Show summary"), overview)
+    return(output)
   })
 })
