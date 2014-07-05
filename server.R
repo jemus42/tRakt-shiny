@@ -60,10 +60,12 @@ shinyServer(function(input, output, session){
     return(showurl)
   })
   
-  output$show.overview <- renderText({
+  output$show.overview <- renderUI({
     if (input$get.show == 0){return(NULL)}
-    show     <- show.overview()
-    overview <- paste0("<div class='well'><p>", show$overview, '</p></div>')
+    show           <- show.overview()
+    banner         <- show$images$banner
+    imageContainer <- tags$div(align = "center", tags$img(src = banner))
+    overview       <- wellPanel(imageContainer, p(show$overview))
     return(overview)
   })
 })
