@@ -70,4 +70,12 @@ shinyServer(function(input, output, session){
                                 h3("Show summary"), overview)
     return(output)
   })
+  
+  output$table.episodes <- renderDataTable({
+    if (input$get.show == 0){return(NULL)}
+    episodes <- show.episodes()
+    episodes$title <- paste0("<a href='", episodes$url.trakt, "'>", episodes$title, "</a>")
+    episodes <- episodes[c("epid", "title", "firstaired.string", "rating", "votes", "loved", "hated")]
+    return(episodes)
+  }, options = list(bSortClasses = TRUE))
 })

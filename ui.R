@@ -1,15 +1,22 @@
 #### Shiny UI ####
 
 shinyUI(
-  navbarPage(title = "tRakt v0.1.6", inverse = TRUE, responsive = TRUE, fluid = TRUE,
+  navbarPage(title = "tRakt v0.1.7", inverse = TRUE, responsive = TRUE, fluid = TRUE,
     
     tabPanel("Main",
         progressInit(),
-        
         h2(htmlOutput("show.name")),
         htmlOutput("show.overview"),
         # TODO: Make this default to device width somehow ¯\_(ツ)_/¯
-        ggvisOutput(plot_id = "ggvis"),
+        conditionalPanel(condition = "input.get.show",
+           tabsetPanel(id = "mainPanel", selected = "tab.plot",
+                       tabPanel(title = "Plot", value = "tab.plot",
+                                ggvisOutput(plot_id = "ggvis")
+                       ),
+                       tabPanel(title = "Data", value = "tab.data",
+                                dataTableOutput(outputId = "table.episodes"))
+           )
+        ),
         hr(),
         
         inputPanel(
