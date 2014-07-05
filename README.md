@@ -1,7 +1,7 @@
 tRakt-shiny
 ===========
 
-This is `tRakt-shiny` (dummy name) version `0.1.7`. 
+This is `tRakt-shiny` (dummy name) version `0.1.8`. 
 
 Using trakt to graph show data and whatevs.  
 To run it, use `shiny::runGitHub(username = "jemus42", repo = "tRakt-shiny")`.  

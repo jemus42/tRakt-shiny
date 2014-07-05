@@ -1,7 +1,7 @@
 #### Shiny UI ####
 
 shinyUI(
-  navbarPage(title = "tRakt v0.1.7", inverse = TRUE, responsive = TRUE, fluid = TRUE,
+  navbarPage(title = "tRakt v0.1.8", inverse = TRUE, responsive = TRUE, fluid = TRUE,
     
     tabPanel("Main",
         progressInit(),
@@ -28,9 +28,11 @@ shinyUI(
           ),
           column(4, offset = 1,
              h3("Plot Options"),
-             selectInput(inputId = "btn.scale.x", label = "Select timeline format:",
+             selectInput(inputId = "btn.scale.x.variable", label = "Select timeline format:",
                          choices = btn.scale.x.choices, selected = "epnum"),
-             checkboxInput(inputId = "btn.scale.y", label = "Scale Ratings 0 - 100%",
+             selectInput(inputId = "btn.scale.y.variable", label = "Select target variable:",
+                         choices = btn.scale.y.choices, selected = "rating"),
+             checkboxInput(inputId = "btn.scale.y.range", label = "Scale Ratings 0 - 100%",
                            value = FALSE)     
           )
         ),
