@@ -38,20 +38,22 @@ shinyServer(function(input, output, session){
   # This is done in observe(), for some actionButton reactivity reason
   observe({
     if (input$get.show == 0){return(NULL)}
-    epdata <- transform(show.episodes(), id = paste0(epid, " - ", title))
+    epdata  <- make_tooltip(show.episodes())
     label.x <- names(btn.scale.x.choices[btn.scale.x.choices == input$btn.scale.x.variable])
     label.y <- names(btn.scale.y.choices[btn.scale.y.choices == input$btn.scale.y.variable])
     
-    plot <- epdata %>% ggvis(y = as.name(input$btn.scale.y.variable), 
-                             fill = ~season, key := ~id)
-    plot <- plot %>%  layer_points(prop("x", as.name(input$btn.scale.x.variable)), size.hover := 200)
+    plot <- epdata %>% ggvis(x    = as.name(input$btn.scale.x.variable),
+                             y    = as.name(input$btn.scale.y.variable), 
+                             fill = ~season, 
+                             key  := ~id)
+    plot <- plot %>% layer_points(size.hover := 200)
     if (input$btn.scale.y.range == TRUE){
       plot <- plot %>% scale_numeric("y", domain = c(0, 100))
     }  
     plot <- plot %>% add_axis("x", title = label.x)
     plot <- plot %>% add_axis("y", title = label.y)
     plot <- plot %>% add_legend("fill", title = "Season", orient = "left")
-    plot <- plot %>% add_tooltip(show_tooltip, "hover")
+    plot <- plot %>% add_tooltip(function(epdata){epdata$id}, "hover")
     plot <- plot %>% bind_shiny(plot_id = "ggvis")
   })
   
@@ -76,9 +78,9 @@ shinyServer(function(input, output, session){
   
   output$table.episodes <- renderDataTable({
     if (input$get.show == 0){return(NULL)}
-    episodes <- show.episodes()
+    episodes       <- show.episodes()
     episodes$title <- paste0("<a href='", episodes$url.trakt, "'>", episodes$title, "</a>")
-    episodes <- episodes[c("epid", "title", "firstaired.string", "rating", "votes", "loved", "hated")]
+    episodes       <- episodes[c("epid", "title", "firstaired.string", "rating", "votes", "loved", "hated")]
     return(episodes)
   }, options = list(bSortClasses = TRUE))
 })

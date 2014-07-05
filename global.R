@@ -55,3 +55,21 @@ show_tooltip <- function(show, idvars = NULL) {
   
   paste0("<strong>", names(show), "</strong>: ", format(show), collapse = "<br />")  
 }
+
+make_tooltip <- function(show.episodes){
+  rating  <- paste0("<strong>Rating:</strong> ", show.episodes$rating, "%")
+  votes   <- paste0("<strong>Votes:</strong> ",  show.episodes$votes)
+  loved   <- paste0("<strong>Loved:</strong> ",  show.episodes$loved)
+  hated   <- paste0("<strong>Hated:</strong> ",  show.episodes$hated)
+  id <- paste0("<strong>",                  show.episodes$epid, "</strong><br />",
+               "<strong>Title:</strong> ",  show.episodes$title, "<br />",
+               "<strong>Aired:</strong> ",  show.episodes$firstaired.string, "<br />",
+               "<strong>Rating:</strong> ", show.episodes$rating, "%<br />",
+               "<strong>Votes:</strong> ",  show.episodes$votes, "<br />",
+               "<strong>Loved:</strong> ",  show.episodes$loved, "<br />",
+               "<strong>Hated:</strong> ",  show.episodes$hated)
+  
+  show.episodes$id <- id
+  #show.episodes$id <- paste(epid, title, airdate, rating, votes, loved, hated, collapse = "<br />")
+  return(show.episodes)
+}
