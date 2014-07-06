@@ -61,7 +61,9 @@ shinyServer(function(input, output, session){
   output$show.name <- renderText({
     if (input$get.show == 0){return(NULL)}
     show    <- show.overview()
-    showurl <- paste0("<a href=", show$url, ">", show$title, "</a>", " (", show$year, ")")
+    showurl <- paste0("<a href=", show$url, ">", show$title, "</a>", 
+                      " (", show$year, ")", " — ", show$ratings$percentage, "% Rating / ",
+                      show$ratings$votes, " Votes")
     return(showurl)
   })
   
