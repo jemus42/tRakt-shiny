@@ -11,14 +11,16 @@ shinyUI(
       h2(htmlOutput("show.name")),
       htmlOutput("show.overview"),
       
-      # TODO: Make this default to device width somehow ¯\_(ツ)_/¯
-      tabsetPanel(id = "mainPanel", selected = "tab.plot",
-        tabPanel(title = "Plot", value = "tab.plot", icon = icon("bar-chart-o"),
-                  ggvisOutput(plot_id = "ggvis")
-         ),
-         tabPanel(title = "Data", value = "tab.data", icon = icon("table"),
-                  dataTableOutput(outputId = "table.episodes")
-         )
+      conditionalPanel(condition = "input.getshow > 0",
+        tabsetPanel(id = "mainPanel", selected = "tab.plot",
+          tabPanel(title = "Plot", value = "tab.plot", icon = icon("bar-chart-o"),
+                   # TODO: Make this default to device width somehow ¯\_(ツ)_/¯
+                   ggvisOutput(plot_id = "ggvis")
+          ),
+          tabPanel(title = "Data", value = "tab.data", icon = icon("table"),
+                   dataTableOutput(outputId = "table.episodes")
+          )
+       )
       ),
 
       hr(),
@@ -32,13 +34,15 @@ shinyUI(
           actionButton(inputId = "get.show", label = "PLOTERIZZLE", icon = icon("play"))
         ),
         column(4, offset = 1,
-          h3( icon("cogs"), "Plot Options"), 
+          h3(icon("cogs"), "Plot Options"), 
           selectInput(inputId = "btn.scale.x.variable", label = "Select timeline format:",
                       choices = btn.scale.x.choices, selected = "epnum"),
           selectInput(inputId = "btn.scale.y.variable", label = "Select target variable:",
                       choices = btn.scale.y.choices, selected = "rating"),
-          checkboxInput(inputId = "btn.scale.y.range", label = "Scale Ratings 0 - 100%",
-                        value = FALSE)
+          conditionalPanel(condition = "input.btnscaleyvariable == 'rating'",
+                      checkboxInput(inputId = "btn.scale.y.range", label = "Scale Ratings 0 - 100%",
+                                    value = FALSE)
+          )
         )
       ),
       hr(),
