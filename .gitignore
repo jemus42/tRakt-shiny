@@ -8,3 +8,5 @@
 key.json
 shinyapps
 key.txt
+packrat/lib*/
+packrat/src/
