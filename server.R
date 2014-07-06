@@ -80,7 +80,8 @@ shinyServer(function(input, output, session){
     if (input$get.show == 0){return(NULL)}
     episodes       <- show.episodes()
     episodes$title <- paste0("<a href='", episodes$url.trakt, "'>", episodes$title, "</a>")
-    episodes       <- episodes[c("epid", "title", "firstaired.string", "rating", "votes", "loved", "hated")]
+    episodes       <- episodes[table.episodes.columns]
+    names(episodes)<- table.episodes.names
     return(episodes)
   }, options = list(bSortClasses = TRUE))
 })

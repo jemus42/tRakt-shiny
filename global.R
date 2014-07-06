@@ -35,6 +35,9 @@ btn.scale.x.choices <- c("Total Episode Numbers" = "epnum",
 btn.scale.y.choices <- c("Rating" = "rating",
                          "Votes"   = "votes")
 
+table.episodes.columns <- c("epid", "title", "firstaired.string", "rating", "votes", "loved", "hated")
+table.episodes.names   <- c("Episode ID", "Title", "Airdate", "Rating (%)", "Votes", "Loved", "Hated")
+
 #### Helper functions ####
 all_values <- function(x) {
   if(is.null(x)) return(NULL)
