@@ -37,8 +37,10 @@ shinyUI(
                       choices = btn.scale.x.choices, selected = "epnum"),
           selectInput(inputId = "btn.scale.y.variable", label = "Select target variable:",
                       choices = btn.scale.y.choices, selected = "rating"),
-          checkboxInput(inputId = "btn.scale.y.range", label = "Scale Ratings 0 - 100%",
-                        value = FALSE)
+          conditionalPanel(condition = "input.btn.scale.y.variable == 'rating' ",
+            checkboxInput(inputId = "btn.scale.y.range", label = "Scale Ratings 0 - 100%",
+                          value = FALSE)
+          )
         )
       ),
       hr(),
