@@ -38,6 +38,7 @@ shinyServer(function(input, output, session){
   # This is done in observe(), for some actionButton reactivity reason
   observe({
     if (input$get.show == 0){return(NULL)}
+    Sys.sleep(.1)
     epdata  <- make_tooltip(show.episodes())
     label.x <- names(btn.scale.x.choices[btn.scale.x.choices == input$btn.scale.x.variable])
     label.y <- names(btn.scale.y.choices[btn.scale.y.choices == input$btn.scale.y.variable])
