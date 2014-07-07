@@ -39,31 +39,8 @@ table.episodes.columns <- c("epid", "title", "firstaired.string", "rating", "vot
 table.episodes.names   <- c("Episode ID", "Title", "Airdate", "Rating (%)", "Votes", "Loved", "Hated")
 
 #### Helper functions ####
-all_values <- function(x) {
-  if(is.null(x)) return(NULL)
-  paste0(names(x), ": ", format(x), collapse = "<br />")
-}
-
-show_tooltip <- function(show, idvars = NULL) {
-  if(is.null(show)) return(NULL)
-  if(!is.null(show$firstaired.posix)){
-    show$firstaired.posix <- paste(as.character(as.POSIXct(show$firstaired.posix/1000, origin = lubridate::origin, tz = "UTC")),
-                                   lubridate::tz(show$firstaired.posix))
-  }
-  names(show) <- sub("firstaired.posix", "Aired", names(show))
-  names(show) <- sub("rating", "Rating", names(show))
-  names(show) <- sub("season", "Season", names(show))
-  names(show) <- sub("id", "Title", names(show))
-  names(show) <- sub("epnum", "Episode Number", names(show))
-  
-  paste0("<strong>", names(show), "</strong>: ", format(show), collapse = "<br />")  
-}
 
 make_tooltip <- function(show.episodes){
-  rating  <- paste0("<strong>Rating:</strong> ", show.episodes$rating, "%")
-  votes   <- paste0("<strong>Votes:</strong> ",  show.episodes$votes)
-  loved   <- paste0("<strong>Loved:</strong> ",  show.episodes$loved)
-  hated   <- paste0("<strong>Hated:</strong> ",  show.episodes$hated)
   id <- paste0("<strong>",                  show.episodes$epid, "</strong><br />",
                "<strong>Title:</strong> ",  show.episodes$title, "<br />",
                "<strong>Aired:</strong> ",  show.episodes$firstaired.string, "<br />",
@@ -73,6 +50,5 @@ make_tooltip <- function(show.episodes){
                "<strong>Hated:</strong> ",  show.episodes$hated)
   
   show.episodes$id <- id
-  #show.episodes$id <- paste(epid, title, airdate, rating, votes, loved, hated, collapse = "<br />")
   return(show.episodes)
 }
