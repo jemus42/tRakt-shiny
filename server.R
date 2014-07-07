@@ -5,16 +5,16 @@ shinyServer(function(input, output, session){
   #### Data pulls ####
   # Need to depend on actionButton, hence the isolate() ¯\_(ツ)_/¯
   show.overview <- reactive({
-    if (input$get.show == 0){return(NULL)}
+    if (input$get_show == 0){return(NULL)}
     isolate({
-      show <- trakt.search(input$show.query)
+      show <- trakt.search(input$show_query)
     })
     return(show)
   })
 
   show.episodes <- reactive({
     withProgress(session, min = 0, max = 5, {
-    if (input$get.show == 0){return(NULL)}
+    if (input$get_show == 0){return(NULL)}
       setProgress(message = "Fetching data from Trakt.tv…",
                   detail = "Getting general show information…",
                   value = 1)
@@ -37,18 +37,18 @@ shinyServer(function(input, output, session){
   #### Actual plotting ####
   # This is done in observe(), for some actionButton reactivity reason
   observe({
-    if (input$get.show == 0){return(NULL)}
+    if (input$get_show == 0){return(NULL)}
     Sys.sleep(.1)
     epdata  <- make_tooltip(show.episodes())
-    label.x <- names(btn.scale.x.choices[btn.scale.x.choices == input$btn.scale.x.variable])
-    label.y <- names(btn.scale.y.choices[btn.scale.y.choices == input$btn.scale.y.variable])
+    label.x <- names(btn.scale.x.choices[btn.scale.x.choices == input$btn_scale_x_variable])
+    label.y <- names(btn.scale.y.choices[btn.scale.y.choices == input$btn_scale_y_variable])
     
-    plot <- epdata %>% ggvis(x    = as.name(input$btn.scale.x.variable),
-                             y    = as.name(input$btn.scale.y.variable), 
+    plot <- epdata %>% ggvis(x    = as.name(input$btn_scale_x_variable),
+                             y    = as.name(input$btn_scale_y_variable), 
                              fill = ~season, 
                              key  := ~id)
     plot <- plot %>% layer_points(size.hover := 200)
-    if (input$btn.scale.y.range == TRUE){
+    if (input$btn_scale_y_range == TRUE){
       plot <- plot %>% scale_numeric("y", domain = c(0, 100))
     }  
     plot <- plot %>% add_axis("x", title = label.x)
@@ -60,7 +60,7 @@ shinyServer(function(input, output, session){
   
   #### Output Assignments ####
   output$show.name <- renderText({
-    if (input$get.show == 0){return(NULL)}
+    if (input$get_show == 0){return(NULL)}
     show    <- show.overview()
     showurl <- paste0("<a href=", show$url, ">", show$title, "</a>", 
                       " (", show$year, ")", " — ", show$ratings$percentage, "% Rating / ",
@@ -69,7 +69,7 @@ shinyServer(function(input, output, session){
   })
   
   output$show.overview <- renderUI({
-    if (input$get.show == 0){return(NULL)}
+    if (input$get_show == 0){return(NULL)}
     show           <- show.overview()
     banner         <- show$images$banner
     imageContainer <- tags$div(align = "center", tags$img(src = banner))
@@ -80,7 +80,7 @@ shinyServer(function(input, output, session){
   })
   
   output$table.episodes <- renderDataTable({
-    if (input$get.show == 0){return(NULL)}
+    if (input$get_show == 0){return(NULL)}
     episodes       <- show.episodes()
     episodes$title <- paste0("<a href='", episodes$url.trakt, "'>", episodes$title, "</a>")
     episodes       <- episodes[table.episodes.columns]
