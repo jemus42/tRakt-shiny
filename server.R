@@ -16,20 +16,24 @@ shinyServer(function(input, output, session){
     withProgress(session, min = 0, max = 5, {
     if (input$get_show == 0){return(NULL)}
       setProgress(message = "Fetching data from Trakt.tv…",
-                  detail = "Getting general show information…",
-                  value = 1)
+                  detail = "Getting general show information…", value = 1)
       show          <- show.overview()
-      setProgress(detail = "Getting season data…",
-                  value = 2)
-      show.seasons  <- trakt.getSeasons(show$tvdb_id)
-      setProgress(detail = "Initializing episode dataset…",
-                  value = 3)
-      show.episodes <- initializeEpisodes(show.seasons)
-      setProgress(detail = "Getting episode data (this takes a while…)",
-                  value = 4)
-      show.episodes <- trakt.getEpisodeData(show$tvdb_id, show.episodes)
-      setProgress(detail = "Done!",
-                  value = 5)
+      cachedfile    <- paste0(show$tvdb_id, ".rds")
+      cachedpath    <- file.path("cache", cachedfile)
+      if (file.exists(cachedpath)){
+        setProgress(detail = "Reading from cache…", value = 3)
+        show.episodes <- readRDS(file = cachedpath)
+      } else {
+        setProgress(detail = "Getting season data…", value = 2)
+        show.seasons  <- trakt.getSeasons(show$tvdb_id)
+        setProgress(detail = "Initializing episode dataset…", value = 3)
+        show.episodes <- initializeEpisodes(show.seasons)
+        setProgress(detail = "Getting episode data (this takes a while…)", value = 4)
+        show.episodes <- trakt.getEpisodeData(show$tvdb_id, show.episodes)
+        setProgress(detail = "Caching results…", value = 5)
+        saveRDS(object = show.episodes, file = cachedpath)
+        setProgress(detail = "Done!", value = 6)
+      }
       return(show.episodes)
     })
   })
