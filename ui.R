@@ -1,7 +1,7 @@
 #### Shiny UI ####
 
 shinyUI(
-  navbarPage(title = "tRakt v0.1.13", inverse = TRUE, responsive = TRUE, fluid = TRUE,
+  navbarPage(title = "tRakt v0.1.14", inverse = TRUE, responsive = TRUE, fluid = TRUE,
     
     #### Main view ####
     tabPanel("Main", icon = icon("tasks"),
