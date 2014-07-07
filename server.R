@@ -6,42 +6,49 @@ shinyServer(function(input, output, session){
   # Need to depend on actionButton, hence the isolate() ¯\_(ツ)_/¯
   show <- reactive({
     if (input$get_show == 0){return(NULL)}
-    isolate({
-     # withProgress(session, min = 0, max = 5, {
-        show          <- list()
-        show$overview <- trakt.search(input$show_query)
-        show_id       <- show$overview$tvdb_id
-        #setProgress(message = "Fetching data from Trakt.tv…",
-        #            detail = "Getting general show information…", value = 1)
-  
-        cachedfile    <- paste0(show_id, ".rds")
-        cachedpath    <- file.path("cache", cachedfile)
-        
-        if (file.exists(cachedpath)){
-        #  setProgress(detail = "Reading from cache…", value = 3)
-          show$episodes <- readRDS(file = cachedpath)
-        } else {
-        #  setProgress(detail = "Getting season data…", value = 2)
-          show$seasons  <- trakt.getSeasons(show_id)
-        #  setProgress(detail = "Initializing episode dataset…", value = 3)
-          show$episodes <- initializeEpisodes(show$seasons)
-        #  setProgress(detail = "Getting episode data (this takes a while…)", value = 4)
-          show$episodes <- trakt.getEpisodeData(show_id, show$episodes)
-        #  setProgress(detail = "Caching results…", value = 5)
-          saveRDS(object = show$episodes, file = cachedpath)
-        #  setProgress(detail = "Done!", value = 6)
-        }
-     # })
-    })
-    return(show)
+     # Initiate progress bar
+     withProgress(session, min = 0, max = 6, {
+      # Inititalize show object as a list 
+      show          <- list()
+      # Use isolate() on show_query to not execute on every update of the input
+      show$overview <- trakt.search(isolate(input$show_query))
+      show_id       <- show$overview$tvdb_id
+      
+      setProgress(message = "Fetching data from Trakt.tv…",
+                  detail = "Getting general show information…", value = 1)
+      
+      # Let's pretend this is a smart solution for caching
+      cachedfile    <- paste0(show_id, ".rds")
+      cachedpath    <- file.path("cache", cachedfile)
+      
+      if (file.exists(cachedpath)){
+        setProgress(detail = "Reading from cache…", value = 3)
+        show$episodes <- readRDS(file = cachedpath)
+      } else {
+        setProgress(detail = "Getting season data…", value = 2)
+        show$seasons  <- trakt.getSeasons(show_id)
+        setProgress(detail = "Initializing episode dataset…", value = 3)
+        show$episodes <- initializeEpisodes(show$seasons)
+        setProgress(detail = "Getting episode data (this takes a while…)", value = 4)
+        show$episodes <- trakt.getEpisodeData(show_id, show$episodes)
+        setProgress(detail = "Caching results…", value = 5)
+        saveRDS(object = show$episodes, file = cachedpath)
+        setProgress(detail = "Done!", value = 6)
+      }
+      return(show)
+      }) # End progressbar after the return(), which apparently is a biggie
   })
   
   #### Actual plotting ####
   # This is done in observe(), for some actionButton reactivity reason
   observe({
     if (input$get_show == 0){return(NULL)}
-    Sys.sleep(.1)
-    show    <- show()
+    # The 0 - 100 range thing should only be active for ratings
+    if (input$btn_scale_y_range && input$btn_scale_y_variable != "rating"){
+      updateCheckboxInput(session, inputId = "btn_scale_y_range", value = FALSE)
+      Sys.sleep(.2)
+    }
+    show    <- isolate(show())
     epdata  <- make_tooltip(show$episodes)
     label.x <- names(btn.scale.x.choices[btn.scale.x.choices == input$btn_scale_x_variable])
     label.y <- names(btn.scale.y.choices[btn.scale.y.choices == input$btn_scale_y_variable])
