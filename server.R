@@ -4,38 +4,36 @@ shinyServer(function(input, output, session){
   
   #### Data pulls ####
   # Need to depend on actionButton, hence the isolate() ¯\_(ツ)_/¯
-  show.overview <- reactive({
+  show <- reactive({
     if (input$get_show == 0){return(NULL)}
     isolate({
-      show <- trakt.search(input$show_query)
+     # withProgress(session, min = 0, max = 5, {
+        show          <- list()
+        show$overview <- trakt.search(input$show_query)
+        show_id       <- show$overview$tvdb_id
+        #setProgress(message = "Fetching data from Trakt.tv…",
+        #            detail = "Getting general show information…", value = 1)
+  
+        cachedfile    <- paste0(show_id, ".rds")
+        cachedpath    <- file.path("cache", cachedfile)
+        
+        if (file.exists(cachedpath)){
+        #  setProgress(detail = "Reading from cache…", value = 3)
+          show$episodes <- readRDS(file = cachedpath)
+        } else {
+        #  setProgress(detail = "Getting season data…", value = 2)
+          show$seasons  <- trakt.getSeasons(show_id)
+        #  setProgress(detail = "Initializing episode dataset…", value = 3)
+          show$episodes <- initializeEpisodes(show$seasons)
+        #  setProgress(detail = "Getting episode data (this takes a while…)", value = 4)
+          show$episodes <- trakt.getEpisodeData(show_id, show$episodes)
+        #  setProgress(detail = "Caching results…", value = 5)
+          saveRDS(object = show$episodes, file = cachedpath)
+        #  setProgress(detail = "Done!", value = 6)
+        }
+     # })
     })
     return(show)
-  })
-
-  show.episodes <- reactive({
-    withProgress(session, min = 0, max = 5, {
-    if (input$get_show == 0){return(NULL)}
-      setProgress(message = "Fetching data from Trakt.tv…",
-                  detail = "Getting general show information…", value = 1)
-      show          <- show.overview()
-      cachedfile    <- paste0(show$tvdb_id, ".rds")
-      cachedpath    <- file.path("cache", cachedfile)
-      if (file.exists(cachedpath)){
-        setProgress(detail = "Reading from cache…", value = 3)
-        show.episodes <- readRDS(file = cachedpath)
-      } else {
-        setProgress(detail = "Getting season data…", value = 2)
-        show.seasons  <- trakt.getSeasons(show$tvdb_id)
-        setProgress(detail = "Initializing episode dataset…", value = 3)
-        show.episodes <- initializeEpisodes(show.seasons)
-        setProgress(detail = "Getting episode data (this takes a while…)", value = 4)
-        show.episodes <- trakt.getEpisodeData(show$tvdb_id, show.episodes)
-        setProgress(detail = "Caching results…", value = 5)
-        saveRDS(object = show.episodes, file = cachedpath)
-        setProgress(detail = "Done!", value = 6)
-      }
-      return(show.episodes)
-    })
   })
   
   #### Actual plotting ####
@@ -43,7 +41,8 @@ shinyServer(function(input, output, session){
   observe({
     if (input$get_show == 0){return(NULL)}
     Sys.sleep(.1)
-    epdata  <- make_tooltip(show.episodes())
+    show    <- show()
+    epdata  <- make_tooltip(show$episodes)
     label.x <- names(btn.scale.x.choices[btn.scale.x.choices == input$btn_scale_x_variable])
     label.y <- names(btn.scale.y.choices[btn.scale.y.choices == input$btn_scale_y_variable])
     
@@ -65,16 +64,20 @@ shinyServer(function(input, output, session){
   #### Output Assignments ####
   output$show.name <- renderText({
     if (input$get_show == 0){return(NULL)}
-    show    <- show.overview()
-    showurl <- paste0("<a href=", show$url, ">", show$title, "</a>", 
-                      " (", show$year, ")", " — ", show$ratings$percentage, "% Rating / ",
-                      show$ratings$votes, " Votes")
-    return(showurl)
+    isolate({
+      show    <- show()
+      show    <- show$overview
+      showurl <- paste0("<a href=", show$url, ">", show$title, "</a>", 
+                        " (", show$year, ")", " — ", show$ratings$percentage, "% Rating / ",
+                        show$ratings$votes, " Votes")
+      return(showurl)
+    })
   })
   
   output$show.overview <- renderUI({
     if (input$get_show == 0){return(NULL)}
-    show           <- show.overview()
+    show           <- show()
+    show           <- show$overview
     banner         <- show$images$banner
     imageContainer <- tags$div(align = "center", tags$img(src = banner))
     overview       <- p(show$overview)
@@ -85,7 +88,8 @@ shinyServer(function(input, output, session){
   
   output$table.episodes <- renderDataTable({
     if (input$get_show == 0){return(NULL)}
-    episodes       <- show.episodes()
+    show           <- show()
+    episodes       <- show$episodes
     episodes$title <- paste0("<a href='", episodes$url.trakt, "'>", episodes$title, "</a>")
     episodes       <- episodes[table.episodes.columns]
     names(episodes)<- table.episodes.names
