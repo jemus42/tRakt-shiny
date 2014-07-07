@@ -1,5 +1,0 @@
-auto.snapshot: TRUE
-vcs.ignore.lib: TRUE
-vcs.ignore.src: TRUE
-print.banner.on.startup: auto
-external.packages:
