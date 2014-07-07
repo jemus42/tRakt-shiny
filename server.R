@@ -8,10 +8,13 @@ shinyServer(function(input, output, session){
     if (input$get_show == 0){return(NULL)}
      # Initiate progress bar
      withProgress(session, min = 0, max = 6, {
+       
+      query <- isolate(input$show_query)
+      if (query == ""){return(NULL)}
       # Inititalize show object as a list 
       show          <- list()
       # Use isolate() on show_query to not execute on every update of the input
-      show$overview <- trakt.search(isolate(input$show_query))
+      show$overview <- trakt.search(query)
       show_id       <- show$overview$tvdb_id
       
       setProgress(message = "Fetching data from Trakt.tv…",
@@ -49,6 +52,7 @@ shinyServer(function(input, output, session){
       Sys.sleep(.2)
     }
     show    <- isolate(show())
+    if (is.null(show)){return(NULL)}
     epdata  <- make_tooltip(show$episodes)
     label.x <- names(btn.scale.x.choices[btn.scale.x.choices == input$btn_scale_x_variable])
     label.y <- names(btn.scale.y.choices[btn.scale.y.choices == input$btn_scale_y_variable])
@@ -73,6 +77,7 @@ shinyServer(function(input, output, session){
     if (input$get_show == 0){return(NULL)}
     isolate({
       show    <- show()
+      if (is.null(show)){return(NULL)}
       show    <- show$overview
       showurl <- paste0("<a href=", show$url, ">", show$title, "</a>", 
                         " (", show$year, ")", " — ", show$ratings$percentage, "% Rating / ",
@@ -84,6 +89,7 @@ shinyServer(function(input, output, session){
   output$show.overview <- renderUI({
     if (input$get_show == 0){return(NULL)}
     show           <- show()
+    if (is.null(show)){return(NULL)}
     show           <- show$overview
     banner         <- show$images$banner
     imageContainer <- tags$div(align = "center", tags$img(src = banner))
