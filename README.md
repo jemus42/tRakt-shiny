@@ -3,7 +3,7 @@ tRakt-shiny
 
 This is `tRakt-shiny` (dummy name) version `0.1.17`. 
 
-Using trakt to graph show data and whatevs.  
+Using the [trakt.tv](http://trakt.tv) API to graph show data and whatevs.  
 To run it, use `shiny::runGitHub(username = "jemus42", repo = "tRakt-shiny")`.  
 Note that this only works with a `key.json` or `key.txt` file containing your trakt.tv API key.  
 Whoopsie.  
