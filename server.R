@@ -94,7 +94,7 @@ shinyServer(function(input, output, session){
     banner         <- show$images$banner
     imageContainer <- tags$div(align = "center", tags$img(src = banner))
     overview       <- p(show$overview)
-    output         <- wellPanel(imageContainer, 
+    output         <- tagList(imageContainer, 
                                 h3("Show summary"), overview)
     return(output)
   })
