@@ -111,4 +111,15 @@ shinyServer(function(input, output, session){
     names(episodes)<- table.episodes.names
     return(episodes)
   }, options = list(bSortClasses = TRUE))
+  
+  #### Parsing url querys ####
+  observe({
+    url_query    <- session$clientData$url_search
+    query_parsed <- parseQueryString(url_query)
+    
+    # Take actions on queries
+    if (!is.null(query_parsed$show)){
+      updateTextInput(session, inputId = "show_query", value = query_parsed$showname)
+    }
+  })
 })

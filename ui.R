@@ -1,7 +1,7 @@
 #### Shiny UI ####
 
 shinyUI(
-  navbarPage(title = "tRakt v0.1.15", inverse = TRUE, responsive = TRUE, fluid = TRUE,
+  navbarPage(title = "tRakt v0.1.16", inverse = TRUE, responsive = TRUE, fluid = TRUE,
     
     #### Main view ####
     tabPanel("Main", icon = icon("tasks"),
@@ -36,7 +36,7 @@ shinyUI(
           actionButton(inputId = "get_show", label = "PLOTERIZZLE", icon = icon("play"))
         ),
         column(4, offset = 1,
-          h3( icon("cogs"), "Plot Options"), 
+          h3(icon("cogs"), "Plot Options"), 
           selectInput(inputId = "btn_scale_x_variable", label = "Select timeline format:",
                       choices = btn.scale.x.choices, selected = "epnum"),
           selectInput(inputId = "btn_scale_y_variable", label = "Select target variable:",
