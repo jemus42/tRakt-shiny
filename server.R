@@ -74,7 +74,7 @@ shinyServer(function(input, output, session){
   
   #### Output Assignments ####
   output$show.name <- renderText({
-    if (input$get_show == 0){return(NULL)}
+    if (input$get_show == 0){return("Show Title will appear here soon. Are you excited?")}
     isolate({
       show    <- show()
       if (is.null(show)){return(NULL)}
@@ -92,11 +92,18 @@ shinyServer(function(input, output, session){
     if (is.null(show)){return(NULL)}
     show           <- show$overview
     banner         <- show$images$banner
-    imageContainer <- tags$div(align = "center", tags$img(src = banner))
     overview       <- p(show$overview)
-    output         <- tagList(imageContainer, 
-                                h3("Show summary"), overview)
-    return(output)
+    return(overview)
+  })
+  
+  output$show.banner <- renderUI({
+    if (input$get_show == 0){return(NULL)}
+    show           <- show()
+    if (is.null(show)){return(NULL)}
+    show           <- show$overview
+    banner         <- show$images$banner
+    image          <- tags$div(align = "center", tags$img(src = banner))
+    return(image)
   })
   
   output$table.episodes <- renderDataTable({

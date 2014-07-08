@@ -1,7 +1,7 @@
 #### Shiny UI ####
 
 shinyUI(
-  navbarPage(title = "tRakt v0.1.16", inverse = TRUE, responsive = TRUE, fluid = TRUE,
+  navbarPage(title = "tRakt v0.1.17", inverse = TRUE, responsive = TRUE, fluid = TRUE,
     
     #### Main view ####
     tabPanel("Main", icon = icon("tasks"),
@@ -11,6 +11,8 @@ shinyUI(
       conditionalPanel(condition = "input.get_show > 0",
         wellPanel(
           h2(htmlOutput("show.name")), br(),
+          htmlOutput("show.banner"),
+          h3("Show summary"),
           htmlOutput("show.overview")
         ),
         hr(),
