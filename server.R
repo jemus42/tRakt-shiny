@@ -103,7 +103,9 @@ shinyServer(function(input, output, session){
     if (input$get_show == 0){return(NULL)}
     show           <- show()
     episodes       <- show$episodes
-    episodes$title <- paste0("<a href='", episodes$url.trakt, "'>", episodes$title, "</a>")
+    episodes$title <- paste0("<a target='_blank' title ='",
+                             episodes$overview, "' href='", episodes$url.trakt, 
+                             "'>", episodes$title, "</a>")
     episodes       <- episodes[table.episodes.columns]
     names(episodes)<- table.episodes.names
     return(episodes)

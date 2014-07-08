@@ -11,6 +11,7 @@ shinyUI(
       h2(htmlOutput("show.name")),
       htmlOutput("show.overview"),
       conditionalPanel(condition = "input.get_show > 0",
+        hr(),
         # TODO: Make this default to device width somehow ¯\_(ツ)_/¯
         tabsetPanel(id = "mainPanel", selected = "tab_plot",
                     tabPanel(title = "Plot", value = "tab_plot", icon = icon("bar-chart-o"),
