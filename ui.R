@@ -1,7 +1,7 @@
 #### Shiny UI ####
 
 shinyUI(
-  navbarPage(title = "tRakt v0.1.17", inverse = TRUE, responsive = TRUE, fluid = TRUE,
+  navbarPage(title = "tRakt", inverse = TRUE, responsive = TRUE, fluid = TRUE,
     
     #### Main view ####
     tabPanel("Main", icon = icon("tasks"),
@@ -50,9 +50,13 @@ shinyUI(
         )
       ),
       hr(),
-      # TODO: about.md should be exbaned and put in an "about" tab
-      # This would probably be the place to put… other information.
-      includeMarkdown("about.md")
+      h5("tRakt version 0.1.18"),
+      p("Updates in", tags$a(href = "http://pants.jemu.name//tag/trakt_shiny", "my #pants"))
+    ),
+    tabPanel(title = "About", icon = icon("question-circle"),
+      fixedPage(
+        column(4, includeMarkdown("about.md"))
+      )
     )
   )
 )

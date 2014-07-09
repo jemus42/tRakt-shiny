@@ -16,12 +16,13 @@ shinyServer(function(input, output, session){
       # Use isolate() on show_query to not execute on every update of the input
       show$overview <- trakt.search(query)
       show_id       <- show$overview$tvdb_id
+      show_name     <- getNameFromURL(show$overview$url, F, F)
       
       setProgress(message = "Fetching data from Trakt.tv…",
                   detail = "Getting general show information…", value = 1)
       
       # Let's pretend this is a smart solution for caching
-      cachedfile    <- paste0(show_id, ".rds")
+      cachedfile    <- paste0(show_id, "-", show_name, ".rds")
       cachedpath    <- file.path("cache", cachedfile)
       
       if (file.exists(cachedpath)){
