@@ -22,7 +22,7 @@ shinyUI(
                    ggvisOutput(plot_id = "ggvis")
           ),
           tabPanel(title = "Plot (debug)", value = "tab_plot_debug", icon = icon("bar-chart-o"),
-                   showOutput("debugPlot", "xcharts")
+                   showOutput("debugPlot", "nvd3")
           ),
           tabPanel(title = "Data", value = "tab_data", icon = icon("table"),
                    dataTableOutput(outputId = "table.episodes")

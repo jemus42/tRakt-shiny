@@ -73,14 +73,21 @@ shinyServer(function(input, output, session){
     plot <- plot %>% bind_shiny(plot_id = "ggvis")
   })
   
-  output$debugPlot <- renderChart({
+  output$debugPlot <- renderChart2({
     if (input$get_show == 0){return(NULL)}
     show    <- isolate(show())
     if (is.null(show)){return(NULL)}
-    epdata <- show$episodes
+    epdata  <- make_tooltip(show$episodes)
     
-    x1 <- xPlot(rating ~ epnum, group = "season", data = epdata, type = "line-dotted")
-    x1$addParams(dom = 'debugPlot')
+    x1 <- nPlot(rating ~ epnum, group = "season", data = epdata, type = "scatterChart")
+    x1$chart(tooltipContent = "#! function(key, x, y, e){ 
+            return e.point.id
+            } !#")
+    x1$params$width <- 800
+    x1$params$height <- 400
+    #x1$chart(showControls = FALSE) # Would deactivate magnify button(?)
+    x1$xAxis(axisLabel = 'Episode Number')  
+    x1$yAxis(axisLabel = 'Rating') 
     return(x1)
   })
   
