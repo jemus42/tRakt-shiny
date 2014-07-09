@@ -1,5 +1,5 @@
 #### Shiny Server ####
-
+require(rCharts)
 shinyServer(function(input, output, session){
   
   #### Data pulls ####
@@ -71,6 +71,17 @@ shinyServer(function(input, output, session){
     plot <- plot %>% add_legend("fill", title = "Season", orient = "left")
     plot <- plot %>% add_tooltip(function(epdata){epdata$id}, "hover")
     plot <- plot %>% bind_shiny(plot_id = "ggvis")
+  })
+  
+  output$debugPlot <- renderChart({
+    if (input$get_show == 0){return(NULL)}
+    show    <- isolate(show())
+    if (is.null(show)){return(NULL)}
+    epdata <- show$episodes
+    
+    x1 <- xPlot(rating ~ epnum, group = "season", data = epdata, type = "line-dotted")
+    x1$addParams(dom = 'debugPlot')
+    return(x1)
   })
   
   #### Output Assignments ####

@@ -15,6 +15,10 @@ if (!'rmarkdown' %in% installed.packages()) install_github("rstudio/rmarkdown", 
 library(rmarkdown)
 if (!'shinyIncubator' %in% installed.packages()) install_github("rstudio/shiny-incubator", dependencies=TRUE)
 library(shinyIncubator)
+if (!'rCharts' %in% installed.packages()) install_github("rCharts", "ramnathv", dependencies = TRUE)
+library(rCharts)
+# See http://ramnathv.github.io/rCharts/
+# and http://bl.ocks.org/patilv/raw/7360262/
 
 ## Set API key ##
 if (file.exists("key.json")){

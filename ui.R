@@ -1,5 +1,5 @@
 #### Shiny UI ####
-
+require(rCharts)
 shinyUI(
   navbarPage(title = "tRakt", inverse = TRUE, responsive = TRUE, fluid = TRUE,
     
@@ -17,9 +17,12 @@ shinyUI(
         ),
         hr(),
         # TODO: Make this default to device width somehow ¯\_(ツ)_/¯
-        tabsetPanel(id = "mainPanel", selected = "tab_plot",
+        tabsetPanel(id = "mainPanel", selected = "tab_plot_debug",
           tabPanel(title = "Plot", value = "tab_plot", icon = icon("bar-chart-o"),
                    ggvisOutput(plot_id = "ggvis")
+          ),
+          tabPanel(title = "Plot (debug)", value = "tab_plot_debug", icon = icon("bar-chart-o"),
+                   showOutput("debugPlot", "xcharts")
           ),
           tabPanel(title = "Data", value = "tab_data", icon = icon("table"),
                    dataTableOutput(outputId = "table.episodes")
