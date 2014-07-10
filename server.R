@@ -25,6 +25,12 @@ shinyServer(function(input, output, session){
       
       # Use isolate() on show_query to not execute on every update of the input
       show$overview <- trakt.search(query)
+      if (!is.null(show$overview$error)){
+        warning(paste0(show$overview$error, ": ", query))
+        updateTextInput(session, inputId = "show_query", label = "Try again…", value = "")
+        return(NULL)
+      }
+      
       show_id       <- show$overview$tvdb_id
       showindex     <- data.frame(title = show$overview$title, id = show$overview$tvdb_id)
       
@@ -81,7 +87,7 @@ shinyServer(function(input, output, session){
   })
   
   #### Output Assignments ####
-  output$show.name <- renderText({
+  output$show_name <- renderText({
     if (input$get_show == 0){return("Show Title will appear here soon. Are you excited?")}
     isolate({
       show    <- show()
@@ -94,7 +100,7 @@ shinyServer(function(input, output, session){
     })
   })
   
-  output$show.overview <- renderUI({
+  output$show_overview <- renderUI({
     if (input$get_show == 0){return(NULL)}
     show           <- show()
     if (is.null(show)){return(NULL)}
@@ -104,7 +110,7 @@ shinyServer(function(input, output, session){
     return(overview)
   })
   
-  output$show.banner <- renderUI({
+  output$show_banner <- renderUI({
     if (input$get_show == 0){return(NULL)}
     show           <- show()
     if (is.null(show)){return(NULL)}

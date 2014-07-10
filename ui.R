@@ -8,12 +8,12 @@ shinyUI(
       progressInit(),
       
       #### Episode information ####
-      conditionalPanel(condition = "input.get_show > 0",
+      conditionalPanel(condition = "input.get_show > 0 && output.show_name != ''",
         wellPanel(
-          h2(htmlOutput("show.name")), br(),
-          htmlOutput("show.banner"),
+          h2(htmlOutput("show_name")), br(),
+          htmlOutput("show_banner"),
           h3("Show summary"),
-          htmlOutput("show.overview")
+          htmlOutput("show_overview")
         ),
         hr(),
         # TODO: Make this default to device width somehow ¯\_(ツ)_/¯
@@ -52,7 +52,7 @@ shinyUI(
         )
       ),
       hr(),
-      h5("tRakt version 0.1.19"),
+      h5("tRakt version 0.1.20"),
       p("Updates in", tags$a(href = "http://pants.jemu.name//tag/trakt_shiny", "my #pants"))
     ),
     tabPanel(title = "About", icon = icon("question-circle"),
