@@ -140,6 +140,8 @@ shinyServer(function(input, output, session){
   
   #### Caching observer ####
   observe({
+    input$get_show
+    
     indexfile <- file.path(cacheDir, "showtitles.rds")
     if (file.exists(indexfile)){
       showindex  <- readRDS(indexfile)
