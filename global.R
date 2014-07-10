@@ -27,13 +27,34 @@ if (file.exists("key.json")){
   stop("Place your key.json or key.txt in the root of this directory")
 }
 
+#### Seti/find/create/save cache dir ####
+cacheDir <- "cache"
+if (!file.exists(cacheDir)){
+  dir.create(cacheDir)
+}
+
+cache_titles <- function(showindex, cache_dir){
+  titles <- file.path(cache_dir, "showtitles.rds")
+  if (!file.exists(titles)){
+    saveRDS(showindex, file = titles)
+  } else {
+    temp <- readRDS(file = titles)
+    if (!(showindex$id %in% temp$id)){
+      temp       <- rbind(temp, showindex)
+      temp$title <- as.character(temp$title)
+      temp       <- plyr::arrange(temp, title)
+      saveRDS(temp, file = titles)
+    }
+  }
+}
+
 #### Setting some values ####
 btn.scale.x.choices <- c("Total Episode Numbers" = "epnum",
                          "Episodes per Season"   = "episode",
                          "Airdate"               = "firstaired.posix")
 
 btn.scale.y.choices <- c("Rating" = "rating",
-                         "Votes"   = "votes")
+                         "Votes"  = "votes")
 
 table.episodes.columns <- c("epid", "title", "firstaired.string", "rating", "votes", "loved", "hated")
 table.episodes.names   <- c("Episode ID", "Title", "Airdate", "Rating (%)", "Votes", "Loved", "Hated")

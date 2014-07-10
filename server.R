@@ -9,21 +9,29 @@ shinyServer(function(input, output, session){
      # Initiate progress bar
      withProgress(session, min = 0, max = 6, {
        
-      query <- isolate(input$show_query)
-      if (query == ""){return(NULL)}
+      query        <- isolate(input$show_query)
+      query_cached <- isolate(input$shows_cached)
+      if (query_cached == "" && query == ""){
+        return(NULL)
+      } else if (query == "" && query_cached != ""){
+        query <- query_cached
+      }
+      
       # Inititalize show object as a list 
       show          <- list()
-      # Use isolate() on show_query to not execute on every update of the input
-      show$overview <- trakt.search(query)
-      show_id       <- show$overview$tvdb_id
-      show_name     <- getNameFromURL(show$overview$url, F, F)
       
       setProgress(message = "Fetching data from Trakt.tv…",
                   detail = "Getting general show information…", value = 1)
       
+      # Use isolate() on show_query to not execute on every update of the input
+      show$overview <- trakt.search(query)
+      show_id       <- show$overview$tvdb_id
+      showindex     <- data.frame(title = show$overview$title, id = show$overview$tvdb_id)
+      
       # Let's pretend this is a smart solution for caching
-      cachedfile    <- paste0(show_id, "-", show_name, ".rds")
-      cachedpath    <- file.path("cache", cachedfile)
+      cache_titles(showindex, cacheDir)
+      cachedfile    <- paste0(show_id, ".rds")
+      cachedpath    <- file.path(cacheDir, cachedfile)
       
       if (file.exists(cachedpath)){
         setProgress(detail = "Reading from cache…", value = 3)
@@ -50,7 +58,6 @@ shinyServer(function(input, output, session){
     # The 0 - 100 range thing should only be active for ratings
     if (input$btn_scale_y_range && input$btn_scale_y_variable != "rating"){
       updateCheckboxInput(session, inputId = "btn_scale_y_range", value = FALSE)
-      Sys.sleep(.2)
     }
     show    <- isolate(show())
     if (is.null(show)){return(NULL)}
@@ -128,6 +135,17 @@ shinyServer(function(input, output, session){
     # Take actions on queries
     if (!is.null(query_parsed$show)){
       updateTextInput(session, inputId = "show_query", value = query_parsed$showname)
+    }
+  })
+  
+  #### Caching observer ####
+  observe({
+    indexfile <- file.path(cacheDir, "showtitles.rds")
+    if (file.exists(indexfile)){
+      showindex  <- readRDS(indexfile)
+      ids        <- showindex$title
+      names(ids) <- showindex$title
+      updateSelectizeInput(session, inputId = "shows_cached", choices = ids)
     }
   })
 })

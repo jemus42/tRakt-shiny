@@ -35,6 +35,8 @@ shinyUI(
           h3(icon("search"), "Show Selection"),
           textInput(inputId = "show_query", label = "Enter the name of a show", value = "Firefly"),
           br(),
+          selectizeInput(inputId = "shows_cached", label = "Or select a cached show", 
+                         choices = "", selected = NULL),
           actionButton(inputId = "get_show", label = "PLOTERIZZLE", icon = icon("play"))
         ),
         column(4, offset = 1,
@@ -50,7 +52,7 @@ shinyUI(
         )
       ),
       hr(),
-      h5("tRakt version 0.1.18"),
+      h5("tRakt version 0.1.19"),
       p("Updates in", tags$a(href = "http://pants.jemu.name//tag/trakt_shiny", "my #pants"))
     ),
     tabPanel(title = "About", icon = icon("question-circle"),
