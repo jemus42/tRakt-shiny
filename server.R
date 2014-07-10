@@ -158,7 +158,7 @@ shinyServer(function(input, output, session){
     titles       <- file.path(cacheDir, "showtitles.rds")
     if (query_parsed$debug == "1" && file.exists(titles)){
       archived <- readRDS(file = titles)
-      p <- ggplot(data = archived, aes(x = title, y = requests))
+      p <- ggplot(data = archived, aes(x = reorder(title, requests), y = requests))
       p <- p + geom_bar(stat = "identity")
       p <- p + coord_flip()
       p <- p + labs(y = "Times Requested", x = "Show Title", title = "Usage Statistics")

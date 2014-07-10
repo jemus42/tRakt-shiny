@@ -42,9 +42,10 @@ cache_titles <- function(showindex, cache_dir){
   } else {
     temp <- readRDS(file = titles)
     if (!(showindex$id %in% temp$id)){
-      temp       <- rbind(temp, showindex)
-      temp$title <- as.character(temp$title)
-      temp       <- plyr::arrange(temp, title)
+      showindex$requests <- 1
+      temp               <- rbind(temp, showindex)
+      temp$title         <- as.character(temp$title)
+      temp               <- plyr::arrange(temp, title)
       saveRDS(temp, file = titles)
     } else {
       temp$requests[temp$id == showindex$id] <- temp$requests[temp$id == showindex$id] + 1
