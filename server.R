@@ -155,7 +155,7 @@ shinyServer(function(input, output, session){
     url_query    <- session$clientData$url_search
     query_parsed <- as.data.frame(parseQueryString(url_query))
     if (is.null(query_parsed$debug)){return(NULL)}
-    titles       <- file.path(cache_dir, "showtitles.rds")
+    titles       <- file.path(cacheDir, "showtitles.rds")
     if (query_parsed$debug == "1" && file.exists(titles)){
       archived <- readRDS(file = titles)
       p <- ggplot(data = archived, aes(x = title, y = requests))
