@@ -15,6 +15,7 @@ if (!'rmarkdown' %in% installed.packages()) install_github("rstudio/rmarkdown", 
 library(rmarkdown)
 if (!'shinyIncubator' %in% installed.packages()) install_github("rstudio/shiny-incubator", dependencies=TRUE)
 library(shinyIncubator)
+if (!'plyr' %in% installed.packages()) install.packages("plyr", dependencies=TRUE)
 
 ## Set API key ##
 if (file.exists("key.json")){
