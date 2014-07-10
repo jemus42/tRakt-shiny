@@ -33,7 +33,7 @@ shinyUI(
       inputPanel(
         column(4,
           h3(icon("search"), "Show Selection"),
-          textInput(inputId = "show_query", label = "Enter the name of a show", value = "Firefly"),
+          textInput(inputId = "show_query", label = "Enter the name of a show", value = ""),
           br(),
           selectizeInput(inputId = "shows_cached", label = "Or select a cached show", 
                          choices = "", selected = NULL),
@@ -52,12 +52,11 @@ shinyUI(
         )
       ),
       hr(),
-      h5("tRakt version 0.1.20"),
-      p("Updates in", tags$a(href = "http://pants.jemu.name//tag/trakt_shiny", "my #pants"))
+      includeMarkdown("footer.md")
     ),
     tabPanel(title = "About", icon = icon("question-circle"),
       fixedPage(
-        column(4, includeMarkdown("about.md"))
+        column(8, includeMarkdown("about.md"))
       )
     )
   )

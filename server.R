@@ -153,7 +153,9 @@ shinyServer(function(input, output, session){
       showindex  <- readRDS(indexfile)
       ids        <- showindex$title
       names(ids) <- showindex$title
-      updateSelectizeInput(session, inputId = "shows_cached", choices = ids)
+      randomshow <- sample(ids, 1)
+      updateSelectizeInput(session, inputId = "shows_cached", 
+                           choices = ids, selected = randomshow)
     }
   })
 })
