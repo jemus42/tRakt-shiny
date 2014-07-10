@@ -37,6 +37,7 @@ if (!file.exists(cacheDir)){
 cache_titles <- function(showindex, cache_dir){
   titles <- file.path(cache_dir, "showtitles.rds")
   if (!file.exists(titles)){
+    showindex$requests <- 1
     saveRDS(showindex, file = titles)
   } else {
     temp <- readRDS(file = titles)
@@ -45,9 +46,13 @@ cache_titles <- function(showindex, cache_dir){
       temp$title <- as.character(temp$title)
       temp       <- plyr::arrange(temp, title)
       saveRDS(temp, file = titles)
+    } else {
+      temp$requests[temp$id == showindex$id] <- temp$requests[temp$id == showindex$id] + 1
+      saveRDS(temp, file = titles)
     }
   }
 }
+
 
 #### Setting some values ####
 btn.scale.x.choices <- c("Total Episode Numbers" = "epnum",

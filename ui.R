@@ -52,7 +52,11 @@ shinyUI(
         )
       ),
       hr(),
-      includeMarkdown("footer.md")
+      includeMarkdown("footer.md"),
+      conditionalPanel(condition = "1 == 4", checkboxInput(inputId = "debug", label = ".", value = F)),
+      conditionalPanel(condition = "input.debug",
+        plotOutput(outputId = "usage_stats", width = "100%")
+      )
     ),
     tabPanel(title = "About", icon = icon("question-circle"),
       fixedPage(

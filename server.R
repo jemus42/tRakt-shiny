@@ -136,11 +136,35 @@ shinyServer(function(input, output, session){
   #### Parsing url querys ####
   observe({
     url_query    <- session$clientData$url_search
-    query_parsed <- parseQueryString(url_query)
+    query_parsed <- as.data.frame(parseQueryString(url_query))
     
     # Take actions on queries
     if (!is.null(query_parsed$show)){
       updateTextInput(session, inputId = "show_query", value = query_parsed$showname)
+    }
+    
+    if (!is.null(query_parsed$debug)){
+      if (query_parsed$debug == "1"){
+        updateCheckboxInput(session, "debug", value = TRUE)
+      }
+    }
+  })
+  
+  
+  output$usage_stats <- renderPlot({
+    url_query    <- session$clientData$url_search
+    query_parsed <- as.data.frame(parseQueryString(url_query))
+    if (is.null(query_parsed$debug)){return(NULL)}
+    titles       <- file.path(cache_dir, "showtitles.rds")
+    if (query_parsed$debug == "1" && file.exists(titles)){
+      archived <- readRDS(file = titles)
+      p <- ggplot(data = archived, aes(x = title, y = requests))
+      p <- p + geom_bar(stat = "identity")
+      p <- p + coord_flip()
+      p <- p + labs(y = "Times Requested", x = "Show Title", title = "Usage Statistics")
+      return(p)
+    } else {
+      return(NULL)
     }
   })
   
