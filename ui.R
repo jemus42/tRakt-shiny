@@ -42,7 +42,7 @@ shinyUI(
                          choices = "", selected = NULL),
           actionButton(inputId = "get_show", label = "PLOTERIZZLE", icon = icon("play"))
         ),
-        column(4, offset = 1,
+        column(4,
           h3(icon("cogs"), "Plot Options"), 
           selectInput(inputId = "btn_scale_x_variable", label = "Select timeline format:",
                       choices = btn.scale.x.choices, selected = "epnum"),

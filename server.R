@@ -84,7 +84,7 @@ shinyServer(function(input, output, session){
     plot <- plot %>% add_axis("y", title = label.y)
     plot <- plot %>% add_legend("fill", title = "Season", orient = "left")
     plot <- plot %>% add_tooltip(function(epdata){epdata$id}, "hover")
-    plot <- plot %>% set_options(width = 900, height = 400)
+    plot <- plot %>% set_options(width = 900, height = 400, renderer = "canvas")
     plot <- plot %>% bind_shiny(plot_id = "ggvis")
   })
   
@@ -103,7 +103,6 @@ shinyServer(function(input, output, session){
     x1$chart(tooltipContent = "#! function(key, x, y, e){ 
                                            return e.point.id
                                   } !#")
-    x1$chart(size = 20)
     #x1$chart(showControls = FALSE) # Would deactivate magnify button(?)
     x1$xAxis(axisLabel = label.x)  
     x1$yAxis(axisLabel = label.y) 
@@ -129,7 +128,6 @@ shinyServer(function(input, output, session){
     show           <- show()
     if (is.null(show)){return(NULL)}
     show           <- show$overview
-    banner         <- show$images$banner
     overview       <- p(show$overview)
     return(overview)
   })

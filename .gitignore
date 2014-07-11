@@ -10,3 +10,4 @@ shinyapps
 key.txt
 packrat/lib*/
 packrat/src/
+playground.R
