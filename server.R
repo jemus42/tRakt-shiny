@@ -79,11 +79,35 @@ shinyServer(function(input, output, session){
     if (input$btn_scale_y_range == TRUE){
       plot <- plot %>% scale_numeric("y", domain = c(0, 100))
     }  
+    plot <- plot %>% scale_numeric("y", zero = input$btn_scale_y_zero)
     plot <- plot %>% add_axis("x", title = label.x)
     plot <- plot %>% add_axis("y", title = label.y)
     plot <- plot %>% add_legend("fill", title = "Season", orient = "left")
     plot <- plot %>% add_tooltip(function(epdata){epdata$id}, "hover")
+    plot <- plot %>% set_options(width = 900, height = 400)
     plot <- plot %>% bind_shiny(plot_id = "ggvis")
+  })
+  
+  output$plot_nvd3 <- renderChart2({
+    if (input$get_show == 0){return(NULL)}
+    show    <- isolate(show())
+    if (is.null(show)){return(NULL)}
+    epdata  <- make_tooltip(show$episodes)
+    label.x <- names(btn.scale.x.choices[btn.scale.x.choices == input$btn_scale_x_variable])
+    label.y <- names(btn.scale.y.choices[btn.scale.y.choices == input$btn_scale_y_variable])
+    
+    x1 <- nPlot(x = input$btn_scale_x_variable,
+                y = input$btn_scale_y_variable,
+                group = "season", data = epdata, type = "scatterChart",
+                width = 900, height = 500)
+    x1$chart(tooltipContent = "#! function(key, x, y, e){ 
+                                           return e.point.id
+                                  } !#")
+    x1$chart(size = 20)
+    #x1$chart(showControls = FALSE) # Would deactivate magnify button(?)
+    x1$xAxis(axisLabel = label.x)  
+    x1$yAxis(axisLabel = label.y) 
+    return(x1)
   })
   
   #### Output Assignments ####

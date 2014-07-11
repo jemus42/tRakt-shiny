@@ -15,6 +15,8 @@ if (!'rmarkdown' %in% installed.packages()) install_github("rstudio/rmarkdown", 
 library(rmarkdown)
 if (!'shinyIncubator' %in% installed.packages()) install_github("rstudio/shiny-incubator", dependencies=TRUE)
 library(shinyIncubator)
+if (!'rCharts' %in% installed.packages()) install_github("ramnathv/rCharts", dependencies=TRUE)
+library(rCharts)
 if (!'plyr' %in% installed.packages()) install.packages("plyr", dependencies=TRUE)
 
 ## Set API key ##
@@ -28,7 +30,7 @@ if (file.exists("key.json")){
   stop("Place your key.json or key.txt in the root of this directory")
 }
 
-#### Seti/find/create/save cache dir ####
+#### Set/find/create/save cache dir ####
 cacheDir <- "cache"
 if (!file.exists(cacheDir)){
   dir.create(cacheDir)

@@ -17,9 +17,12 @@ shinyUI(
         ),
         hr(),
         # TODO: Make this default to device width somehow ¯\_(ツ)_/¯
-        tabsetPanel(id = "mainPanel", selected = "tab_plot",
-          tabPanel(title = "Plot", value = "tab_plot", icon = icon("bar-chart-o"),
+        tabsetPanel(id = "mainPanel", selected = "tab_plot_ggvis",
+          tabPanel(title = "Plot (ggvis)", value = "tab_plot_ggvis", icon = icon("bar-chart-o"),
                    ggvisOutput(plot_id = "ggvis")
+          ),
+          tabPanel(title = "Plot (nvd3)", value = "tab_plot_nvd3", icon = icon("bar-chart-o"),
+                   chartOutput(outputId = "plot_nvd3", lib = "nvd3")
           ),
           tabPanel(title = "Data", value = "tab_data", icon = icon("table"),
                    dataTableOutput(outputId = "table.episodes")
@@ -45,6 +48,8 @@ shinyUI(
                       choices = btn.scale.x.choices, selected = "epnum"),
           selectInput(inputId = "btn_scale_y_variable", label = "Select target variable:",
                       choices = btn.scale.y.choices, selected = "rating"),
+          checkboxInput(inputId = "btn_scale_y_zero", label = "Start y axis at zero",
+                        value = FALSE),
           conditionalPanel(condition = "input.btn_scale_y_variable == 'rating' ",
             checkboxInput(inputId = "btn_scale_y_range", label = "Scale Ratings 0 - 100%",
                           value = FALSE)
