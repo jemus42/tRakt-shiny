@@ -104,8 +104,11 @@ shinyServer(function(input, output, session){
                                            return e.point.id
                                   } !#")
     #x1$chart(showControls = FALSE) # Would deactivate magnify button(?)
-    x1$xAxis(axisLabel = label.x)  
-    x1$yAxis(axisLabel = label.y) 
+    x1$xAxis(axisLabel = label.x)
+    x1$yAxis(axisLabel = label.y)
+    if (input$btn_scale_x_variable == "firstaired.posix"){
+      x1$xAxis(tickFormat="#!function(d) {return d3.time.format('%Y-%m-%d')(new Date( d * 1000));}!#" )
+    }
     return(x1)
   })
   
