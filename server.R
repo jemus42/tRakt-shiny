@@ -116,12 +116,20 @@ shinyServer(function(input, output, session){
   output$show_name <- renderText({
     if (input$get_show == 0){return("Show Title will appear here soon. Are you excited?")}
     isolate({
-      show    <- show()
+      show      <- show()
       if (is.null(show)){return(NULL)}
-      show    <- show$overview
-      showurl <- paste0("<a href=", show$url, ">", show$title, "</a>", 
-                        " (", show$year, ")", " — ", show$ratings$percentage, "% Rating / ",
-                        show$ratings$votes, " Votes")
+      overview  <- show$overview
+      if (overview$ended){
+        if (overview$year != max(show$episodes$year)){
+          years <- paste0("(", overview$year, " - ", max(show$episodes$year), ")")
+        } else {
+          years <- paste0("(", overview$year, ")")
+        }
+      } else {
+        years <- paste0("(", overview$year, ", ongoing)")
+      }
+      showurl   <- paste0("<a href=", overview$url, ">", overview$title, "</a> ", 
+                        years)
       return(showurl)
     })
   })
@@ -135,13 +143,30 @@ shinyServer(function(input, output, session){
     return(overview)
   })
   
+  output$show_ratings <- renderUI({
+    if (input$get_show == 0){return(NULL)}
+    show           <- show()
+    if (is.null(show)){return(NULL)}
+    
+    show_rating_total    <- paste0(show$overview$ratings$percentage, "%")
+    show_rating_episodes <- paste0(round(mean(show$episodes$rating), 2), "%")
+    show_votes           <- show$overview$ratings$votes
+    
+    output <- fluidRow(
+                column(3, h4("Show Rating"), show_rating_total),
+                column(3, h4("Episode Average"), show_rating_episodes),
+                column(3, h4("Total Votes"), show_votes)
+              )
+    return(output)
+  })
+  
   output$show_banner <- renderUI({
     if (input$get_show == 0){return(NULL)}
     show           <- show()
     if (is.null(show)){return(NULL)}
     show           <- show$overview
-    banner         <- show$images$banner
-    image          <- tags$div(align = "center", tags$img(src = banner))
+    banner         <- show$images$poster
+    image          <- tags$div(align = "right", tags$img(src = banner, width = 300))
     return(image)
   })
   
