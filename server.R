@@ -84,7 +84,7 @@ shinyServer(function(input, output, session){
     plot <- plot %>% add_axis("y", title = label.y)
     plot <- plot %>% add_legend("fill", title = "Season", orient = "left")
     plot <- plot %>% add_tooltip(function(epdata){epdata$id}, "hover")
-    plot <- plot %>% set_options(width = 900, height = 400, renderer = "canvas")
+    plot <- plot %>% set_options(width = 900, height = 500, renderer = "canvas")
     plot <- plot %>% bind_shiny(plot_id = "ggvis")
   })
   
