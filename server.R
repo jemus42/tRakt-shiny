@@ -119,17 +119,19 @@ shinyServer(function(input, output, session){
       show      <- show()
       if (is.null(show)){return(NULL)}
       overview  <- show$overview
+      label_ended   <- tags$span(class = "label label-default", "ended")
+      label_ongoing <- tags$span(class = "label label-success", "ongoing")
       if (overview$ended){
         if (overview$year != max(show$episodes$year)){
-          years <- paste0("(", overview$year, " - ", max(show$episodes$year), ")")
+          runtime <- paste0("(", overview$year, " - ", max(show$episodes$year), ") ", label_ended)
         } else {
-          years <- paste0("(", overview$year, ")")
+          runtime <- paste0("(", overview$year, ") ", label_ended)
         }
       } else {
-        years <- paste0("(", overview$year, ", ongoing)")
+        runtime <- paste0("(", overview$year, ") ", label_ongoing)
       }
       showurl   <- paste0("<a href=", overview$url, ">", overview$title, "</a> ", 
-                        years)
+                        runtime)
       return(showurl)
     })
   })
@@ -139,7 +141,7 @@ shinyServer(function(input, output, session){
     show           <- show()
     if (is.null(show)){return(NULL)}
     show           <- show$overview
-    overview       <- p(show$overview)
+    overview       <- p(class = "lead", show$overview)
     return(overview)
   })
   
@@ -166,7 +168,7 @@ shinyServer(function(input, output, session){
     if (is.null(show)){return(NULL)}
     show           <- show$overview
     banner         <- show$images$poster
-    image          <- tags$div(align = "right", tags$img(src = banner, width = 300))
+    image          <- tags$div(align = "right", tags$img(src = banner, width = 300, class = "img-rounded"))
     return(image)
   })
   

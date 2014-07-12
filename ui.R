@@ -2,7 +2,7 @@
 
 shinyUI(
   navbarPage(title = "tRakt", inverse = TRUE, responsive = TRUE, fluid = TRUE,
-    
+  
     #### Main view ####
     tabPanel("Main", icon = icon("tasks"),
       progressInit(),
@@ -10,10 +10,9 @@ shinyUI(
       #### Episode information ####
       conditionalPanel(condition = "input.get_show > 0 && output.show_name != ''",
         wellPanel(
-          fluidRow(
+          fixedRow(
             column(9,
                    h2(htmlOutput("show_name")),
-                   h3("Show summary"),
                    htmlOutput("show_overview"),
                    htmlOutput("show_ratings")
             ),
