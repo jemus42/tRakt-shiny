@@ -11,7 +11,7 @@ shinyUI(
       conditionalPanel(condition = "input.get_show > 0 && output.show_name != ''",
         wellPanel(
           fixedRow(
-            column(9,
+            column(10,
                    h2(htmlOutput("show_name")),
                    htmlOutput("show_overview"),
                    htmlOutput("show_ratings")

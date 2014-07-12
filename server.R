@@ -153,11 +153,13 @@ shinyServer(function(input, output, session){
     show_rating_total    <- paste0(show$overview$ratings$percentage, "%")
     show_rating_episodes <- paste0(round(mean(show$episodes$rating), 2), "%")
     show_votes           <- show$overview$ratings$votes
+    show_ratings_sd      <- paste0(round(sd(show$episodes$rating), 2), "%")
     
     output <- fluidRow(
-                column(3, h4("Show Rating"), show_rating_total),
-                column(3, h4("Episode Average"), show_rating_episodes),
-                column(3, h4("Total Votes"), show_votes)
+                column(2, h4("Show Rating"), show_rating_total),
+                column(2, h4("Episode ", tags$abbr(HTML("&#956;"), title = "Average")), show_rating_episodes),
+                column(2, h4("Episode ", tags$abbr(HTML("&#963;"), title = "Standard Deviation")), show_ratings_sd),
+                column(2, h4("Total Votes"), show_votes)
               )
     return(output)
   })
@@ -168,7 +170,7 @@ shinyServer(function(input, output, session){
     if (is.null(show)){return(NULL)}
     show           <- show$overview
     banner         <- show$images$poster
-    image          <- tags$div(align = "right", tags$img(src = banner, width = 300, class = "img-rounded"))
+    image          <- tags$div(align = "right", tags$img(src = banner, width = 200, class = "img-rounded"))
     return(image)
   })
   
