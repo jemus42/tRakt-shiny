@@ -10,14 +10,13 @@ shinyUI(
       #### Episode information ####
       conditionalPanel(condition = "input.get_show > 0 && output.show_name != ''",
         wellPanel(
-          fixedRow(
-            column(10,
-                   h2(htmlOutput("show_name")),
-                   htmlOutput("show_overview"),
-                   htmlOutput("show_ratings")
-            ),
-            column(2,
-                   htmlOutput("show_banner")
+          h2(htmlOutput("show_name")),
+          fluidRow(
+            column(2, htmlOutput("show_banner", inline = TRUE)),
+            column(10, 
+              htmlOutput("show_overview"), 
+              htmlOutput("show_ratings"), br(),
+              htmlOutput("show_links")
             )
           )
         ),
@@ -59,12 +58,15 @@ shinyUI(
           conditionalPanel(condition = "input.btn_scale_y_variable == 'rating' ",
             checkboxInput(inputId = "btn_scale_y_range", label = "Scale Ratings 0 - 100%",
                           value = FALSE)
-          )
+          )#,
+          #checkboxGroupInput(inputId = "btn_trendlines", label = "Trendlines", inline = T,
+          #                   choices = c("Show", "Season"), selected = NULL)
         )
       ),
       hr(),
       includeMarkdown("footer.md"),
-      conditionalPanel(condition = "1 == 4", checkboxInput(inputId = "debug", label = ".", value = F)),
+      # Clumsiest way of hiding a debug input element ever
+      conditionalPanel(condition = "false", checkboxInput(inputId = "debug", label = ".", value = F)),
       conditionalPanel(condition = "input.debug",
         plotOutput(outputId = "usage_stats", width = "100%")
       )

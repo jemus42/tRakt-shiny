@@ -8,22 +8,23 @@ shinyServer(function(input, output, session){
     if (input$get_show == 0){return(NULL)}
      # Initiate progress bar
      withProgress(session, min = 0, max = 6, {
-       
+      # Use isolate() on show_query to not execute on every update of the input
       query        <- isolate(input$show_query)
       query_cached <- isolate(input$shows_cached)
+      # textInput is favored over selectizeInput containing chached data
       if (query_cached == "" && query == ""){
         return(NULL)
       } else if (query == "" && query_cached != ""){
         query <- query_cached
       }
       
-      # Inititalize show object as a list 
+      # Inititalize show object as a list
       show          <- list()
       
       setProgress(message = "Fetching data from Trakt.tv…",
-                  detail = "Getting general show information…", value = 1)
+                  detail  = "Getting general show information…", value = 1)
       
-      # Use isolate() on show_query to not execute on every update of the input
+      # Starting to pull data
       show$overview <- trakt.search(query)
       if (!is.null(show$overview$error)){
         warning(paste0(show$overview$error, ": ", query))
@@ -72,13 +73,19 @@ shinyServer(function(input, output, session){
     label.y <- names(btn.scale.y.choices[btn.scale.y.choices == input$btn_scale_y_variable])
     
     plot <- epdata %>% ggvis(x    = as.name(input$btn_scale_x_variable),
-                             y    = as.name(input$btn_scale_y_variable), 
-                             fill = ~season, 
+                             y    = as.name(input$btn_scale_y_variable),
+                             fill = ~season,
                              key  := ~id)
     plot <- plot %>% layer_points(size.hover := 200)
+    if ("Show" %in% input$btn_trendlines){
+      plot <- plot %>% layer_model_predictions(formula = rating ~ epnum, model = "lm", se = F)
+    }
+    if ("Season" %in% input$btn_trendlines){
+      plot <- plot %>% group_by(season) %>% layer_model_predictions(model = "lm", se = F)
+    }
     if (input$btn_scale_y_range == TRUE){
       plot <- plot %>% scale_numeric("y", domain = c(0, 100))
-    }  
+    }
     plot <- plot %>% scale_numeric("y", zero = input$btn_scale_y_zero)
     plot <- plot %>% add_axis("x", title = label.x)
     plot <- plot %>% add_axis("y", title = label.y)
@@ -100,7 +107,7 @@ shinyServer(function(input, output, session){
                 y = input$btn_scale_y_variable,
                 group = "season", data = epdata, type = "scatterChart",
                 width = 900, height = 500)
-    x1$chart(tooltipContent = "#! function(key, x, y, e){ 
+    x1$chart(tooltipContent = "#! function(key, x, y, e){
                                            return e.point.id
                                   } !#")
     #x1$chart(showControls = FALSE) # Would deactivate magnify button(?)
@@ -130,7 +137,7 @@ shinyServer(function(input, output, session){
       } else {
         runtime <- paste0("(", overview$year, ") ", label_ongoing)
       }
-      showurl   <- paste0("<a href=", overview$url, ">", overview$title, "</a> ", 
+      showurl   <- paste0("<a href=", overview$url, ">", overview$title, "</a> ",
                         runtime)
       return(showurl)
     })
@@ -170,8 +177,28 @@ shinyServer(function(input, output, session){
     if (is.null(show)){return(NULL)}
     show           <- show$overview
     banner         <- show$images$poster
-    image          <- tags$div(align = "right", tags$img(src = banner, width = 200, class = "img-rounded"))
+    image          <- tags$img(src = banner, width = 250, class = "img-rounded")
     return(image)
+  })
+  
+  output$show_links <- renderUI({
+    if (input$get_show == 0){return(NULL)}
+    show           <- show()
+    if (is.null(show)){return(NULL)}
+    overview       <- show$overview
+    imdb           <- paste0("http://www.imdb.com/title/",         overview$imdb_id)
+    tvrage         <- paste0("http://www.tvrage.com/shows/id-",    overview$tvrage_id)
+    tvdb           <- paste0("http://thetvdb.com/?tab=series&id=", overview$tvdb_id)
+    wiki           <- paste0("http://en.wikipedia.org/wiki/Special:Search?search=list of ", 
+                             overview$title, " episodes&go=Go")
+    output <- fluidRow(
+                column(1, tags$strong(tags$a(href = imdb,   "IMDb"))),
+                column(1, tags$strong(tags$a(href = tvrage, "TVRage"))),
+                column(1, tags$strong(tags$a(href = tvdb,   "TheTVDB"))),
+                column(1, tags$strong(tags$a(href = wiki,   "Wikipedia")))
+              )
+    return(output)
+    
   })
   
   output$table.episodes <- renderDataTable({
@@ -180,7 +207,7 @@ shinyServer(function(input, output, session){
     episodes       <- show$episodes
     overview       <- gsub("'", "’", episodes$overview)
     episodes$title <- paste0("<a target='_blank' title ='",
-                             overview, "' href='", episodes$url.trakt, 
+                             overview, "' href='", episodes$url.trakt,
                              "'>", episodes$title, "</a>")
     episodes       <- episodes[table.episodes.columns]
     names(episodes)<- table.episodes.names
@@ -215,6 +242,7 @@ shinyServer(function(input, output, session){
       p <- ggplot(data = archived, aes(x = reorder(title, requests), y = requests))
       p <- p + geom_bar(stat = "identity")
       p <- p + coord_flip()
+      p <- p + scale_x_continuous(breaks = pretty_breaks())
       p <- p + labs(y = "Times Requested", x = "Show Title", title = "Usage Statistics")
       return(p)
     } else {
@@ -232,7 +260,7 @@ shinyServer(function(input, output, session){
       ids        <- showindex$title
       names(ids) <- showindex$title
       randomshow <- sample(ids, 1)
-      updateSelectizeInput(session, inputId = "shows_cached", 
+      updateSelectizeInput(session, inputId = "shows_cached",
                            choices = ids, selected = randomshow)
     }
   })
