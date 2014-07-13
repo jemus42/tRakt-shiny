@@ -224,7 +224,7 @@ shinyServer(function(input, output, session){
     
     # Take actions on queries
     if (!is.null(query_parsed$show)){
-      updateTextInput(session, inputId = "show_query", value = query_parsed$showname)
+      updateTextInput(session, inputId = "show_query", value = query_parsed$show)
     }
     
     if (!is.null(query_parsed$debug)){
