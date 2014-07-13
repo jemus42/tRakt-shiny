@@ -58,9 +58,9 @@ shinyUI(
           conditionalPanel(condition = "input.btn_scale_y_variable == 'rating' ",
             checkboxInput(inputId = "btn_scale_y_range", label = "Scale Ratings 0 - 100%",
                           value = FALSE)
-          )#,
-          #checkboxGroupInput(inputId = "btn_trendlines", label = "Trendlines", inline = T,
-          #                   choices = c("Show", "Season"), selected = NULL)
+          ),
+          checkboxGroupInput(inputId = "btn_trendlines", label = "Trendlines", inline = T,
+                             choices = c("Show", "Season"), selected = NULL)
         )
       ),
       hr(),
