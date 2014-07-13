@@ -176,7 +176,8 @@ shinyServer(function(input, output, session){
     show           <- show()
     if (is.null(show)){return(NULL)}
     show           <- show$overview
-    banner         <- show$images$poster
+    # Get image link, and use https
+    banner         <- sub("http:", "https:", show$images$poster)
     image          <- tags$img(src = banner, width = 250, class = "img-rounded")
     return(image)
   })
