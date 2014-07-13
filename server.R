@@ -50,6 +50,12 @@ shinyServer(function(input, output, session){
         show$episodes <- initializeEpisodes(show$seasons)
         setProgress(detail = "Getting episode data (this takes a while…)", value = 4)
         show$episodes <- trakt.getEpisodeData(show_id, show$episodes)
+        show$seasons  <- plyr::join(show$seasons, 
+                                    plyr::ddply(show$episodes, .(season), plyr::summarize, 
+                                        avg.rating.season = round(mean(rating), 1), 
+                                        rating.sd = sd(rating), 
+                                        top.rating.episode = max(rating), 
+                                        lowest.rating.episode = min(rating)))
         setProgress(detail = "Caching results…", value = 5)
         saveRDS(object = show$episodes, file = cachedpath)
         setProgress(detail = "Done!", value = 6)
@@ -65,6 +71,8 @@ shinyServer(function(input, output, session){
     # The 0 - 100 range thing should only be active for ratings
     if (input$btn_scale_y_range && input$btn_scale_y_variable != "rating"){
       updateCheckboxInput(session, inputId = "btn_scale_y_range", value = FALSE)
+    } else if (input$btn_scale_y_zero && input$btn_scale_y_variable == "rating"){
+      updateCheckboxInput(session, inputId = "btn_scale_y_zero", value = FALSE)
     }
     show    <- isolate(show())
     if (is.null(show)){return(NULL)}
@@ -77,7 +85,8 @@ shinyServer(function(input, output, session){
     plot <- epdata %>% ggvis(x    = as.name(var_x),
                              y    = as.name(var_y),
                              fill = ~season,
-                             key  := ~id)
+                             key  := ~id,
+                             stroke := NA, stroke.hover := "gray", strokeWidth := 2)
     plot <- plot %>% layer_points(size.hover := 200)
     if ("Show" %in% input$btn_trendlines && var_y == "rating"){
       plot <- plot %>% layer_model_predictions(model = "lm", se = F)
@@ -156,7 +165,7 @@ shinyServer(function(input, output, session){
   
   output$show_ratings <- renderUI({
     if (input$get_show == 0){return(NULL)}
-    show           <- show()
+    show                <- show()
     if (is.null(show)){return(NULL)}
     
     show_rating_total    <- paste0(show$overview$ratings$percentage, "%")
@@ -207,6 +216,7 @@ shinyServer(function(input, output, session){
   output$table.episodes <- renderDataTable({
     if (input$get_show == 0){return(NULL)}
     show           <- show()
+    if (is.null(show)){return(NULL)}
     episodes       <- show$episodes
     overview       <- gsub("'", "’", episodes$overview)
     episodes$title <- paste0("<a target='_blank' title ='",
@@ -233,7 +243,6 @@ shinyServer(function(input, output, session){
       }
     }
   })
-  
   
   output$usage_stats <- renderPlot({
     url_query    <- session$clientData$url_search

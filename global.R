@@ -18,6 +18,7 @@ library(shinyIncubator)
 if (!'rCharts' %in% installed.packages()) install_github("ramnathv/rCharts", dependencies=TRUE)
 library(rCharts)
 if (!'plyr' %in% installed.packages()) install.packages("plyr", dependencies=TRUE)
+library(plyr)
 
 ## Set API key ##
 if (file.exists("key.json")){
@@ -55,7 +56,6 @@ cache_titles <- function(showindex, cache_dir){
     }
   }
 }
-
 
 #### Setting some values ####
 btn.scale.x.choices <- c("Total Episode Numbers" = "epnum",

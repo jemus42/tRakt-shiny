@@ -39,7 +39,7 @@ shinyUI(
       
       #### Control panel ####
       inputPanel(
-        column(4,
+        column(3,
           h3(icon("search"), "Show Selection"),
           textInput(inputId = "show_query", label = "Enter the name of a show", value = ""),
           br(),
@@ -47,19 +47,24 @@ shinyUI(
                          choices = "", selected = NULL),
           actionButton(inputId = "get_show", label = "PLOTERIZZLE", icon = icon("play"))
         ),
-        column(4,
-          h3(icon("cogs"), "Plot Options"), 
+        column(3, h3(icon("cogs"), "Plot Options"),
           selectInput(inputId = "btn_scale_x_variable", label = "Select timeline format:",
                       choices = btn.scale.x.choices, selected = "epnum"),
           selectInput(inputId = "btn_scale_y_variable", label = "Select target variable:",
-                      choices = btn.scale.y.choices, selected = "rating"),
-          checkboxInput(inputId = "btn_scale_y_zero", label = "Start y axis at zero",
-                        value = FALSE),
-          conditionalPanel(condition = "input.btn_scale_y_variable == 'rating' ",
-            checkboxInput(inputId = "btn_scale_y_range", label = "Scale Ratings 0 - 100%",
+                      choices = btn.scale.y.choices, selected = "rating")
+        ),
+        column(3, h3(icon("cogs"), "Display Options"),
+          h5("Axis scales"),
+          conditionalPanel(condition = "input.btn_scale_y_variable != 'rating' ",
+            checkboxInput(inputId = "btn_scale_y_zero", label = "Start y axis at zero",
                           value = FALSE)
           ),
-          checkboxGroupInput(inputId = "btn_trendlines", label = "Trendlines", inline = T,
+          conditionalPanel(condition = "input.btn_scale_y_variable == 'rating' ",
+                           checkboxInput(inputId = "btn_scale_y_range", label = "Scale Ratings 0 - 100%",
+                                         value = FALSE)
+          ), br(),
+          h5("Trendlines (WIP)"),
+          checkboxGroupInput(inputId = "btn_trendlines", label = "", inline = T,
                              choices = c("Show", "Season"), selected = NULL)
         )
       ),
