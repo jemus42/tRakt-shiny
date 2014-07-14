@@ -15,8 +15,8 @@ shinyUI(
             column(2, htmlOutput("show_banner", inline = TRUE)),
             column(10, 
               htmlOutput("show_overview"), 
-              htmlOutput("show_ratings"), br(),
-              htmlOutput("show_links")
+              htmlOutput("show_links"), br(),
+              htmlOutput("show_ratings")
             )
           )
         ),
@@ -29,8 +29,11 @@ shinyUI(
           tabPanel(title = "Plot (nvd3)", value = "tab_plot_nvd3", icon = icon("bar-chart-o"),
                    chartOutput(outputId = "plot_nvd3", lib = "nvd3")
           ),
-          tabPanel(title = "Data", value = "tab_data", icon = icon("table"),
-                   dataTableOutput(outputId = "table.episodes")
+          tabPanel(title = "Episodes", value = "tab_data_episodes", icon = icon("table"),
+                   dataTableOutput(outputId = "table_episodes")
+          ),
+          tabPanel(title = "Seasons", value = "tab_data_seasons", icon = icon("table"),
+                   dataTableOutput(outputId = "table_seasons")
           )
         )
       ),
@@ -44,7 +47,7 @@ shinyUI(
           textInput(inputId = "show_query", label = "Enter the name of a show", value = ""),
           br(),
           selectizeInput(inputId = "shows_cached", label = "Or select a cached show", 
-                         choices = "", selected = NULL),
+                         choices = "Loading cache…", selected = NULL),
           actionButton(inputId = "get_show", label = "PLOTERIZZLE", icon = icon("play"))
         ),
         column(3, h3(icon("cogs"), "Plot Options"),

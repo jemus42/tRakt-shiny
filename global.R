@@ -68,6 +68,9 @@ btn.scale.y.choices <- c("Rating" = "rating",
 table.episodes.columns <- c("epid", "title", "firstaired.string", "rating", "votes", "loved", "hated")
 table.episodes.names   <- c("Episode ID", "Title", "Airdate", "Rating (%)", "Votes", "Loved", "Hated")
 
+table.seasons.columns  <- c("season", "episodes", "avg.rating.season", "rating.sd", "top.rating.episode", "lowest.rating.episode")
+table.seasons.names    <- c("Season", "Episodes", "Average Rating", paste("Episode", sigma), "Highest Rating", "Lowest Rating")
+
 #### Helper functions ####
 
 make_tooltip <- function(show.episodes){
@@ -82,3 +85,8 @@ make_tooltip <- function(show.episodes){
   show.episodes$id <- id
   return(show.episodes)
 }
+
+#### Define some HTML characters ####
+bullet <- HTML("&#8226;")
+mu     <- HTML("&#956;")
+sigma  <- HTML("&#963;")

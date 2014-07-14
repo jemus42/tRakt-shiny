@@ -42,7 +42,7 @@ shinyServer(function(input, output, session){
       
       if (file.exists(cachedpath)){
         setProgress(detail = "Reading from cache…", value = 3)
-        show$episodes <- readRDS(file = cachedpath)
+        show <- readRDS(file = cachedpath)
       } else {
         setProgress(detail = "Getting season data…", value = 2)
         show$seasons  <- trakt.getSeasons(show_id)
@@ -57,7 +57,7 @@ shinyServer(function(input, output, session){
                                         top.rating.episode = max(rating), 
                                         lowest.rating.episode = min(rating)))
         setProgress(detail = "Caching results…", value = 5)
-        saveRDS(object = show$episodes, file = cachedpath)
+        saveRDS(object = show, file = cachedpath)
         setProgress(detail = "Done!", value = 6)
       }
       return(show)
@@ -174,8 +174,8 @@ shinyServer(function(input, output, session){
     
     output <- fluidRow(
                 column(2, h4("Show Rating"), show_rating_total),
-                column(2, h4("Episode ", tags$abbr(HTML("&#956;"), title = "Average")), show_rating_episodes),
-                column(2, h4("Episode ", tags$abbr(HTML("&#963;"), title = "Standard Deviation")), show_ratings_sd),
+                column(2, h4("Episode ", tags$abbr(mu, title = "Average")), show_rating_episodes),
+                column(2, h4("Episode ", tags$abbr(sigma, title = "Standard Deviation")), show_ratings_sd),
                 column(2, h4("Total Votes"), show_votes)
               )
     return(output)
@@ -202,17 +202,17 @@ shinyServer(function(input, output, session){
     tvdb           <- paste0("http://thetvdb.com/?tab=series&id=", overview$tvdb_id)
     wiki           <- paste0("http://en.wikipedia.org/wiki/Special:Search?search=list of ", 
                              overview$title, " episodes&go=Go")
-    output <- fluidRow(
-                column(1, tags$strong(tags$a(href = imdb,   "IMDb"))),
-                column(1, tags$strong(tags$a(href = tvrage, "TVRage"))),
-                column(1, tags$strong(tags$a(href = tvdb,   "TheTVDB"))),
-                column(1, tags$strong(tags$a(href = wiki,   "Wikipedia")))
-              )
+    
+    output <- tags$span(bullet, tags$strong(tags$a(href = imdb,   "IMDb")), 
+                        bullet, tags$strong(tags$a(href = tvrage, "TVRage")),
+                        bullet, tags$strong(tags$a(href = tvdb,   "TheTVDB")),
+                        bullet, tags$strong(tags$a(href = wiki,   "Wikipedia")), bullet)
     return(output)
     
   })
   
-  output$table.episodes <- renderDataTable({
+  #### Data tables ####
+  output$table_episodes <- renderDataTable({
     if (input$get_show == 0){return(NULL)}
     show           <- show()
     if (is.null(show)){return(NULL)}
@@ -224,6 +224,17 @@ shinyServer(function(input, output, session){
     episodes       <- episodes[table.episodes.columns]
     names(episodes)<- table.episodes.names
     return(episodes)
+  }, options = list(bSortClasses = TRUE))
+  
+  output$table_seasons <- renderDataTable({
+    if (input$get_show == 0){return(NULL)}
+    show              <- show()
+    if (is.null(show)){return(NULL)}
+    seasons           <- show$seasons
+    seasons$rating.sd <- round(seasons$rating.sd, 2)
+    seasons           <- seasons[table.seasons.columns]
+    names(seasons)    <- table.seasons.names
+    return(seasons)
   }, options = list(bSortClasses = TRUE))
   
   #### Parsing url querys ####
