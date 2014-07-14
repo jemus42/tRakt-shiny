@@ -58,6 +58,12 @@ cache_titles <- function(showindex, cache_dir){
 }
 
 #### Setting some values ####
+## Define some HTML characters
+bullet <- HTML("&#8226;")
+mu     <- HTML("&#956;")
+sigma  <- HTML("&#963;")
+
+## UI elements ##
 btn.scale.x.choices <- c("Total Episode Numbers" = "epnum",
                          "Episodes per Season"   = "episode",
                          "Airdate"               = "firstaired.posix")
@@ -85,8 +91,3 @@ make_tooltip <- function(show.episodes){
   show.episodes$id <- id
   return(show.episodes)
 }
-
-#### Define some HTML characters ####
-bullet <- HTML("&#8226;")
-mu     <- HTML("&#956;")
-sigma  <- HTML("&#963;")
