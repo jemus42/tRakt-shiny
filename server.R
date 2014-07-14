@@ -254,7 +254,6 @@ shinyServer(function(input, output, session){
       p <- ggplot(data = archived, aes(x = reorder(title, requests), y = requests))
       p <- p + geom_bar(stat = "identity")
       p <- p + coord_flip()
-      p <- p + scale_x_continuous(breaks = pretty_breaks())
       p <- p + labs(y = "Times Requested", x = "Show Title", title = "Usage Statistics")
       return(p)
     } else {
