@@ -25,7 +25,7 @@ if (file.exists("key.json")){
   message("Reading API key from key.json")
   options(trakt.apikey = jsonlite::fromJSON("key.json")$apikey)
 } else if (file.exists("key.txt")){
-  message("Reading API key from key.json")
+  message("Reading API key from key.txt")
   options(trakt.apikey = read.table("key.txt", stringsAsFactors = F)[1,1])
 } else {
   stop("Place your key.json or key.txt in the root of this directory")

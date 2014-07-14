@@ -85,14 +85,13 @@ shinyServer(function(input, output, session){
     plot <- epdata %>% ggvis(x    = as.name(var_x),
                              y    = as.name(var_y),
                              fill = ~season,
-                             key  := ~id,
-                             stroke := NA, stroke.hover := "gray", strokeWidth := 2)
-    plot <- plot %>% layer_points(size.hover := 200)
+                             key  := ~id)
+    plot <- plot %>% layer_points(size.hover := 200, stroke := NA, stroke.hover := "gray", strokeWidth := 2)
     if ("Show" %in% input$btn_trendlines && var_y == "rating"){
-      plot <- plot %>% layer_model_predictions(model = "lm", se = F)
+      plot <- plot %>% layer_model_predictions(model = "lm", se = F, stroke := "black")
     }
     if ("Season" %in% input$btn_trendlines && var_y == "rating"){
-      plot <- plot %>% group_by(season) %>% layer_model_predictions(model = "lm", se = F)
+      plot <- plot %>% group_by(season) %>% layer_model_predictions(model = "lm", se = F, stroke = ~season)
     }
     if (input$btn_scale_y_range == TRUE){
       plot <- plot %>% scale_numeric("y", domain = c(0, 100))
