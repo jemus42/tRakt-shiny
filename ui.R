@@ -44,7 +44,7 @@ shinyUI(
       inputPanel(
         column(3,
           h3(icon("search"), "Show Selection"),
-          textInput(inputId = "show_query", label = "Enter the name of a show", value = ""),
+          textInput(inputId = "show_query", label = "Search a show on trakt.tv", value = ""),
           br(),
           selectizeInput(inputId = "shows_cached", label = "Or select a cached show", 
                          choices = "Loading cache…", selected = NULL),
