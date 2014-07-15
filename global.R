@@ -91,3 +91,8 @@ make_tooltip <- function(show.episodes){
   show.episodes$id <- id
   return(show.episodes)
 }
+
+# Easy string addition
+# via http://adv-r.had.co.nz/Functions.html#infix-functions
+
+`%+%` <- function(a, b) paste(a, b, sep = "")
