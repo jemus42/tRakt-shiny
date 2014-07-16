@@ -8,6 +8,11 @@ shinyUI(
       progressInit(),
       
       #### Episode information ####
+      ## Show this when the actionButton was not clicked yet, marking the 'inactive' state
+      conditionalPanel(condition = "input.get_show == 0",
+        wellPanel(includeMarkdown("text/intro.md"))
+      ),
+      ## Show this only when the actionButton was clicked, marking the 'active' state
       conditionalPanel(condition = "input.get_show > 0 && output.show_name != ''",
         wellPanel(
           h2(htmlOutput("show_name")),
@@ -72,7 +77,7 @@ shinyUI(
         )
       ),
       hr(),
-      includeMarkdown("footer.md"),
+      includeMarkdown("text/footer.md"),
       # Clumsiest way of hiding a debug input element ever
       conditionalPanel(condition = "false", checkboxInput(inputId = "debug", label = ".", value = F)),
       conditionalPanel(condition = "input.debug",
@@ -81,7 +86,7 @@ shinyUI(
     ),
     tabPanel(title = "About", icon = icon("question-circle"),
       fixedPage(
-        column(8, includeMarkdown("about.md"))
+        column(8, includeMarkdown("text/about.md"))
       )
     )
   )
