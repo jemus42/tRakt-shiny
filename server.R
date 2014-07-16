@@ -171,12 +171,14 @@ shinyServer(function(input, output, session){
     show_rating_episodes <- round(mean(show$episodes$rating), 2) %+% "%"
     show_votes           <- show$overview$ratings$votes
     show_ratings_sd      <- round(sd(show$episodes$rating), 2) %+% "%"
+    show_flipcount       <- get_flipcount(show$overview$title)$count
     
     output <- fluidRow(
                 column(2, h4("Show Rating"), show_rating_total),
                 column(2, h4("Episode ", tags$abbr(mu, title = "Average")), show_rating_episodes),
                 column(2, h4("Episode ", tags$abbr(sigma, title = "Standard Deviation")), show_ratings_sd),
-                column(2, h4("Total Votes"), show_votes)
+                column(2, h4("Total Votes"), show_votes),
+                column(2, h4("Times", tags$a(href='http://tisch.ding.si', "flipped")), show_flipcount)
               )
     return(output)
   })
