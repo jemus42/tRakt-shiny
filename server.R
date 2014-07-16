@@ -224,7 +224,7 @@ shinyServer(function(input, output, session){
     episodes       <- episodes[table.episodes.columns]
     names(episodes)<- table.episodes.names
     return(episodes)
-  }, options = list(bSortClasses = TRUE))
+  }, options = list(bSortClasses = TRUE, aoColumnDefs = list(list(sWidth=c("10px"), aTargets=list(0)))))
   
   output$table_seasons <- renderDataTable({
     if (input$get_show == 0){return(NULL)}

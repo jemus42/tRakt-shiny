@@ -71,8 +71,8 @@ btn.scale.x.choices <- c("Total Episode Numbers" = "epnum",
 btn.scale.y.choices <- c("Rating" = "rating",
                          "Votes"  = "votes")
 
-table.episodes.columns <- c("epid", "title", "firstaired.string", "rating", "votes", "loved", "hated")
-table.episodes.names   <- c("Episode ID", "Title", "Airdate", "Rating (%)", "Votes", "Loved", "Hated")
+table.episodes.columns <- c("epnum", "epid", "title", "firstaired.string", "rating", "votes", "loved", "hated")
+table.episodes.names   <- c("#", "Episode ID", "Title", "Airdate", "Rating (%)", "Votes", "Loved", "Hated")
 
 table.seasons.columns  <- c("season", "episodes", "avg.rating.season", "rating.sd", "top.rating.episode", "lowest.rating.episode")
 table.seasons.names    <- c("Season", "Episodes", "Average Rating", paste("Episode", sigma), "Highest Rating", "Lowest Rating")
