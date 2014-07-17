@@ -79,8 +79,8 @@ table.seasons.names    <- c("Season", "Episodes", "Average Rating", paste("Episo
 
 #### Helper functions ####
 
-make_tooltip <- function(show.episodes){
-  id <- paste0("<strong>",                  show.episodes$epid, "</strong><br />",
+make_tooltip <- function(show.episodes, keyvar = "tooltip"){
+  strings <- paste0("<strong>",                  show.episodes$epid, "</strong><br />",
                "<strong>Title:</strong> ",  show.episodes$title, "<br />",
                "<strong>Aired:</strong> ",  show.episodes$firstaired.string, "<br />",
                "<strong>Rating:</strong> ", show.episodes$rating, "%<br />",
@@ -88,7 +88,7 @@ make_tooltip <- function(show.episodes){
                "<strong>Loved:</strong> ",  show.episodes$loved, "<br />",
                "<strong>Hated:</strong> ",  show.episodes$hated)
   
-  show.episodes$id <- id
+  show.episodes[[keyvar]] <- strings
   return(show.episodes)
 }
 
@@ -105,4 +105,19 @@ get_flipcount <- function(showname = NULL){
   query    <- baseURL %+% showname
   response <- jsonlite::fromJSON(query)
   return(response)
+}
+
+## Get season average ratings etc
+
+get_season_ratings <- function(show.episodes = NULL, show.seasons = NULL){
+  if (is.null(show.episodes) | is.null(show.seasons)){
+    stop("You need to provide episode and season datasets")
+  }
+  seasons <- plyr::join(show.seasons, 
+                 plyr::ddply(show.episodes, .(season), plyr::summarize, 
+                             avg.rating.season = round(mean(rating), 1), 
+                             rating.sd = sd(rating), 
+                             top.rating.episode = max(rating), 
+                             lowest.rating.episode = min(rating)))
+  return(seasons)
 }

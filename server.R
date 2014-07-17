@@ -50,16 +50,12 @@ shinyServer(function(input, output, session){
         show$episodes <- initializeEpisodes(show$seasons)
         setProgress(detail = "Getting episode data (this takes a while…)", value = 4)
         show$episodes <- trakt.getEpisodeData(show_id, show$episodes)
-        show$seasons  <- plyr::join(show$seasons, 
-                                    plyr::ddply(show$episodes, .(season), plyr::summarize, 
-                                        avg.rating.season = round(mean(rating), 1), 
-                                        rating.sd = sd(rating), 
-                                        top.rating.episode = max(rating), 
-                                        lowest.rating.episode = min(rating)))
+        show$seasons  <- get_season_ratings(show$episodes, show$seasons)
         setProgress(detail = "Caching results…", value = 5)
         saveRDS(object = show, file = cachedpath)
         setProgress(detail = "Done!", value = 6)
       }
+      show$episodes <- make_tooltip(show$episodes, keyvar = "tooltip")
       return(show)
       }) # End progressbar after the return(), which apparently is a biggie
   })
@@ -76,17 +72,15 @@ shinyServer(function(input, output, session){
     }
     show    <- isolate(show())
     if (is.null(show)){return(NULL)}
-    epdata  <- make_tooltip(show$episodes)
     label_x <- names(btn.scale.x.choices[btn.scale.x.choices == input$btn_scale_x_variable])
     label_y <- names(btn.scale.y.choices[btn.scale.y.choices == input$btn_scale_y_variable])
     var_x   <- input$btn_scale_x_variable
     var_y   <- input$btn_scale_y_variable
     
-    plot <- epdata %>% ggvis(x    = as.name(var_x),
-                             y    = as.name(var_y),
-                             fill = ~season,
-                             key  := ~id)
-    plot <- plot %>% layer_points(size.hover := 200, stroke := NA, stroke.hover := "gray", strokeWidth := 2)
+    plot <- show$episodes %>% ggvis(x    = as.name(var_x),
+                                    y    = as.name(var_y),
+                                    fill = ~season)
+    plot <- plot %>% layer_points(key := ~tooltip, size.hover := 200, stroke := NA, stroke.hover := "gray", strokeWidth := 2)
     if ("Show" %in% input$btn_trendlines && var_y == "rating"){
       plot <- plot %>% layer_model_predictions(model = "lm", se = F, stroke := "black")
     }
@@ -100,7 +94,8 @@ shinyServer(function(input, output, session){
     plot <- plot %>% add_axis("x", title = label_x)
     plot <- plot %>% add_axis("y", title = label_y)
     plot <- plot %>% add_legend("fill", title = "Season", orient = "left")
-    plot <- plot %>% add_tooltip(function(epdata){epdata$id}, "hover")
+    #plot <- plot %>% add_legend("stroke", title = "Season")
+    plot <- plot %>% add_tooltip(function(epdata){epdata$tooltip}, "hover")
     plot <- plot %>% set_options(width = 900, height = 500, renderer = "canvas")
     plot <- plot %>% bind_shiny(plot_id = "ggvis")
   })
