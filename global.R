@@ -57,6 +57,26 @@ cache_titles <- function(showindex, cache_dir){
   }
 }
 
+## Fix cache index
+fix_cached_index <- function(cacheDir = "cache"){
+  cached <- sub(".rds", "", dir(cacheDir), ignore.case = T)
+  for (id in cached){
+    if (id == "showtitles"){next}
+    show  <- trakt.show.summary(id)
+    index <- data.frame(title = show$title, id = show$tvdb_id)
+    cache_titles(index, cacheDir)
+  }
+}
+
+reset_title_cache <- function(cacheDir = "cache"){
+  temp          <- readRDS(file.path(cacheDir, "showtitles.rds"))
+  temp$title    <- as.character(temp$title)
+  temp          <- plyr::arrange(temp, title)
+  temp$requests <- 0
+  saveRDS(temp, file.path(cacheDir, "showtitles.rds"))
+}
+
+
 #### Setting some values ####
 ## Define some HTML characters
 bullet <- HTML("&#8226;")

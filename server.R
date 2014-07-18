@@ -273,13 +273,16 @@ shinyServer(function(input, output, session){
     input$get_show
     
     indexfile <- file.path(cacheDir, "showtitles.rds")
-    if (file.exists(indexfile)){
-      showindex  <- readRDS(indexfile)
-      ids        <- showindex$title
-      names(ids) <- showindex$title
-      randomshow <- sample(ids, 1)
-      updateSelectizeInput(session, inputId = "shows_cached",
-                           choices = ids, selected = randomshow)
+    if (!file.exists(indexfile)){
+      fix_cached_index(cacheDir)
+      reset_title_cache(cacheDir)
     }
+    
+    showindex  <- readRDS(indexfile)
+    ids        <- showindex$title
+    names(ids) <- showindex$title
+    randomshow <- sample(ids, 1)
+    updateSelectizeInput(session, inputId = "shows_cached",
+                         choices = ids, selected = randomshow)
   })
 })
