@@ -81,11 +81,12 @@ shinyServer(function(input, output, session){
                                     y    = as.name(var_y),
                                     fill = ~season)
     plot <- plot %>% layer_points(key := ~tooltip, size.hover := 200, stroke := NA, stroke.hover := "gray", strokeWidth := 2)
-    if ("Show" %in% input$btn_trendlines && var_y == "rating"){
+    if ("Show" %in% input$btn_trendlines){
       plot <- plot %>% layer_model_predictions(model = "lm", se = F, stroke := "black")
     }
-    if ("Season" %in% input$btn_trendlines && var_y == "rating"){
+    if ("Season" %in% input$btn_trendlines){
       plot <- plot %>% group_by(season) %>% layer_model_predictions(model = "lm", se = F, stroke = ~season)
+      plot <- plot %>% hide_legend("stroke")
     }
     if (input$btn_scale_y_range == TRUE){
       plot <- plot %>% scale_numeric("y", domain = c(0, 100))
@@ -94,7 +95,6 @@ shinyServer(function(input, output, session){
     plot <- plot %>% add_axis("x", title = label_x)
     plot <- plot %>% add_axis("y", title = label_y)
     plot <- plot %>% add_legend("fill", title = "Season", orient = "left")
-    #plot <- plot %>% add_legend("stroke", title = "Season")
     plot <- plot %>% add_tooltip(function(epdata){epdata$tooltip}, "hover")
     plot <- plot %>% set_options(width = 900, height = 500, renderer = "canvas")
     plot <- plot %>% bind_shiny(plot_id = "ggvis")
