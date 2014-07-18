@@ -17,7 +17,7 @@ shinyUI(
         wellPanel(
           h2(htmlOutput("show_name")),
           fluidRow(
-            column(2, htmlOutput("show_banner", inline = TRUE)),
+            column(2, htmlOutput("show_banner")),
             column(10, 
               htmlOutput("show_overview"), 
               htmlOutput("show_links"), br(),
