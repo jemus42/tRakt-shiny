@@ -136,9 +136,10 @@ get_season_ratings <- function(show.episodes = NULL, show.seasons = NULL){
   }
   seasons <- plyr::join(show.seasons, 
                  plyr::ddply(show.episodes, .(season), plyr::summarize, 
-                             avg.rating.season = round(mean(rating), 1), 
-                             rating.sd = sd(rating), 
-                             top.rating.episode = max(rating), 
+                             avg.rating.season     = round(mean(rating), 1), 
+                             rating.sd             = round(sd(rating), 2), 
+                             top.rating.episode    = max(rating), 
                              lowest.rating.episode = min(rating)))
+  seasons$season <- factor(seasons$season, ordered = T)
   return(seasons)
 }
