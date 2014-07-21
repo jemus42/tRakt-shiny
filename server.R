@@ -132,7 +132,7 @@ shinyServer(function(input, output, session){
       if (is.null(show)){return(NULL)}
       overview  <- show$overview
       label_ended   <- tags$span(class = "label label-default", "ended")
-      label_ongoing <- tags$span(class = "label label-success", "ongoing")
+      label_continuing <- tags$span(class = "label label-success", "continuing")
       if (overview$ended){
         if (overview$year != max(show$episodes$year)){
           runtime <- paste0("(", overview$year, " - ", max(show$episodes$year), ") ", label_ended)
@@ -140,7 +140,7 @@ shinyServer(function(input, output, session){
           runtime <- paste0("(", overview$year, ") ", label_ended)
         }
       } else {
-        runtime <- paste0("(", overview$year, ") ", label_ongoing)
+        runtime <- paste0("(", overview$year, ") ", label_continuing)
       }
       showurl   <- paste0("<a href=", overview$url, ">", overview$title, "</a> ",
                         runtime)
