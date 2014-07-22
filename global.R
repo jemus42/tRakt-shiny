@@ -118,7 +118,7 @@ make_tooltip <- function(show.episodes, keyvar = "tooltip"){
 get_flipcount <- function(showname = NULL){
   showname <- gsub(" ", "+", showname)
   baseURL  <- "http://api.l3vi.de/flips.json?flippable="
-  query    <- baseURL %+% showname
+  query    <- paste0(baseURL, showname)
   response <- jsonlite::fromJSON(query)
   return(response)
 }
