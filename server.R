@@ -160,10 +160,10 @@ shinyServer(function(input, output, session){
     show                <- show()
     if (is.null(show)){return(NULL)}
     
-    show_rating_total    <- show$overview$ratings$percentage %+% "%"
-    show_rating_episodes <- round(mean(show$episodes$rating), 2) %+% "%"
+    show_rating_total    <- paste0(show$overview$ratings$percentage, "%")
+    show_rating_episodes <- paste0(round(mean(show$episodes$rating), 2), "%")
     show_votes           <- show$overview$ratings$votes
-    show_ratings_sd      <- round(sd(show$episodes$rating), 2) %+% "%"
+    show_ratings_sd      <- paste0(round(sd(show$episodes$rating), 2), "%")
     show_flipcount       <- get_flipcount(show$overview$title)$count
     
     output <- fluidRow(
