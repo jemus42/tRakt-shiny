@@ -71,7 +71,7 @@ shinyUI(
                            checkboxInput(inputId = "btn_scale_y_range", label = "Scale Ratings 0 - 100%",
                                          value = FALSE)
           ), br(),
-          h5("Trendlines (WIP)"),
+          h5("Trendlines"),
           checkboxGroupInput(inputId = "btn_trendlines", label = "", inline = T,
                              choices = c("Show", "Season"), selected = NULL)
         )
