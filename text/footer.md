@@ -1,4 +1,4 @@
-##### tRakt version 0.2.6
+##### tRakt version 0.3.0
 
 * Updates in [my #pants](http://pants.jemu.name//tag/trakt_shiny)
 * Code on [GitHub](https://github.com/jemus42/tRakt-shiny)

@@ -7,7 +7,7 @@ shinyServer(function(input, output, session){
   show <- reactive({
     if (input$get_show == 0){return(NULL)}
      # Initiate progress bar
-     withProgress(session, min = 0, max = 6, {
+     withProgress(session, min = 0, max = 5, {
       # Use isolate() on show_query to not execute on every update of the input
       query        <- isolate(input$show_query)
       query_cached <- isolate(input$shows_cached)
@@ -46,14 +46,12 @@ shinyServer(function(input, output, session){
       } else {
         setProgress(detail = "Getting season data…", value = 2)
         show$seasons  <- trakt.getSeasons(show_id)
-        setProgress(detail = "Initializing episode dataset…", value = 3)
-        show$episodes <- initializeEpisodes(show$seasons)
-        setProgress(detail = "Getting episode data (this takes a while…)", value = 4)
-        show$episodes <- trakt.getEpisodeData(show_id, show$episodes)
+        setProgress(detail = "Getting episode data (this takes a while…)", value = 3)
+        show$episodes <- trakt.getEpisodeData2(show_id, show$seasons$season)
         show$seasons  <- get_season_ratings(show$episodes, show$seasons)
-        setProgress(detail = "Caching results…", value = 5)
+        setProgress(detail = "Caching results…", value = 4)
         saveRDS(object = show, file = cachedpath)
-        setProgress(detail = "Done!", value = 6)
+        setProgress(detail = "Done!", value = 5)
       }
       show$episodes <- make_tooltip(show$episodes, keyvar = "tooltip")
       return(show)
@@ -216,7 +214,7 @@ shinyServer(function(input, output, session){
     episodes       <- show$episodes
     overview       <- gsub("'", "’", episodes$overview)
     episodes$title <- paste0("<a target='_blank' title ='",
-                             overview, "' href='", episodes$url.trakt,
+                             overview, "' href='", episodes$url,
                              "'>", episodes$title, "</a>")
     episodes       <- episodes[table.episodes.columns]
     names(episodes)<- table.episodes.names

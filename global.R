@@ -112,11 +112,6 @@ make_tooltip <- function(show.episodes, keyvar = "tooltip"){
   return(show.episodes)
 }
 
-# Easy string addition
-# via http://adv-r.had.co.nz/Functions.html#infix-functions
-
-`%+%` <- function(a, b) paste(a, b, sep = "")
-
 ## Check number of flips
 # How often has a show been flipped on http://tisch.ding.si?
 
