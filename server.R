@@ -125,25 +125,24 @@ shinyServer(function(input, output, session){
   #### Output Assignments ####
   output$show_name <- renderText({
     if (input$get_show == 0){return("Show Title will appear here soon. Are you excited?")}
-    isolate({
-      show      <- show()
-      if (is.null(show)){return(NULL)}
-      overview  <- show$overview
-      label_ended   <- tags$span(class = "label label-default", "ended")
-      label_continuing <- tags$span(class = "label label-success", "continuing")
-      if (overview$ended){
-        if (overview$year != max(show$episodes$year)){
-          runtime <- paste0("(", overview$year, " - ", max(show$episodes$year), ") ", label_ended)
-        } else {
-          runtime <- paste0("(", overview$year, ") ", label_ended)
-        }
+    show      <- show()
+    if (is.null(show)){return("Looks like I didn’t find anything, try again maybe?")}
+    overview      <- show$overview
+    label_ended   <- tags$span(class = "label label-default", "ended")
+    label_continuing <- tags$span(class = "label label-success", "continuing")
+    if (overview$ended){
+      if (overview$year != max(show$episodes$year)){
+        runtime <- paste0("(", overview$year, " - ", max(show$episodes$year), ") ", label_ended)
       } else {
-        runtime <- paste0("(", overview$year, ") ", label_continuing)
+        runtime <- paste0("(", overview$year, ") ", label_ended)
       }
-      showurl   <- paste0("<a href=", overview$url, ">", overview$title, "</a> ",
-                        runtime)
-      return(showurl)
-    })
+    } else {
+      runtime <- paste0("(", overview$year, ") ", label_continuing)
+    }
+    showurl   <- paste0("<a href=", overview$url, ">", overview$title, "</a> ",
+                      runtime)
+    return(showurl)
+    
   })
   
   output$show_overview <- renderUI({
