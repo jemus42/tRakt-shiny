@@ -1,27 +1,27 @@
 #### Shiny UI ####
 
 shinyUI(
-  tags$meta(name = "twitter:card", content = "summary")
-  tags$meta(name = "twitter:site" content="@jemus42")
-  tags$meta(name = "twitter:title" content="tRakt")
-  tags$meta(name = "twitter:description" content="Graph trakt.tv shows")
-  tags$meta(name = "twitter:creator" content="@jemus42")
-  tags$meta(name = "twitter:image:src" content="")
-  tags$meta(name = "twitter:domain" content="http://trakt.jemu.name")
-  tags$meta(name = "twitter:app:name:iphone" content="")
-  tags$meta(name = "twitter:app:name:ipad" content="")
-  tags$meta(name = "twitter:app:name:googleplay" content="")
-  tags$meta(name = "twitter:app:url:iphone" content="")
-  tags$meta(name = "twitter:app:url:ipad" content="")
-  tags$meta(name = "twitter:app:url:googleplay" content="")
-  tags$meta(name = "twitter:app:id:iphone" content="")
-  tags$meta(name = "twitter:app:id:ipad" content="")
-  tags$meta(name = "twitter:app:id:googleplay" content="")
-  
   navbarPage(title = "tRakt", inverse = TRUE, responsive = TRUE, fluid = TRUE,
-  
     #### Main view ####
     tabPanel("Main", icon = icon("tasks"),
+     tags$head(
+       tags$meta(name = "twitter:card", content = "summary"),
+       tags$meta(name = "twitter:site", content="@jemus42"),
+       tags$meta(name = "twitter:title", content="tRakt"),
+       tags$meta(name = "twitter:description", content="Graph trakt.tv shows"),
+       tags$meta(name = "twitter:creator", content="@jemus42"),
+       tags$meta(name = "twitter:image:src", content=""),
+       tags$meta(name = "twitter:domain", content="http://trakt.jemu.name"),
+       tags$meta(name = "twitter:app:name:iphone", content=""),
+       tags$meta(name = "twitter:app:name:ipad", content=""),
+       tags$meta(name = "twitter:app:name:googleplay", content=""),
+       tags$meta(name = "twitter:app:url:iphone", content=""),
+       tags$meta(name = "twitter:app:url:ipad", content=""),
+       tags$meta(name = "twitter:app:url:googleplay", content=""),
+       tags$meta(name = "twitter:app:id:iphone", content=""),
+       tags$meta(name = "twitter:app:id:ipad", content=""),
+       tags$meta(name = "twitter:app:id:googleplay", content="")
+     ),
       progressInit(),
       
       #### Episode information ####
