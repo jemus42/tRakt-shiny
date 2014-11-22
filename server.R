@@ -98,30 +98,6 @@ shinyServer(function(input, output, session){
     plot <- plot %>% bind_shiny(plot_id = "ggvis")
   })
   
-  output$plot_nvd3 <- renderChart2({
-    if (input$get_show == 0){return(NULL)}
-    show    <- isolate(show())
-    if (is.null(show)){return(NULL)}
-    epdata  <- make_tooltip(show$episodes)
-    label.x <- names(btn.scale.x.choices[btn.scale.x.choices == input$btn_scale_x_variable])
-    label.y <- names(btn.scale.y.choices[btn.scale.y.choices == input$btn_scale_y_variable])
-    
-    x1 <- nPlot(x = input$btn_scale_x_variable,
-                y = input$btn_scale_y_variable,
-                group = "season", data = epdata, type = "scatterChart",
-                width = 900, height = 500)
-    x1$chart(tooltipContent = "#! function(key, x, y, e){
-                                           return e.point.id
-                                  } !#")
-    #x1$chart(showControls = FALSE) # Would deactivate magnify button(?)
-    x1$xAxis(axisLabel = label.x)
-    x1$yAxis(axisLabel = label.y)
-    if (input$btn_scale_x_variable == "firstaired.posix"){
-      x1$xAxis(tickFormat="#!function(d) {return d3.time.format('%Y-%m-%d')(new Date( d * 1000));}!#" )
-    }
-    return(x1)
-  })
-  
   #### Output Assignments ####
   output$show_name <- renderText({
     if (input$get_show == 0){return("Show Title will appear here soon. Are you excited?")}
@@ -215,10 +191,11 @@ shinyServer(function(input, output, session){
     episodes$title <- paste0("<a target='_blank' title ='",
                              overview, "' href='", episodes$url,
                              "'>", episodes$title, "</a>")
+    #episodes$title <- a(target = '_blank', title = overview, href = episodes$url, episodes$title)
     episodes       <- episodes[table.episodes.columns]
     names(episodes)<- table.episodes.names
     return(episodes)
-  }, options = list(bSortClasses = TRUE, aoColumnDefs = list(list(sWidth=c("10px"), aTargets=list(0)))))
+  }, options = list(orderClasses = TRUE, columnDefs = list(list(sWidth=c("10px"), aTargets=list(0)))))
   
   output$table_seasons <- renderDataTable({
     if (input$get_show == 0){return(NULL)}

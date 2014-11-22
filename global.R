@@ -15,8 +15,6 @@ if (!'rmarkdown' %in% installed.packages()) install_github("rstudio/rmarkdown", 
 library(rmarkdown)
 if (!'shinyIncubator' %in% installed.packages()) install_github("rstudio/shiny-incubator", dependencies=TRUE)
 library(shinyIncubator)
-if (!'rCharts' %in% installed.packages()) install_github("ramnathv/rCharts", dependencies=TRUE)
-library(rCharts)
 if (!'plyr' %in% installed.packages()) install.packages("plyr", dependencies=TRUE)
 library(plyr)
 
@@ -98,7 +96,6 @@ table.seasons.columns  <- c("season", "episodes", "avg.rating.season", "rating.s
 table.seasons.names    <- c("Season", "Episodes", "Average Rating", paste("Episode", sigma), "Highest Rating", "Lowest Rating")
 
 #### Helper functions ####
-
 make_tooltip <- function(show.episodes, keyvar = "tooltip"){
   strings <- paste0("<strong>",                  show.episodes$epid, "</strong><br />",
                "<strong>Title:</strong> ",  show.episodes$title, "<br />",
@@ -113,8 +110,7 @@ make_tooltip <- function(show.episodes, keyvar = "tooltip"){
 }
 
 ## Check number of flips
-# How often has a show been flipped on http://tisch.ding.si?
-
+# How often a show has been flipped on http://tisch.ding.si
 get_flipcount <- function(showname = NULL){
   showname <- gsub(" ", "+", showname)
   baseURL  <- "http://api.l3vi.de/flips.json?flippable="
@@ -124,7 +120,6 @@ get_flipcount <- function(showname = NULL){
 }
 
 ## Get season average ratings etc
-
 get_season_ratings <- function(show.episodes = NULL, show.seasons = NULL){
   if (is.null(show.episodes) | is.null(show.seasons)){
     stop("You need to provide episode and season datasets")
