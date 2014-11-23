@@ -188,9 +188,10 @@ shinyServer(function(input, output, session){
     if (is.null(show)){return(NULL)}
     episodes       <- show$episodes
     overview       <- gsub("'", "’", episodes$overview)
-    episodes$title <- paste0("<a target='_blank' title ='",
-                             overview, "' href='", episodes$url,
-                             "'>", episodes$title, "</a>")
+    # Temporarily disable hyperlinked titles
+    #episodes$title <- paste0("<a target='_blank' title ='",
+    #                         overview, "' href='", episodes$url,
+    #                         "'>", episodes$title, "</a>")
     #episodes$title <- a(target = '_blank', title = overview, href = episodes$url, episodes$title)
     episodes       <- episodes[table.episodes.columns]
     names(episodes)<- table.episodes.names
@@ -206,7 +207,7 @@ shinyServer(function(input, output, session){
     seasons           <- seasons[table.seasons.columns]
     names(seasons)    <- table.seasons.names
     return(seasons)
-  }, options = list(bSortClasses = TRUE))
+  }, options = list(orderClasses = TRUE))
   
   #### Parsing url querys ####
   observe({
