@@ -56,7 +56,7 @@ shinyUI(
           )
         )
       ),
-
+      
       hr(),
       
       #### Control panel ####
