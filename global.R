@@ -74,7 +74,6 @@ reset_title_cache <- function(cacheDir = "cache"){
   saveRDS(temp, file.path(cacheDir, "showtitles.rds"))
 }
 
-
 #### Setting some values ####
 ## Define some HTML characters
 bullet <- HTML("&#8226;")
@@ -97,7 +96,7 @@ table.seasons.names    <- c("Season", "Episodes", "Average Rating", paste("Episo
 
 #### Helper functions ####
 make_tooltip <- function(show.episodes, keyvar = "tooltip"){
-  strings <- paste0("<strong>",                  show.episodes$epid, "</strong><br />",
+  strings <- paste0("<strong>",             show.episodes$epid, "</strong><br />",
                "<strong>Title:</strong> ",  show.episodes$title, "<br />",
                "<strong>Aired:</strong> ",  show.episodes$firstaired.string, "<br />",
                "<strong>Rating:</strong> ", show.episodes$rating, "%<br />",
