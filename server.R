@@ -188,15 +188,15 @@ shinyServer(function(input, output, session){
     if (is.null(show)){return(NULL)}
     episodes       <- show$episodes
     overview       <- gsub("'", "’", episodes$overview)
-    # Temporarily disable hyperlinked titles
-    #episodes$title <- paste0("<a target='_blank' title ='",
-    #                         overview, "' href='", episodes$url,
-    #                         "'>", episodes$title, "</a>")
-    #episodes$title <- a(target = '_blank', title = overview, href = episodes$url, episodes$title)
+    episodes$title <- paste0("<a target='_blank' title ='",
+                             overview, "' href='", episodes$url,
+                             "'>", episodes$title, "</a>")
     episodes       <- episodes[table.episodes.columns]
     names(episodes)<- table.episodes.names
     return(episodes)
-  }, options = list(orderClasses = TRUE, columnDefs = list(list(sWidth=c("10px"), aTargets=list(0)))))
+  }, escape = FALSE, options = list(orderClasses = TRUE, 
+                                    columnDefs = list(list(sWidth=c("10px"), 
+                                                           aTargets=list(0)))))
   
   output$table_seasons <- renderDataTable({
     if (input$get_show == 0){return(NULL)}
