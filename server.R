@@ -207,7 +207,7 @@ shinyServer(function(input, output, session){
     seasons           <- seasons[table.seasons.columns]
     names(seasons)    <- table.seasons.names
     return(seasons)
-  }, options = list(orderClasses = TRUE))
+  }, escape = FALSE, options = list(orderClasses = TRUE))
   
   #### Parsing url querys ####
   observe({
