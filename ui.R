@@ -61,7 +61,7 @@ shinyUI(
       
       #### Control panel ####
       inputPanel(
-        column(4,
+        column(3,
           h3(icon("search"), "Show Selection"),
           textInput(inputId = "show_query", label = "Search a show on trakt.tv", value = ""),
           br(),
@@ -69,13 +69,13 @@ shinyUI(
                          choices = "Loading cache…", selected = NULL),
           actionButton(inputId = "get_show", label = "PLOTERIZZLE", icon = icon("play"))
         ),
-        column(4, h3(icon("cogs"), "Plot Options"),
+        column(3, h3(icon("cogs"), "Plot Options"),
           selectInput(inputId = "btn_scale_x_variable", label = "Select timeline format:",
                       choices = btn.scale.x.choices, selected = "epnum"),
           selectInput(inputId = "btn_scale_y_variable", label = "Select target variable:",
                       choices = btn.scale.y.choices, selected = "rating")
         ),
-        column(4, h3(icon("cogs"), "Display Options"),
+        column(3, h3(icon("cogs"), "Display Options"),
           h5("Axis scales"),
           conditionalPanel(condition = "input.btn_scale_y_variable != 'rating' ",
             checkboxInput(inputId = "btn_scale_y_zero", label = "Start y axis at zero",
