@@ -106,6 +106,7 @@ shinyServer(function(input, output, session){
     overview      <- show$overview
     label_ended   <- tags$span(class = "label label-default", "ended")
     label_continuing <- tags$span(class = "label label-success", "continuing")
+    
     if (overview$ended){
       if (overview$year != max(show$episodes$year)){
         runtime <- paste0("(", overview$year, " - ", max(show$episodes$year), ") ", label_ended)
@@ -188,15 +189,16 @@ shinyServer(function(input, output, session){
     if (is.null(show)){return(NULL)}
     episodes       <- show$episodes
     overview       <- gsub("'", "’", episodes$overview)
-    episodes$title <- paste0("<a target='_blank' title ='",
-                             overview, "' href='", episodes$url,
-                             "'>", episodes$title, "</a>")
+    # Temporarily disable until new shiny version is documented propery, use 'escape = FALSE'
+    #episodes$title <- paste0("<a target='_blank' title ='",
+    #                         overview, "' href='", episodes$url,
+    #                         "'>", episodes$title, "</a>")
     episodes       <- episodes[table.episodes.columns]
     names(episodes)<- table.episodes.names
     return(episodes)
-  }, escape = FALSE, options = list(orderClasses = TRUE, 
-                                    columnDefs = list(list(sWidth=c("10px"), 
-                                                           aTargets=list(0)))))
+  }, options = list(orderClasses = TRUE, 
+                    columnDefs = list(list(sWidth=c("10px"), 
+                                           aTargets=list(0)))))
   
   output$table_seasons <- renderDataTable({
     if (input$get_show == 0){return(NULL)}
@@ -207,7 +209,7 @@ shinyServer(function(input, output, session){
     seasons           <- seasons[table.seasons.columns]
     names(seasons)    <- table.seasons.names
     return(seasons)
-  }, escape = FALSE, options = list(orderClasses = TRUE))
+  }, options = list(orderClasses = TRUE))
   
   #### Parsing url querys ####
   observe({
