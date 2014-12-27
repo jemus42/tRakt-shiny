@@ -13,8 +13,6 @@ library(ggplot2)
 # "Warning in install.packages : package ‘rmarkdown’ is not available (for R version 3.1.0)"
 if (!'rmarkdown' %in% installed.packages()) install_github("rstudio/rmarkdown", dependencies=TRUE)
 library(rmarkdown)
-if (!'shinyIncubator' %in% installed.packages()) install_github("rstudio/shiny-incubator", dependencies=TRUE)
-library(shinyIncubator)
 if (!'plyr' %in% installed.packages()) install.packages("plyr", dependencies=TRUE)
 library(plyr)
 

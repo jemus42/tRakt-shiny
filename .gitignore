@@ -9,6 +9,6 @@ key.json
 shinyapps
 key.txt
 packrat/lib*/
-packrat/src/
 playground.R
 shinyminimal.R
+packrat/src/
