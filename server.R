@@ -40,7 +40,7 @@ shinyServer(function(input, output, session){
       cachedfile    <- paste0(show_id, ".rds")
       cachedpath    <- file.path(cacheDir, cachedfile)
       
-      if (file.exists(cachedpath) && (file.info(cachedpath)$mtime - Sys.time()) > -7){
+      if (file.exists(cachedpath) && (file.info(cachedpath)$mtime - Sys.time()) > -30){
         setProgress(detail = "Reading from cache…", value = 3)
         show <- readRDS(file = cachedpath)
       } else {
