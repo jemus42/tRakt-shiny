@@ -26,7 +26,6 @@ We'll see.
 * [shiny](http://shiny.rstudio.com)
 * [ggvis](http://ggvis.rstudio.com)
 * [rmarkdown](http://rmarkdown.rstudio.com)
-* [shinyIncubator](https://github.com/rstudio/shiny-incubator)
 
 And directly or indirectly pretty much everything [RStudio](http://rstudio.com) 
 or [Hadley Wickham](http://had.co.nz/) ever released.

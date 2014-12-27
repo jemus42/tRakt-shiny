@@ -1,7 +1,7 @@
 tRakt-shiny
 ===========
 
-This is `tRakt-shiny` (dummy name) version `0.3.4`. 
+This is `tRakt-shiny` (dummy name) version `0.4.0`. 
 
 Using the [trakt.tv](http://trakt.tv) API to graph show data and whatevs.  
 To run it, use `shiny::runGitHub(username = "jemus42", repo = "tRakt-shiny")`.  
@@ -14,7 +14,6 @@ Maybe you'd rather look at [trakt.jemu.name](http://trakt.jemu.name) to see it l
 * [shiny](http://shiny.rstudio.com)
 * [ggvis](http://ggvis.rstudio.com)
 * [rmarkdown](http://rmarkdown.rstudio.com)
-* [shinyIncubator](https://github.com/rstudio/shiny-incubator)
 
 When you clone this repository, `source`ing `global.R` should automatically install any missing dependency it finds.
 

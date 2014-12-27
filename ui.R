@@ -22,7 +22,6 @@ shinyUI(
        tags$meta(name = "twitter:app:id:ipad", content=""),
        tags$meta(name = "twitter:app:id:googleplay", content="")
      ),
-      progressInit(),
       
       #### Episode information ####
       ## Show this when the actionButton was not clicked yet, marking the 'inactive' state
