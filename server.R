@@ -103,8 +103,8 @@ shinyServer(function(input, output, session){
     if (input$get_show == 0){return("Show Title will appear here soon. Are you excited?")}
     show      <- show()
     if (is.null(show)){return("Looks like I didn’t find anything, try again maybe?")}
-    overview      <- show$overview
-    label_ended   <- tags$span(class = "label label-default", "ended")
+    overview         <- show$overview
+    label_ended      <- tags$span(class = "label label-default", "ended")
     label_continuing <- tags$span(class = "label label-success", "continuing")
     
     if (overview$ended){
@@ -116,8 +116,7 @@ shinyServer(function(input, output, session){
     } else {
       runtime <- paste0("(", overview$year, ") ", label_continuing)
     }
-    showurl   <- paste0("<a href=", overview$url, ">", overview$title, "</a> ",
-                      runtime)
+    showurl   <- paste0("<a href=", overview$url, ">", overview$title, "</a> ", runtime)
     return(showurl)
     
   })
@@ -147,7 +146,7 @@ shinyServer(function(input, output, session){
                 column(2, h4("Episode ", tags$abbr(mu, title = "Average")), show_rating_episodes),
                 column(2, h4("Episode ", tags$abbr(sigma, title = "Standard Deviation")), show_ratings_sd),
                 column(2, h4("Total Votes"), show_votes),
-                column(2, h4("Times", tags$a(href='http://tisch.ding.si', "flipped")), show_flipcount)
+                column(2, h4("Times", tags$a(href = "http://tisch.ding.si", "flipped")), show_flipcount)
               )
     return(output)
   })
