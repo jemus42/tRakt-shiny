@@ -25,10 +25,14 @@ shinyServer(function(input, output, session){
                   detail  = "Getting general show information…", value = 1)
       
       # Starting to pull data
-      show$overview <- trakt.search(query, limit = 2)
-      
-      # Workaround for duplicate shows: Take the newest one
-      show$overview <- head(arrange(show$overview, desc(year)), 1)
+      if (query %in% c("scandal", "Scandal")){
+        show$overview <- trakt.search(query, limit = 2)
+        
+        # Workaround for duplicate shows: Take the newest one
+        show$overview <- head(arrange(show$overview, desc(year)), 1)
+      } else {
+        show$overview <- trakt.search(query)
+      }
       
       #
       if (!is.null(show$overview$error)){
