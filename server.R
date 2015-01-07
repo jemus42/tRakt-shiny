@@ -25,7 +25,12 @@ shinyServer(function(input, output, session){
                   detail  = "Getting general show information…", value = 1)
       
       # Starting to pull data
-      show$overview <- trakt.search(query)
+      show$overview <- trakt.search(query, limit = 2)
+      
+      # Workaround for duplicate shows: Take the newest one
+      show$overview <- head(arrange(show$overview, desc(year)), 1)
+      
+      #
       if (!is.null(show$overview$error)){
         warning(paste0(show$overview$error, ": ", query))
         updateTextInput(session, inputId = "show_query", label = "Try again…", value = "")
