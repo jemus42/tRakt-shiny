@@ -256,9 +256,15 @@ Requires: RColorBrewer, dichromat, labeling, munsell, plyr
 
 Package: shiny
 Source: CRAN
-Version: 0.10.2.2
-Hash: 298d386816696b92d9e251f5ddcf1a25
+Version: 0.11
+Hash: 6ab20161a34c3faff2543f84f48894a2
 Requires: R6, RJSONIO, digest, htmltools, httpuv, mime, xtable
+
+Package: shinythemes
+Source: CRAN
+Version: 1.0
+Hash: cde8aea2f474c4bd70045e488dc08ae9
+Requires: shiny
 
 Package: stringr
 Source: CRAN
