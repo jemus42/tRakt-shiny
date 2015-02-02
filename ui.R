@@ -1,7 +1,7 @@
 #### Shiny UI ####
 
 shinyUI(
-  navbarPage(title = "tRakt", inverse = TRUE, responsive = TRUE, fluid = TRUE,
+  navbarPage(title = "tRakt", inverse = TRUE, theme = shinytheme("cosmo"),
     #### Main view ####
     tabPanel("Main", icon = icon("tasks"),
      tags$head(
@@ -33,7 +33,7 @@ shinyUI(
         wellPanel(
           h2(htmlOutput("show_name")),
           fluidRow(
-            column(2, htmlOutput("show_banner")),
+            column(2, htmlOutput("show_banner", inline = TRUE)),
             column(10, 
               htmlOutput("show_overview"), 
               htmlOutput("show_links"), br(),
@@ -59,8 +59,8 @@ shinyUI(
       hr(),
       
       #### Control panel ####
-      inputPanel(
-        column(3,
+      wellPanel(fluidRow(
+        column(4,
           h3(icon("search"), "Show Selection"),
           textInput(inputId = "show_query", label = "Search a show on trakt.tv", value = ""),
           br(),
@@ -68,13 +68,13 @@ shinyUI(
                          choices = "Loading cache…", selected = NULL),
           actionButton(inputId = "get_show", label = "PLOTERIZZLE", icon = icon("play"))
         ),
-        column(3, h3(icon("cogs"), "Plot Options"),
+        column(4, h3(icon("cogs"), "Plot Options"),
           selectInput(inputId = "btn_scale_x_variable", label = "Select timeline format:",
                       choices = btn.scale.x.choices, selected = "epnum"),
           selectInput(inputId = "btn_scale_y_variable", label = "Select target variable:",
                       choices = btn.scale.y.choices, selected = "rating")
         ),
-        column(3, h3(icon("cogs"), "Display Options"),
+        column(4, h3(icon("cogs"), "Display Options"),
           h5("Axis scales"),
           conditionalPanel(condition = "input.btn_scale_y_variable != 'rating' ",
             checkboxInput(inputId = "btn_scale_y_zero", label = "Start y axis at zero",
@@ -88,7 +88,7 @@ shinyUI(
           checkboxGroupInput(inputId = "btn_trendlines", label = "", inline = T,
                              choices = c("Show", "Season"), selected = NULL)
         )
-      ),
+      )),
       hr(),
       includeMarkdown("text/footer.md"),
       # Clumsiest way of hiding a debug input element ever

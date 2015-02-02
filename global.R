@@ -10,11 +10,12 @@ if (!'ggvis' %in% installed.packages()) install.packages("ggvis", dependencies=T
 library(ggvis)
 if (!'ggplot2' %in% installed.packages()) install.packages("ggplot2", dependencies=TRUE)
 library(ggplot2)
-# "Warning in install.packages : package ‘rmarkdown’ is not available (for R version 3.1.0)"
 if (!'rmarkdown' %in% installed.packages()) install_github("rstudio/rmarkdown", dependencies=TRUE)
 library(rmarkdown)
 if (!'plyr' %in% installed.packages()) install.packages("plyr", dependencies=TRUE)
 library(plyr)
+if (!'shinythemes' %in% installed.packages()) install.packages("shinythemes", dependencies=TRUE)
+library(shinythemes)
 
 ## Set API key ##
 if (file.exists("key.json")){
