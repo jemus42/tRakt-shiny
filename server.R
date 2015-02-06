@@ -125,7 +125,7 @@ shinyServer(function(input, output, session){
     } else {
       runtime <- paste0("(", overview$year, ") ", label_continuing)
     }
-    showurl   <- paste0("<a href=", overview$url, ">", overview$title, "</a> ", runtime)
+    showurl   <- paste0("<a href=http://trakt.tv", overview$url, ">", overview$title, "</a> ", runtime)
     return(showurl)
     
   })
