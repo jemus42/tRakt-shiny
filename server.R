@@ -205,6 +205,8 @@ shinyServer(function(input, output, session){
     names(episodes)<- table.episodes.names
     return(episodes)
   }, options = list(orderClasses = TRUE, 
+                    lengthMenu = list(c(25, 50, -1), c('25', '50', 'All')),
+                    pageLength = 50,
                     columnDefs = list(list(sWidth=c("10px"), 
                                            aTargets=list(0)))))
   
@@ -217,7 +219,7 @@ shinyServer(function(input, output, session){
     seasons           <- seasons[table.seasons.columns]
     names(seasons)    <- table.seasons.names
     return(seasons)
-  }, options = list(orderClasses = TRUE))
+  }, options = list(orderClasses = TRUE, paging = FALSE))
   
   #### Parsing url querys ####
   observe({

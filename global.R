@@ -18,15 +18,7 @@ if (!'shinythemes' %in% installed.packages()) install.packages("shinythemes", de
 library(shinythemes)
 
 ## Set API key ##
-if (file.exists("key.json")){
-  message("Reading API key from key.json")
-  options(trakt.apikey = jsonlite::fromJSON("key.json")$apikey)
-} else if (file.exists("key.txt")){
-  message("Reading API key from key.txt")
-  options(trakt.apikey = read.table("key.txt", stringsAsFactors = F)[1,1])
-} else {
-  stop("Place your key.json or key.txt in the root of this directory")
-}
+get_trakt_credentials()
 
 #### Set/find/create/save cache dir ####
 cacheDir <- "cache"
@@ -91,7 +83,7 @@ table.episodes.columns <- c("epnum", "epid", "title", "firstaired.string", "rati
 table.episodes.names   <- c("#", "Episode ID", "Title", "Airdate", "Rating (%)", "Votes", "Loved", "Hated")
 
 table.seasons.columns  <- c("season", "episodes", "avg.rating.season", "rating.sd", "top.rating.episode", "lowest.rating.episode")
-table.seasons.names    <- c("Season", "Episodes", "Average Rating", paste("Episode", sigma), "Highest Rating", "Lowest Rating")
+table.seasons.names    <- c("Season", "Episodes", "Average Rating", "Episode sd", "Highest Rating", "Lowest Rating")
 
 #### Helper functions ####
 make_tooltip <- function(show.episodes, keyvar = "tooltip"){
