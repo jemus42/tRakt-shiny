@@ -25,15 +25,7 @@ shinyServer(function(input, output, session){
                   detail  = "Getting general show information…", value = 1)
       
       # Starting to pull data
-      if (query %in% c("scandal", "Scandal")){
-        show$overview <- trakt.search(query, limit = 2)
-        
-        # Workaround for duplicate shows: Take the newest one
-        show$overview <- head(arrange(show$overview, desc(year)), 1)
-      } else {
-        show$overview <- trakt.search(query)
-      }
-      
+      show$overview <- trakt.search(query)
       #
       if (!is.null(show$overview$error)){
         warning(paste0(show$overview$error, ": ", query))
@@ -41,8 +33,8 @@ shinyServer(function(input, output, session){
         return(NULL)
       }
       
-      show_id       <- show$overview$tvdb_id
-      showindex     <- data.frame(title = show$overview$title, id = show$overview$tvdb_id)
+      show_id       <- show$overview$ids$tvdb
+      showindex     <- data.frame(title = show$overview$title, id = show_id)
       
       # Let's pretend this is a smart solution for caching
       cache_titles(showindex, cacheDir)
@@ -116,16 +108,19 @@ shinyServer(function(input, output, session){
     label_ended      <- tags$span(class = "label label-default", "ended")
     label_continuing <- tags$span(class = "label label-success", "continuing")
     
-    if (overview$ended){
-      if (overview$year != max(show$episodes$year)){
-        runtime <- paste0("(", overview$year, " - ", max(show$episodes$year), ") ", label_ended)
-      } else {
-        runtime <- paste0("(", overview$year, ") ", label_ended)
-      }
-    } else {
-      runtime <- paste0("(", overview$year, ") ", label_continuing)
-    }
-    showurl   <- paste0("<a href=http://trakt.tv", overview$url, ">", overview$title, "</a> ", runtime)
+#     if (overview$ended){
+#       if (overview$year != max(show$episodes$year)){
+#         runtime <- paste0("(", overview$year, " - ", max(show$episodes$year), ") ", label_ended)
+#       } else {
+#         runtime <- paste0("(", overview$year, ") ", label_ended)
+#       }
+#     } else {
+#       runtime <- paste0("(", overview$year, ") ", label_continuing)
+#     }
+
+    # Temporary runtime assesment
+    runtime <- paste0("(", overview$year, " - ", max(show$episodes$year), ")")
+    showurl   <- paste0("<a href='http://trakt.tv", overview$url, "'>", overview$title, "</a> ", runtime)
     return(showurl)
     
   })
