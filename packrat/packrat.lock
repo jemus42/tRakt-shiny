@@ -273,13 +273,13 @@ Hash: cdde0cfa0f52cffeaca23a11a3899779
 
 Package: tRakt
 Source: github
-Version: 0.5.2
-Hash: ec2b7f87dbbfdc7272a5c566549f68798056be27
+Version: 0.5.3
+Hash: 9061a4f7ba3877d76a1252e531feb9a1b4be98d9
 Requires: httr, jsonlite, lubridate, plyr, stringr
 GithubRepo: tRakt-package
 GithubUsername: jemus42
 GithubRef: master
-GithubSha1: ec2b7f87dbbfdc7272a5c566549f68798056be27
+GithubSha1: 9061a4f7ba3877d76a1252e531feb9a1b4be98d9
 
 Package: whisker
 Source: CRAN
