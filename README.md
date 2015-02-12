@@ -5,8 +5,7 @@ This is `tRakt-shiny` (dummy name) version `0.5.0`.
 
 Using the [trakt.tv](http://trakt.tv) API to graph show data and whatevs.  
 To run it, use `shiny::runGitHub(username = "jemus42", repo = "tRakt-shiny")`.  
-Note that this only works with a `key.json` or `key.txt` file containing your trakt.tv API key.  
-Whoopsie.  
+Note that this only works with trakt.tv API credentials set. See [tRakt](https://github.com/jemus42/tRakt-package) for further information.
 Maybe you'd rather look at [trakt.jemu.name](http://trakt.jemu.name) to see it live™.
 
 ## Dependencies
