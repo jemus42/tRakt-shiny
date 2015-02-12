@@ -25,16 +25,16 @@ shinyServer(function(input, output, session){
                   detail  = "Getting general show information…", value = 1)
       
       # Starting to pull data
-      show$overview <- trakt.search(query)
+      show$info <- trakt.search(query)
       #
       if (!is.null(show$overview$error)){
-        warning(paste0(show$overview$error, ": ", query))
+        warning(paste0(show$info$error, ": ", query))
         updateTextInput(session, inputId = "show_query", label = "Try again…", value = "")
         return(NULL)
       }
       
-      show_id       <- show$overview$ids$tvdb
-      showindex     <- data.frame(title = show$overview$title, id = show_id)
+      show_id       <- show$info$ids$slug
+      showindex     <- data.frame(title = show$info$title, id = show_id)
       
       # Let's pretend this is a smart solution for caching
       cache_titles(showindex, cacheDir)
@@ -45,10 +45,11 @@ shinyServer(function(input, output, session){
         setProgress(detail = "Reading from cache…", value = 3)
         show <- readRDS(file = cachedpath)
       } else {
+        show$summary <- trakt.show.summary(show_id)
         setProgress(detail = "Getting season data…", value = 2)
         show$seasons  <- trakt.getSeasons(show_id)
         setProgress(detail = "Getting episode data (this takes a while…)", value = 3)
-        show$episodes <- trakt.getEpisodeData2(show_id, show$seasons$season)
+        show$episodes <- trakt.getEpisodeData(show_id, show$seasons$season)
         show$seasons  <- get_season_ratings(show$episodes, show$seasons)
         setProgress(detail = "Caching results…", value = 4)
         saveRDS(object = show, file = cachedpath)
@@ -104,23 +105,20 @@ shinyServer(function(input, output, session){
     if (input$get_show == 0){return("Show Title will appear here soon. Are you excited?")}
     show      <- show()
     if (is.null(show)){return("Looks like I didn’t find anything, try again maybe?")}
-    overview         <- show$overview
+    summary          <- show$summary
     label_ended      <- tags$span(class = "label label-default", "ended")
     label_continuing <- tags$span(class = "label label-success", "continuing")
     
-#     if (overview$ended){
-#       if (overview$year != max(show$episodes$year)){
-#         runtime <- paste0("(", overview$year, " - ", max(show$episodes$year), ") ", label_ended)
-#       } else {
-#         runtime <- paste0("(", overview$year, ") ", label_ended)
-#       }
-#     } else {
-#       runtime <- paste0("(", overview$year, ") ", label_continuing)
-#     }
-
-    # Temporary runtime assesment
-    runtime <- paste0("(", overview$year, " - ", max(show$episodes$year), ")")
-    showurl   <- paste0("<a href='http://trakt.tv", overview$url, "'>", overview$title, "</a> ", runtime)
+    if (summary$status == "ended"){
+      if (summary$year != max(show$episodes$year)){
+        runtime <- paste0("(", summary$year, " - ", max(show$episodes$year), ") ", label_ended)
+      } else {
+        runtime <- paste0("(", summary$year, ") ", label_ended)
+      }
+    } else {
+      runtime <- paste0("(", summary$year, ") ", label_continuing)
+    }
+    showurl <- paste0("<a href='http://trakt.tv/shows/", show$info$ids$slug, "'>", summary$title, "</a> ", runtime)
     return(showurl)
     
   })
@@ -129,7 +127,7 @@ shinyServer(function(input, output, session){
     if (input$get_show == 0){return(NULL)}
     show           <- show()
     if (is.null(show)){return(NULL)}
-    show           <- show$overview
+    show           <- show$info
     overview       <- p(class = "lead", show$overview)
     return(overview)
   })
@@ -139,11 +137,11 @@ shinyServer(function(input, output, session){
     show                <- show()
     if (is.null(show)){return(NULL)}
     
-    show_rating_total    <- paste0(show$overview$ratings$percentage, "%")
-    show_rating_episodes <- paste0(round(mean(show$episodes$rating), 2), "%")
-    show_votes           <- show$overview$ratings$votes
-    show_ratings_sd      <- paste0(round(sd(show$episodes$rating), 2), "%")
-    show_flipcount       <- get_flipcount(show$overview$title)$count
+    show_rating_total    <- paste0(round(10 * show$summary$rating, 1), "%")
+    show_rating_episodes <- paste0(10 * round(mean(show$episodes$rating), 2), "%")
+    show_votes           <- show$summary$votes
+    show_ratings_sd      <- paste0(10 * round(sd(show$episodes$rating), 2), "%")
+    show_flipcount       <- get_flipcount(show$info$title)$count
     
     output <- fluidRow(
                 column(2, h4("Show Rating"), show_rating_total),
@@ -159,9 +157,8 @@ shinyServer(function(input, output, session){
     if (input$get_show == 0){return(NULL)}
     show           <- show()
     if (is.null(show)){return(NULL)}
-    show           <- show$overview
     # Get image link, and use https
-    banner         <- sub("http:", "https:", show$images$poster)
+    banner         <- sub("http:", "https:", show$info$images$poster$medium)
     image          <- tags$img(src = banner, width = 250, class = "img-responsive img-thumbnail")
     #return(list(src = show$images$poster, class = "img-rounded", width = 250))
   })
@@ -170,12 +167,12 @@ shinyServer(function(input, output, session){
     if (input$get_show == 0){return(NULL)}
     show           <- show()
     if (is.null(show)){return(NULL)}
-    overview       <- show$overview
-    imdb           <- paste0("http://www.imdb.com/title/",         overview$imdb_id)
-    tvrage         <- paste0("http://www.tvrage.com/shows/id-",    overview$tvrage_id)
-    tvdb           <- paste0("http://thetvdb.com/?tab=series&id=", overview$tvdb_id)
+    ids            <- show$info$ids
+    imdb           <- paste0("http://www.imdb.com/title/",         ids$imdb)
+    tvrage         <- paste0("http://www.tvrage.com/shows/id-",    ids$tvrage)
+    tvdb           <- paste0("http://thetvdb.com/?tab=series&id=", ids$tvdb)
     wiki           <- paste0("http://en.wikipedia.org/wiki/Special:Search?search=list of ", 
-                             overview$title, " episodes&go=Go")
+                             show$info$title, " episodes&go=Go")
     
     output <- tags$span(bullet, tags$strong(tags$a(href = imdb,   "IMDb")), 
                         bullet, tags$strong(tags$a(href = tvrage, "TVRage")),
@@ -261,7 +258,7 @@ shinyServer(function(input, output, session){
     }
     
     showindex  <- readRDS(indexfile)
-    ids        <- showindex$title
+    ids        <- as.character(showindex$title)
     names(ids) <- showindex$title
     randomshow <- sample(ids, 1)
     updateSelectizeInput(session, inputId = "shows_cached",
