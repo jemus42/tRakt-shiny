@@ -17,7 +17,9 @@ if (!'shinythemes' %in% installed.packages()) install.packages("shinythemes", de
 library(shinythemes)
 
 ## Set API key ##
-get_trakt_credentials()
+if (is.null(getOption("trakt.client.id"))){
+  get_trakt_credentials()
+}
 
 #### Set/find/create/save cache dir ####
 cacheDir <- "cache"
@@ -89,7 +91,7 @@ make_tooltip <- function(show.episodes, keyvar = "tooltip"){
   strings <- paste0("<strong>",             show.episodes$epid, "</strong><br />",
                "<strong>Title:</strong> ",  show.episodes$title, "<br />",
                "<strong>Aired:</strong> ",  show.episodes$firstaired.string, "<br />",
-               "<strong>Rating:</strong> ", 10 * show.episodes$rating, "%<br />",
+               "<strong>Rating:</strong> ", show.episodes$rating, "%<br />",
                "<strong>Votes:</strong> ",  show.episodes$votes)
   
   show.episodes[[keyvar]] <- strings
