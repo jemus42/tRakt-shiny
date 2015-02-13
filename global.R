@@ -1,7 +1,7 @@
 #### Loading libraries ####
 if (!'devtools' %in% installed.packages()) install.packages("devtools", dependencies=TRUE)
 library(devtools)
-if (!'tRakt' %in% installed.packages()) install_github("jemus42/tRakt-package", dependencies=TRUE)
+if (!'tRakt' %in% installed.packages()) install_github("jemus42/tRakt", dependencies=TRUE)
 library(tRakt)
 if (!'shiny' %in% installed.packages()) install.packages("shiny", dependencies=TRUE)
 library(shiny)
