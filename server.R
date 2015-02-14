@@ -161,7 +161,7 @@ shinyServer(function(input, output, session){
   url_show_query <- reactive({
     url_query    <- session$clientData$url_search
     query_parsed <- as.data.frame(parseQueryString(url_query))
-    if (!(is.null(query_parsed$show)) || is.na(query_parsed$show)){
+    if (!(is.null(query_parsed$show)))){
       return(NULL)
     }
     return(query_parsed$show)
