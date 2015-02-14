@@ -4,13 +4,19 @@ shinyServer(function(input, output, session){
   #### Data pulls ####
   # Need to depend on actionButton, hence the isolate() ¯\_(ツ)_/¯
   show <- reactive({
-    if (input$get_show == 0){return(NULL)}
+    if (!(is.null(url_show_query()))){
+      query_url <- url_show_query()
+    } else {
+      query_url <- NULL
+    }
+    if (input$get_show == 0 && !(is.null(query_url))){return(NULL)}
     # Initiate progress bar
     withProgress(session, min = 0, max = 5, {
     # Use isolate() on show_query to not execute on every update of the input
     query        <- isolate(input$show_query)
     query_cached <- isolate(input$shows_cached)
     # textInput is favored over selectizeInput containing chached data
+    # but query_url should take precedence over all
     if (query_cached == "" && query == ""){
       return(NULL)
     } else if (query == "" && query_cached != ""){
@@ -152,6 +158,14 @@ shinyServer(function(input, output, session){
   source("server/dataTables.R", local = TRUE)
   
   #### Parsing url querys ####
+  url_show_query <- reactive({
+    url_query    <- session$clientData$url_search
+    query_parsed <- as.data.frame(parseQueryString(url_query))
+    if (!(is.null(query_parsed$show)) || is.na(query_parsed$show)){
+      return(NULL)
+    }
+    return(query_parsed$show)
+  })
   observe({
     url_query    <- session$clientData$url_search
     query_parsed <- as.data.frame(parseQueryString(url_query))
