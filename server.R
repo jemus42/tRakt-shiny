@@ -25,7 +25,7 @@ shinyServer(function(input, output, session){
     
     # Starting to pull data
     show$info <- trakt.search(query)
-    #
+    
     if (!is.null(show$info$error)){
       warning(paste0(show$info$error, ": ", query))
       updateTextInput(session, inputId = "show_query", label = "Try again…", value = "")
@@ -38,11 +38,11 @@ shinyServer(function(input, output, session){
     # Let's pretend this is a smart solution for caching
     cache_titles(showindex, cacheDir)
     cachedfile <- paste0(show_id, ".rds")
-    cachedpath <- file.path(cacheDir, cachedfile)
+    cachedfile <- file.path(cacheDir, cachedfile)
     
-    if (file.exists(cachedpath) && (file.info(cachedpath)$mtime - Sys.time()) > -14){
+    if (file.exists(cachedfile) && (file.info(cachedfile)$mtime - Sys.time()) > -14){
       setProgress(detail = "Reading from cache…", value = 3)
-      show <- readRDS(file = cachedpath)
+      show <- readRDS(file = cachedfile)
     } else {
       show$summary <- trakt.show.summary(show_id)
       setProgress(detail = "Getting season data…", value = 2)
