@@ -2,15 +2,31 @@
 shinyServer(function(input, output, session){
   
   #### Define a global "active" state ####
+  # Parsing url querys
+  url_show_query <- reactive({
+    url_query    <- session$clientData$url_search
+    query_parsed <- as.data.frame(parseQueryString(url_query))
+    message("is.null(query_parsed$show):")
+    message(is.null(query_parsed$show))
+    if (!(is.null(query_parsed$show))){
+      message(paste0("query_parsed$show is '", query_parsed$show, "'"))
+      return(NULL)
+    } else {
+      message(paste0("query_parsed$show is '", query_parsed$show, "'"))
+      return(query_parsed$show)
+    }
+  })
+  
   observe({
     url_show_query <- url_show_query()
     if (input$get_show > 0 || !is.null(url_show_query)){
       updateCheckboxInput(session, "isActive", value = TRUE)
-      message(paste("Activate. url_show_query is '", url_show_query, "'"))
+      message(paste0("Activate. url_show_query is '", url_show_query, "'"))
+      message(is.null(url_show_query))
     }
   })
   
-  isActive <- reactive({
+  isActive <- reactive(label = "isActive", {
     url_show_query <- url_show_query()
     if (input$get_show > 0 || !is.null(url_show_query)){
       return(TRUE)
@@ -21,7 +37,7 @@ shinyServer(function(input, output, session){
     
   #### Data pulls ####
   # Need to depend on actionButton, hence the isolate() ¯\_(ツ)_/¯
-  show <- reactive({
+  show <- reactive(label = "show", {
     if (!(is.null(url_show_query()))){
       query_url <- url_show_query()
     } else {
@@ -180,23 +196,14 @@ shinyServer(function(input, output, session){
   #### Data tables ####
   source("server/dataTables.R", local = TRUE)
   
-  #### Parsing url querys ####
-  url_show_query <- reactive({
-    url_query    <- session$clientData$url_search
-    query_parsed <- as.data.frame(parseQueryString(url_query))
-    if (!(is.null(query_parsed$show))){
-      return(NULL)
-    }
-    return(query_parsed$show)
-  })
   observe({
     url_query    <- session$clientData$url_search
     query_parsed <- as.data.frame(parseQueryString(url_query))
     
-    # Take actions on queries
-    if (!is.null(query_parsed$show)){
-      updateTextInput(session, inputId = "show_query", value = query_parsed$show)
-    }
+#     # Take actions on queries
+#     if (!is.null(query_parsed$show)){
+#       updateTextInput(session, inputId = "show_query", value = query_parsed$show)
+#     }
     
     if (!is.null(query_parsed$debug)){
       if (query_parsed$debug == "1"){
@@ -224,7 +231,7 @@ shinyServer(function(input, output, session){
   
   #### Caching observer ####
   observe({
-    input$get_show
+    #input$get_show
     
     indexfile <- file.path(cacheDir, "showtitles.rds")
     if (!file.exists(indexfile)){
