@@ -1,5 +1,4 @@
 #### Shiny Server ####
-
 shinyServer(function(input, output, session){
   
   #### Data pulls ####
@@ -27,19 +26,19 @@ shinyServer(function(input, output, session){
       # Starting to pull data
       show$info <- trakt.search(query)
       #
-      if (!is.null(show$overview$error)){
+      if (!is.null(show$info$error)){
         warning(paste0(show$info$error, ": ", query))
         updateTextInput(session, inputId = "show_query", label = "Try again…", value = "")
         return(NULL)
       }
       
-      show_id       <- show$info$ids$slug
-      showindex     <- data.frame(title = show$info$title, id = show_id)
+      show_id    <- show$info$ids$slug
+      showindex  <- data.frame(title = show$info$title, id = show_id)
       
       # Let's pretend this is a smart solution for caching
       cache_titles(showindex, cacheDir)
-      cachedfile    <- paste0(show_id, ".rds")
-      cachedpath    <- file.path(cacheDir, cachedfile)
+      cachedfile <- paste0(show_id, ".rds")
+      cachedpath <- file.path(cacheDir, cachedfile)
       
       if (file.exists(cachedpath) && (file.info(cachedpath)$mtime - Sys.time()) > -30){
         setProgress(detail = "Reading from cache…", value = 3)
@@ -62,44 +61,7 @@ shinyServer(function(input, output, session){
   })
   
   #### Actual plotting ####
-  # This is done in observe(), for some actionButton reactivity reason
-  observe({
-    if (input$get_show == 0){return(NULL)}
-    # The 0 - 100 range thing should only be active for ratings
-    if (input$btn_scale_y_range && input$btn_scale_y_variable != "rating"){
-      updateCheckboxInput(session, inputId = "btn_scale_y_range", value = FALSE)
-    } else if (input$btn_scale_y_zero && input$btn_scale_y_variable == "rating"){
-      updateCheckboxInput(session, inputId = "btn_scale_y_zero", value = FALSE)
-    }
-    show    <- isolate(show())
-    if (is.null(show)){return(NULL)}
-    label_x <- names(btn.scale.x.choices[btn.scale.x.choices == input$btn_scale_x_variable])
-    label_y <- names(btn.scale.y.choices[btn.scale.y.choices == input$btn_scale_y_variable])
-    var_x   <- input$btn_scale_x_variable
-    var_y   <- input$btn_scale_y_variable
-    
-    plot <- show$episodes %>% ggvis(x    = as.name(var_x),
-                                    y    = as.name(var_y),
-                                    fill = ~season)
-    plot <- plot %>% layer_points(key := ~tooltip, size.hover := 200, stroke := NA, stroke.hover := "gray", strokeWidth := 2)
-    if ("Show" %in% input$btn_trendlines){
-      plot <- plot %>% layer_model_predictions(model = "lm", se = F, stroke := "black")
-    }
-    if ("Season" %in% input$btn_trendlines){
-      plot <- plot %>% group_by(season) %>% layer_model_predictions(model = "lm", se = F, stroke = ~season)
-      plot <- plot %>% hide_legend("stroke")
-    }
-    if (input$btn_scale_y_range == TRUE){
-      plot <- plot %>% scale_numeric("y", domain = c(0, 100))
-    }
-    plot <- plot %>% scale_numeric("y", zero = input$btn_scale_y_zero)
-    plot <- plot %>% add_axis("x", title = label_x)
-    plot <- plot %>% add_axis("y", title = label_y)
-    plot <- plot %>% add_legend("fill", title = "Season", orient = "left")
-    plot <- plot %>% add_tooltip(function(epdata){epdata$tooltip}, "hover")
-    plot <- plot %>% set_options(width = 900, height = 500, renderer = "canvas")
-    plot <- plot %>% bind_shiny(plot_id = "ggvis")
-  })
+  source("server/episode_plot.R", local = TRUE)
   
   #### Output Assignments ####
   output$show_name <- renderText({
@@ -133,6 +95,7 @@ shinyServer(function(input, output, session){
     return(overview)
   })
   
+  # Assemble ratings displayed in the show info box
   output$show_ratings <- renderUI({
     if (input$get_show == 0){return(NULL)}
     show                <- show()
@@ -154,6 +117,7 @@ shinyServer(function(input, output, session){
     return(output)
   })
   
+  # Assemble the show banner (needs work)
   output$show_banner <- renderUI({
     if (input$get_show == 0){return(NULL)}
     show           <- show()
@@ -164,6 +128,7 @@ shinyServer(function(input, output, session){
     #return(list(src = show$images$poster, class = "img-rounded", width = 250))
   })
   
+  # Assemble the links displayed under the show overview
   output$show_links <- renderUI({
     if (input$get_show == 0){return(NULL)}
     show           <- show()
@@ -184,35 +149,7 @@ shinyServer(function(input, output, session){
   })
   
   #### Data tables ####
-  output$table_episodes <- renderDataTable({
-    if (input$get_show == 0){return(NULL)}
-    show           <- show()
-    if (is.null(show)){return(NULL)}
-    episodes       <- show$episodes
-    overview       <- gsub("'", "’", episodes$overview)
-    # Temporarily disable until new shiny version is documented propery, use 'escape = FALSE'
-    #episodes$title <- paste0("<a target='_blank' title ='",
-    #                         overview, "' href='", episodes$url,
-    #                         "'>", episodes$title, "</a>")
-    episodes       <- episodes[table.episodes.columns]
-    names(episodes)<- table.episodes.names
-    return(episodes)
-  }, options = list(orderClasses = TRUE, 
-                    lengthMenu = list(c(25, 50, -1), c('25', '50', 'All')),
-                    pageLength = 50,
-                    columnDefs = list(list(sWidth=c("10px"), 
-                                           aTargets=list(0)))))
-  
-  output$table_seasons <- renderDataTable({
-    if (input$get_show == 0){return(NULL)}
-    show              <- show()
-    if (is.null(show)){return(NULL)}
-    seasons           <- show$seasons
-    seasons$rating.sd <- round(seasons$rating.sd, 2)
-    seasons           <- seasons[table.seasons.columns]
-    names(seasons)    <- table.seasons.names
-    return(seasons)
-  }, options = list(orderClasses = TRUE, paging = FALSE))
+  source("server/dataTables.R", local = TRUE)
   
   #### Parsing url querys ####
   observe({
