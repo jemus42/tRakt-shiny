@@ -1,7 +1,7 @@
 tRakt-shiny
 ===========
 
-This is `tRakt-shiny` (dummy name) version `0.5.0`. 
+This is `tRakt-shiny` (dummy name) version `0.5.1`. 
 
 Using the [trakt.tv](http://trakt.tv) API to graph show data and whatevs.  
 To run it, use `shiny::runGitHub(username = "jemus42", repo = "tRakt-shiny")`.  
