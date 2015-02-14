@@ -102,7 +102,8 @@ shinyUI(
     ),
     tabPanel(title = "About", icon = icon("question-circle"),
       fixedPage(
-        column(8, includeMarkdown("text/about.md"))
+        column(6, includeMarkdown("README.md")),
+        column(6, includeMarkdown("text/about.md"))
       )
     )
   )
