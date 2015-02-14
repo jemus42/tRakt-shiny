@@ -5,59 +5,59 @@ shinyServer(function(input, output, session){
   # Need to depend on actionButton, hence the isolate() ¯\_(ツ)_/¯
   show <- reactive({
     if (input$get_show == 0){return(NULL)}
-     # Initiate progress bar
-     withProgress(session, min = 0, max = 5, {
-      # Use isolate() on show_query to not execute on every update of the input
-      query        <- isolate(input$show_query)
-      query_cached <- isolate(input$shows_cached)
-      # textInput is favored over selectizeInput containing chached data
-      if (query_cached == "" && query == ""){
-        return(NULL)
-      } else if (query == "" && query_cached != ""){
-        query <- query_cached
-      }
-      
-      # Inititalize show object as a list
-      show          <- list()
-      
-      setProgress(message = "Fetching data from Trakt.tv…",
-                  detail  = "Getting general show information…", value = 1)
-      
-      # Starting to pull data
-      show$info <- trakt.search(query)
-      #
-      if (!is.null(show$info$error)){
-        warning(paste0(show$info$error, ": ", query))
-        updateTextInput(session, inputId = "show_query", label = "Try again…", value = "")
-        return(NULL)
-      }
-      
-      show_id    <- show$info$ids$slug
-      showindex  <- data.frame(title = show$info$title, id = show_id)
-      
-      # Let's pretend this is a smart solution for caching
-      cache_titles(showindex, cacheDir)
-      cachedfile <- paste0(show_id, ".rds")
-      cachedpath <- file.path(cacheDir, cachedfile)
-      
-      if (file.exists(cachedpath) && (file.info(cachedpath)$mtime - Sys.time()) > -30){
-        setProgress(detail = "Reading from cache…", value = 3)
-        show <- readRDS(file = cachedpath)
-      } else {
-        show$summary <- trakt.show.summary(show_id)
-        setProgress(detail = "Getting season data…", value = 2)
-        show$seasons  <- trakt.getSeasons(show_id)
-        setProgress(detail = "Getting episode data (this takes a while…)", value = 3)
-        show$episodes <- trakt.getEpisodeData(show_id, show$seasons$season)
-        show$episodes$rating <- 10 * show$episodes$rating
-        show$seasons  <- get_season_ratings(show$episodes, show$seasons)
-        setProgress(detail = "Caching results…", value = 4)
-        saveRDS(object = show, file = cachedpath)
-        setProgress(detail = "Done!", value = 5)
-      }
-      show$episodes <- make_tooltip(show$episodes, keyvar = "tooltip")
-      return(show)
-      }) # End progressbar after the return(), which apparently is a biggie
+    # Initiate progress bar
+    withProgress(session, min = 0, max = 5, {
+    # Use isolate() on show_query to not execute on every update of the input
+    query        <- isolate(input$show_query)
+    query_cached <- isolate(input$shows_cached)
+    # textInput is favored over selectizeInput containing chached data
+    if (query_cached == "" && query == ""){
+      return(NULL)
+    } else if (query == "" && query_cached != ""){
+      query <- query_cached
+    }
+    
+    # Inititalize show object as a list
+    show          <- list()
+    
+    setProgress(message = "Fetching data from Trakt.tv…",
+                detail  = "Getting general show information…", value = 1)
+    
+    # Starting to pull data
+    show$info <- trakt.search(query)
+    #
+    if (!is.null(show$info$error)){
+      warning(paste0(show$info$error, ": ", query))
+      updateTextInput(session, inputId = "show_query", label = "Try again…", value = "")
+      return(NULL)
+    }
+    
+    show_id    <- show$info$ids$slug
+    showindex  <- data.frame(title = show$info$title, id = show_id)
+    
+    # Let's pretend this is a smart solution for caching
+    cache_titles(showindex, cacheDir)
+    cachedfile <- paste0(show_id, ".rds")
+    cachedpath <- file.path(cacheDir, cachedfile)
+    
+    if (file.exists(cachedpath) && (file.info(cachedpath)$mtime - Sys.time()) < -14){
+      setProgress(detail = "Reading from cache…", value = 3)
+      show <- readRDS(file = cachedpath)
+    } else {
+      show$summary <- trakt.show.summary(show_id)
+      setProgress(detail = "Getting season data…", value = 2)
+      show$seasons  <- trakt.getSeasons(show_id)
+      setProgress(detail = "Getting episode data (this takes a while…)", value = 3)
+      show$episodes <- trakt.getEpisodeData(show_id, show$seasons$season)
+      show$episodes$rating <- 10 * show$episodes$rating
+      show$seasons  <- get_season_ratings(show$episodes, show$seasons)
+      setProgress(detail = "Caching results…", value = 4)
+      saveRDS(object = show, file = cachedpath)
+      setProgress(detail = "Done!", value = 5)
+    }
+    show$episodes <- make_tooltip(show$episodes, keyvar = "tooltip")
+    return(show)
+    }) # End progressbar after the return(), which apparently is a biggie
   })
   
   #### Actual plotting ####
