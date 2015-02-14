@@ -1,6 +1,25 @@
 #### Shiny Server ####
 shinyServer(function(input, output, session){
   
+  #### Define a global "active" state ####
+  output$isActive <- renderPrint({
+    url_show_query <- url_show_query()
+    if (input$get_show > 0 || !is.null(url_show_query)){
+      return(TRUE)
+    } else {
+      return(FALSE)
+    }
+  })
+  
+  isActive <- reactive({
+    url_show_query <- url_show_query()
+    if (input$get_show > 0 || !is.null(url_show_query)){
+      return(TRUE)
+    } else {
+      return(FALSE)
+    }
+  })
+    
   #### Data pulls ####
   # Need to depend on actionButton, hence the isolate() ¯\_(ツ)_/¯
   show <- reactive({
@@ -9,7 +28,7 @@ shinyServer(function(input, output, session){
     } else {
       query_url <- NULL
     }
-    if (input$get_show == 0 && !(is.null(query_url))){return(NULL)}
+    if (!(isActive())){return(NULL)}
     # Initiate progress bar
     withProgress(session, min = 0, max = 5, {
     # Use isolate() on show_query to not execute on every update of the input
@@ -71,7 +90,7 @@ shinyServer(function(input, output, session){
   
   #### Output Assignments ####
   output$show_name <- renderText({
-    if (input$get_show == 0){return("Show Title will appear here soon. Are you excited?")}
+    if (!(isActive())){return("Show Title will appear here soon. Are you excited?")}
     show      <- show()
     if (is.null(show)){return("Looks like I didn’t find anything, try again maybe?")}
     summary          <- show$summary
@@ -93,7 +112,7 @@ shinyServer(function(input, output, session){
   })
   
   output$show_overview <- renderUI({
-    if (input$get_show == 0){return(NULL)}
+    if (!(isActive())){return(NULL)}
     show           <- show()
     if (is.null(show)){return(NULL)}
     show           <- show$info
@@ -103,7 +122,7 @@ shinyServer(function(input, output, session){
   
   # Assemble ratings displayed in the show info box
   output$show_ratings <- renderUI({
-    if (input$get_show == 0){return(NULL)}
+    if (!(isActive())){return(NULL)}
     show                <- show()
     if (is.null(show)){return(NULL)}
     
@@ -125,7 +144,7 @@ shinyServer(function(input, output, session){
   
   # Assemble the show banner (needs work)
   output$show_banner <- renderUI({
-    if (input$get_show == 0){return(NULL)}
+    if (!(isActive())){return(NULL)}
     show           <- show()
     if (is.null(show)){return(NULL)}
     # Get image link, and use https
@@ -136,7 +155,7 @@ shinyServer(function(input, output, session){
   
   # Assemble the links displayed under the show overview
   output$show_links <- renderUI({
-    if (input$get_show == 0){return(NULL)}
+    if (!(isActive())){return(NULL)}
     show           <- show()
     if (is.null(show)){return(NULL)}
     ids            <- show$info$ids

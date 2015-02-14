@@ -1,6 +1,6 @@
 # Episode dataTable
 output$table_episodes <- renderDataTable({
-  if (input$get_show == 0){return(NULL)}
+  if (!(isActive())){return(NULL)}
   show           <- show()
   if (is.null(show)){return(NULL)}
   episodes       <- show$episodes
@@ -19,7 +19,7 @@ output$table_episodes <- renderDataTable({
                                          aTargets=list(0)))))
 # Season dataTable
 output$table_seasons <- renderDataTable({
-  if (input$get_show == 0){return(NULL)}
+  if (!(isActive())){return(NULL)}
   show              <- show()
   if (is.null(show)){return(NULL)}
   seasons           <- show$seasons

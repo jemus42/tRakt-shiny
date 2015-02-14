@@ -1,7 +1,7 @@
 #### Episode plotting code ####
 # This is done in observe(), for some actionButton reactivity reason
 observe({
-  if (input$get_show == 0){return(NULL)}
+  if (!(isActive())){return(NULL)}
   # The 0 - 100 range thing should only be active for ratings
   if (input$btn_scale_y_range && input$btn_scale_y_variable != "rating"){
     updateCheckboxInput(session, inputId = "btn_scale_y_range", value = FALSE)
