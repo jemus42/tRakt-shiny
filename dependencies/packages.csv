@@ -1,0 +1,9 @@
+name, src, github,
+devtools, CRAN, NA,
+tRakt, github, jemus42/tRakt,
+shiny, CRAN, NA,
+ggvis, CRAN, NA,
+ggplot2, CRAN, NA,
+rmarkdown, github, rstudio/rmarkdown,
+plyr, CRAN, NA,
+shinythemes, CRAN, NA

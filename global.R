@@ -1,20 +1,5 @@
 #### Loading libraries ####
-if (!'devtools' %in% installed.packages()) install.packages("devtools", dependencies=TRUE)
-library(devtools)
-if (!'tRakt' %in% installed.packages()) install_github("jemus42/tRakt", dependencies=TRUE)
-library(tRakt)
-if (!'shiny' %in% installed.packages()) install.packages("shiny", dependencies=TRUE)
-library(shiny)
-if (!'ggvis' %in% installed.packages()) install.packages("ggvis", dependencies=TRUE)
-library(ggvis)
-if (!'ggplot2' %in% installed.packages()) install.packages("ggplot2", dependencies=TRUE)
-library(ggplot2)
-if (!'rmarkdown' %in% installed.packages()) install_github("rstudio/rmarkdown", dependencies=TRUE)
-library(rmarkdown)
-if (!'plyr' %in% installed.packages()) install.packages("plyr", dependencies=TRUE)
-library(plyr)
-if (!'shinythemes' %in% installed.packages()) install.packages("shinythemes", dependencies=TRUE)
-library(shinythemes)
+source("dependencies/package-check.R")
 
 ## Set API key ##
 if (is.null(getOption("trakt.client.id"))){
