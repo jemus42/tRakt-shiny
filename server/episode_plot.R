@@ -1,3 +1,4 @@
+#### Episode plotting code ####
 # This is done in observe(), for some actionButton reactivity reason
 observe({
   if (input$get_show == 0){return(NULL)}
@@ -14,10 +15,13 @@ observe({
   var_x   <- input$btn_scale_x_variable
   var_y   <- input$btn_scale_y_variable
   
+  #### ggvis object creation starts here ####
+  # use as.name() to circumvent ~ usage with variables
   plot <- show$episodes %>% ggvis(x    = as.name(var_x),
                                   y    = as.name(var_y),
                                   fill = ~season)
-  plot <- plot %>% layer_points(key := ~tooltip, size.hover := 200, stroke := NA, stroke.hover := "gray", strokeWidth := 2)
+  plot <- plot %>% layer_points(key := ~tooltip, size.hover := 200, 
+                                stroke := NA, stroke.hover := "black", strokeWidth := 2)
   if ("Show" %in% input$btn_trendlines){
     plot <- plot %>% layer_model_predictions(model = "lm", se = F, stroke := "black")
   }
@@ -31,8 +35,13 @@ observe({
   plot <- plot %>% scale_numeric("y", zero = input$btn_scale_y_zero)
   plot <- plot %>% add_axis("x", title = label_x)
   plot <- plot %>% add_axis("y", title = label_y)
-  plot <- plot %>% add_legend("fill", title = "Season", orient = "left")
+  plot <- plot %>% add_legend("fill", title = "Season", orient = "left", 
+                                properties = legend_props(
+                                                title = list(fontSize = 16),
+                                                labels = list(fontSize = 14)
+                                              )
+                            )
   plot <- plot %>% add_tooltip(function(epdata){epdata$tooltip}, "hover")
-  plot <- plot %>% set_options(width = 900, height = 500, renderer = "canvas")
+  plot <- plot %>% set_options(width = 900, height = 400, renderer = "canvas")
   plot <- plot %>% bind_shiny(plot_id = "ggvis")
 })
