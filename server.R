@@ -2,12 +2,11 @@
 shinyServer(function(input, output, session){
   
   #### Define a global "active" state ####
-  output$isActive <- renderPrint({
+  observe({
     url_show_query <- url_show_query()
     if (input$get_show > 0 || !is.null(url_show_query)){
-      return(TRUE)
-    } else {
-      return(FALSE)
+      updateCheckboxInput(session, "isActive", value = TRUE)
+      message(paste("Activate. url_show_query is '", url_show_query, "'"))
     }
   })
   
@@ -49,7 +48,11 @@ shinyServer(function(input, output, session){
                 detail  = "Getting general show information…", value = 1)
     
     # Starting to pull data
-    show$info <- trakt.search(query)
+    if (is.null(query_url)){
+      show$info <- trakt.search(query)
+    } else {
+      show$info <- trakt.show.summary(query_url)
+    }
     
     if (!is.null(show$info$error)){
       warning(paste0(show$info$error, ": ", query))
@@ -59,6 +62,7 @@ shinyServer(function(input, output, session){
     
     show_id    <- show$info$ids$slug
     showindex  <- data.frame(title = show$info$title, id = show_id)
+    message(paste("Getting", show_id))
     
     # Let's pretend this is a smart solution for caching
     cache_titles(showindex, cacheDir)
