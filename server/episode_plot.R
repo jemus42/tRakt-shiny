@@ -36,11 +36,11 @@ observe({
   plot <- plot %>% add_axis("x", title = label_x)
   plot <- plot %>% add_axis("y", title = label_y)
   plot <- plot %>% add_legend("fill", title = "Season", orient = "left", 
-                                properties = legend_props(
-                                                title = list(fontSize = 16),
-                                                labels = list(fontSize = 14)
-                                              )
-                            )
+                              properties = legend_props(
+                                            title = list(fontSize = 16),
+                                            labels = list(fontSize = 14)
+                                           )
+                             )
   plot <- plot %>% add_tooltip(function(epdata){epdata$tooltip}, "hover")
   plot <- plot %>% set_options(width = 900, height = 400, renderer = "canvas")
   plot <- plot %>% bind_shiny(plot_id = "ggvis")
