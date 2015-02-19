@@ -65,7 +65,12 @@ shinyServer(function(input, output, session){
     
     # Starting to pull data
     if (is.null(query_url)){
-      show$info <- trakt.search(query)
+      if (grepl(pattern = "^trakt:", x = query)){
+        slug <- substring(query, 7)
+        show$info <- trakt.show.summary(slug)
+      } else {
+        show$info <- trakt.search(query)
+      }
     } else {
       show$info <- trakt.show.summary(query_url)
     }
