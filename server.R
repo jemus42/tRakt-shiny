@@ -97,7 +97,7 @@ shinyServer(function(input, output, session){
       show$episodes$rating <- 10 * show$episodes$rating
       show$seasons  <- get_season_ratings(show$episodes, show$seasons)
       setProgress(detail = "Caching results…", value = 4)
-      saveRDS(object = show, file = cachedpath)
+      saveRDS(object = show, file = cachedfile)
       setProgress(detail = "Done!", value = 5)
     }
     show$episodes <- make_tooltip(show$episodes, keyvar = "tooltip")
