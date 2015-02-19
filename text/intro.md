@@ -10,4 +10,8 @@
 * You can fiddle around with the plot with the inputs on the right
 * Or just look at the dataTables, idunno
 
+**Note**: The search API on trakt's side is a little wonky right now, so searching for example for `the americans 2013` will fail. I've implemented a workaraound for this which allows you to use the show's *slug*.  
+Example: Enter it like this `trakt:the-americans-2013`, `trakt:game-of-thrones`, …  
+The *slug* usually consists of a show's name, separated by - and, if needed, the year it first aired.
+
 <small>Also, pls tell me about bugs 'n stuff, k?</small>
