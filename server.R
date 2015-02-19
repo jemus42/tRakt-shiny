@@ -67,7 +67,7 @@ shinyServer(function(input, output, session){
     if (is.null(query_url)){
       if (grepl(pattern = "^trakt:", x = query)){
         slug <- substring(query, 7)
-        show$info <- trakt.show.summary(slug)
+        show$info <- trakt.show.summary(slug, extended = "full,images")
       } else {
         show$info <- trakt.search(query)
       }
