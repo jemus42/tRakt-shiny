@@ -60,12 +60,12 @@ sigma  <- HTML("&#963;")
 ## UI elements ##
 btn.scale.x.choices <- c("Total Episode Numbers" = "epnum",
                          "Episodes per Season"   = "episode",
-                         "Airdate"               = "firstaired.posix")
+                         "Airdate"               = "first_aired")
 
 btn.scale.y.choices <- c("Rating" = "rating",
                          "Votes"  = "votes")
 
-table.episodes.columns <- c("epnum", "epid", "title", "firstaired.string", "rating", "votes")
+table.episodes.columns <- c("epnum", "epid", "title", "first_aired.string", "rating", "votes")
 table.episodes.names   <- c("#", "Episode ID", "Title", "Airdate", "Rating (%)", "Votes")
 
 table.seasons.columns  <- c("season", "episode_count", "rating", "votes", "avg.rating.season", "rating.sd", "top.rating.episode", "lowest.rating.episode")
@@ -75,7 +75,7 @@ table.seasons.names    <- c("Season", "Episodes", "Rating", "Votes", "Average Ra
 make_tooltip <- function(show.episodes, keyvar = "tooltip"){
   strings <- paste0("<strong>",             show.episodes$epid, "</strong><br />",
                "<strong>Title:</strong> ",  show.episodes$title, "<br />",
-               "<strong>Aired:</strong> ",  show.episodes$firstaired.string, "<br />",
+               "<strong>Aired:</strong> ",  show.episodes$first_aired.string, "<br />",
                "<strong>Rating:</strong> ", show.episodes$rating, "%<br />",
                "<strong>Votes:</strong> ",  show.episodes$votes)
   
