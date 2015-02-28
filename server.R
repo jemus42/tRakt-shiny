@@ -54,7 +54,7 @@ shinyServer(function(input, output, session){
     if (query_cached == "" && query == ""){
       return(NULL)
     } else if (query == "" && query_cached != ""){
-      query <- query_cached
+      query <- paste0("trakt:", query_cached)
     }
     
     # Inititalize show object as a list
@@ -245,7 +245,7 @@ shinyServer(function(input, output, session){
     }
     
     showindex  <- readRDS(indexfile)
-    ids        <- as.character(showindex$title)
+    ids        <- as.character(showindex$id)
     names(ids) <- showindex$title
     randomshow <- sample(ids, 1)
     updateSelectizeInput(session, inputId = "shows_cached",
