@@ -98,7 +98,7 @@ shinyServer(function(input, output, session){
       setProgress(detail = "Getting season data…", value = 2)
       show$seasons  <- trakt.seasons.summary(show_id, extended = "full")
       setProgress(detail = "Getting episode data (this takes a while…)", value = 3)
-      show$episodes <- trakt.getEpisodeData(show_id, show$seasons$season)
+      show$episodes <- trakt.get_all_episodes(show_id, show$seasons$season)
       show$episodes$rating <- 10 * show$episodes$rating
       show$seasons  <- get_season_ratings(show$episodes, show$seasons)
       setProgress(detail = "Caching results…", value = 4)
