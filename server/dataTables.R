@@ -11,12 +11,13 @@ output$table_episodes <- DT::renderDataTable({
   #                         "'>", episodes$title, "</a>")
   episodes       <- episodes[table.episodes.columns]
   names(episodes)<- table.episodes.names
+  
+  episodes <- datatable(episodes, style = "bootstrap", rownames = FALSE,
+                        options = list(orderClasses = TRUE, 
+                                       lengthMenu = list(c(25, 50, -1), c('25', '50', 'All')),
+                                       pageLength = 50))
   return(episodes)
-}, options = list(orderClasses = TRUE, 
-                  lengthMenu = list(c(25, 50, -1), c('25', '50', 'All')),
-                  pageLength = 50,
-                  columnDefs = list(list(sWidth=c("10px"), 
-                                         aTargets=list(0)))))
+})
 # Season dataTable
 output$table_seasons <- DT::renderDataTable({
   if (!(isActive())){return(NULL)}
@@ -26,5 +27,8 @@ output$table_seasons <- DT::renderDataTable({
   seasons$rating.sd <- round(seasons$rating.sd, 2)
   seasons           <- seasons[table.seasons.columns]
   names(seasons)    <- table.seasons.names
+  
+  seasons <- datatable(seasons, style = "bootstrap", rownames = FALSE,
+                       options = list(orderClasses = TRUE, paging = FALSE))
   return(seasons)
-}, options = list(orderClasses = TRUE, paging = FALSE))
+})
