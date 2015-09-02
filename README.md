@@ -9,7 +9,7 @@ Note that this only works with trakt.tv API credentials set. See [tRakt](https:/
 Maybe you'd rather look at [trakt.jemu.name](http://trakt.jemu.name) to see it live™.
 
 ## Dependencies
-* The [tRakt](https://github.com/jemus42/tRakt-package)-package with its dependencies
+* The [tRakt](https://github.com/jemus42/tRakt)-package with its dependencies
 * [shiny](http://shiny.rstudio.com)
 * [ggvis](http://ggvis.rstudio.com)
 * [rmarkdown](http://rmarkdown.rstudio.com)
