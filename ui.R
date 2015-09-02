@@ -48,10 +48,10 @@ shinyUI(
                    ggvisOutput(plot_id = "ggvis")
           ),
           tabPanel(title = "Episodes", value = "tab_data_episodes", icon = icon("table"),
-                   dataTableOutput(outputId = "table_episodes")
+                   DT::dataTableOutput(outputId = "table_episodes")
           ),
           tabPanel(title = "Seasons", value = "tab_data_seasons", icon = icon("table"),
-                   dataTableOutput(outputId = "table_seasons")
+                   DT::dataTableOutput(outputId = "table_seasons")
           )
         )
       ),

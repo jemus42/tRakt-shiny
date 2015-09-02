@@ -1,5 +1,5 @@
 # Episode dataTable
-output$table_episodes <- renderDataTable({
+output$table_episodes <- DT::renderDataTable({
   if (!(isActive())){return(NULL)}
   show           <- show()
   if (is.null(show)){return(NULL)}
@@ -18,7 +18,7 @@ output$table_episodes <- renderDataTable({
                   columnDefs = list(list(sWidth=c("10px"), 
                                          aTargets=list(0)))))
 # Season dataTable
-output$table_seasons <- renderDataTable({
+output$table_seasons <- DT::renderDataTable({
   if (!(isActive())){return(NULL)}
   show              <- show()
   if (is.null(show)){return(NULL)}
