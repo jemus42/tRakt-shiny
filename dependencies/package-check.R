@@ -17,7 +17,7 @@ check_and_load <- function(pkg = NULL, quiet = TRUE){
   if (!installed){
     message(pkg$name, " not found, trying to install from ", pkg$src, "…")
     if (pkg$src == "CRAN"){
-      install.packages(pkg$name)
+      install.packages(pkg$name, dependencies = TRUE)
     } else if (pkg$src == "github"){
       if (!("devtools" %in% installed.packages())){install.packages("devtools")}
       require(devtools)
