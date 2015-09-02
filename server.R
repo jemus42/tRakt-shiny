@@ -98,6 +98,12 @@ shinyServer(function(input, output, session){
       setProgress(detail = "Getting season data…", value = 2)
       show$seasons  <- trakt.seasons.summary(show_id, extended = "full")
       setProgress(detail = "Getting episode data (this takes a while…)", value = 3)
+      
+      if (nrow(show$seasons) == 0){
+        warning("Show object is empty, sorry")
+        return(NULL)
+      }
+      
       show$episodes <- trakt.get_all_episodes(show_id, show$seasons$season)
       show$episodes$rating <- 10 * show$episodes$rating
       show$seasons  <- get_season_ratings(show$episodes, show$seasons)
@@ -117,7 +123,7 @@ shinyServer(function(input, output, session){
   output$show_name <- renderText({
     if (!(isActive())){return("Show Title will appear here soon. Are you excited?")}
     show      <- show()
-    if (is.null(show)){return("Looks like I didn’t find anything, try again maybe?")}
+    if (is.null(show)){return("Looks like I didn’t find anything, try again maybe? Try including the year, maybe?")}
     summary          <- show$summary
     label_ended      <- tags$span(class = "label label-default", "ended")
     label_continuing <- tags$span(class = "label label-success", "continuing")
