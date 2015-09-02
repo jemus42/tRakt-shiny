@@ -123,7 +123,9 @@ shinyServer(function(input, output, session){
   output$show_name <- renderText({
     if (!(isActive())){return("Show Title will appear here soon. Are you excited?")}
     show      <- show()
-    if (is.null(show)){return("Looks like I didn’t find anything, try again maybe? Try including the year, maybe?")}
+    if (is.null(show)){
+      return("Looks like I didn’t find anything, try including the year, maybe?")
+    }
     summary          <- show$summary
     label_ended      <- tags$span(class = "label label-default", "ended")
     label_continuing <- tags$span(class = "label label-success", "continuing")
