@@ -105,7 +105,6 @@ shinyServer(function(input, output, session){
       }
       
       show$episodes <- trakt.get_all_episodes(show_id, show$seasons$season)
-      show$episodes$rating <- 10 * show$episodes$rating
       show$seasons  <- get_season_ratings(show$episodes, show$seasons)
       setProgress(detail = "Caching results…", value = 4)
       saveRDS(object = show, file = cachedfile)
@@ -159,10 +158,10 @@ shinyServer(function(input, output, session){
     show                <- show()
     if (is.null(show)){return(NULL)}
     
-    show_rating_total    <- paste0(round(10 * show$summary$rating, 1), "%")
-    show_rating_episodes <- paste0(round(mean(show$episodes$rating, na.rm = T), 2), "%")
+    show_rating_total    <- round(show$summary$rating, 2)
+    show_rating_episodes <- round(mean(show$episodes$rating, na.rm = T), 3)
     show_votes           <- show$summary$votes
-    show_ratings_sd      <- paste0(round(sd(show$episodes$rating, na.rm = T), 2), "%")
+    show_ratings_sd      <- round(sd(show$episodes$rating, na.rm = T), 3)
     show_flipcount       <- get_flipcount(show$info$title)$count
     
     output <- fluidRow(

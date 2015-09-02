@@ -30,7 +30,11 @@ observe({
     plot <- plot %>% hide_legend("stroke")
   }
   if (input$btn_scale_y_range == TRUE){
-    plot <- plot %>% scale_numeric("y", domain = c(0, 100))
+    if (max(show$episodes$rating) < 10){
+      plot <- plot %>% scale_numeric("y", domain = c(0, 10))
+    } else {
+      plot <- plot %>% scale_numeric("y", domain = c(0, 100))
+    }
   }
   plot <- plot %>% scale_numeric("y", zero = input$btn_scale_y_zero)
   plot <- plot %>% add_axis("x", title = label_x)
