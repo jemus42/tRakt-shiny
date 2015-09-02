@@ -8,11 +8,11 @@ suggested_packages <- read.csv("dependencies/packages.csv",
                                header = T, stringsAsFactor = F, strip.white = T)
 
 # Define a function to check for packages, install if necessary and load afterwards
-check_and_load <- function(pkg = NULL){
+check_and_load <- function(pkg = NULL, quiet = TRUE){
   if (is.null(pkg$name) || !is.character(pkg$name) || length(pkg$name) != 1){
     stop("No package defined ¯\\_(ツ)_/¯ Doing nothing.")
   }
-  message("Checking if ", pkg$name, " is installed…")
+  if (!quiet) message("Checking if ", pkg$name, " is installed…")
   installed <- (pkg$name %in% installed.packages())
   if (!installed){
     message(pkg$name, " not found, trying to install from ", pkg$src, "…")
@@ -24,15 +24,15 @@ check_and_load <- function(pkg = NULL){
       install_github(pkg$github)
     }
   } else {
-    message(pkg$name, " is installed, skipping installation…")
+    if (!quiet) message(pkg$name, " is installed, skipping installation…")
   }
-  message("Loading ", pkg$name)
+  if (!quiet) message("Loading ", pkg$name)
   suppressPackageStartupMessages(library(pkg$name, character.only = T))
 }
 
 # Execute previous function on defined packages
 for (pkg in seq_len(nrow(suggested_packages))){
-  check_and_load(suggested_packages[pkg, ])
+  check_and_load(suggested_packages[pkg, ], quiet = TRUE)
 }
 
 # Cleanup
