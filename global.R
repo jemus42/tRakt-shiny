@@ -76,7 +76,7 @@ make_tooltip <- function(show.episodes, keyvar = "tooltip"){
   strings <- paste0("<strong>",             show.episodes$epid, "</strong><br />",
                "<strong>Title:</strong> ",  show.episodes$title, "<br />",
                "<strong>Aired:</strong> ",  show.episodes$first_aired.string, "<br />",
-               "<strong>Rating:</strong> ", show.episodes$rating, "%<br />",
+               "<strong>Rating:</strong> ", show.episodes$rating, "<br />",
                "<strong>Votes:</strong> ",  show.episodes$votes)
   
   show.episodes[[keyvar]] <- strings
