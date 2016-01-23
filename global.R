@@ -85,13 +85,14 @@ make_tooltip <- function(show.episodes, keyvar = "tooltip"){
 
 ## Check number of flips
 # How often a show has been flipped on http://tisch.ding.si
-get_flipcount <- function(showname = NULL){
-  showname <- gsub(" ", "+", showname)
-  baseURL  <- "http://api.l3vi.de/flips.json?flippable="
-  query    <- paste0(baseURL, showname)
-  response <- jsonlite::fromJSON(query)
-  return(response)
-}
+# Disabled/not used because errors
+# get_flipcount <- function(showname = NULL){
+#   showname <- gsub(" ", "+", showname)
+#   baseURL  <- "http://api.l3vi.de/flips.json?flippable="
+#   query    <- paste0(baseURL, showname)
+#   response <- jsonlite::fromJSON(query)
+#   return(response)
+# }
 
 ## Get season average ratings etc
 get_season_ratings <- function(show.episodes = NULL, show.seasons = NULL){
