@@ -75,7 +75,6 @@ shinyUI(
                       choices = btn.scale.y.choices, selected = "rating")
         ),
         column(4, h3(icon("cogs"), "Display Options"),
-          h5("Axis scales"),
           conditionalPanel(condition = "input.btn_scale_y_variable != 'rating' ",
             checkboxInput(inputId = "btn_scale_y_zero", label = "Start y axis at zero",
                           value = FALSE)
@@ -84,8 +83,7 @@ shinyUI(
                            checkboxInput(inputId = "btn_scale_y_range", label = "Scale Ratings 0 - 100%",
                                          value = FALSE)
           ), br(),
-          h5("Trendlines"),
-          checkboxGroupInput(inputId = "btn_trendlines", label = "", inline = T,
+          checkboxGroupInput(inputId = "btn_trendlines", label = "Trendlines", inline = T,
                              choices = c("Show", "Season"), selected = NULL)
         )
       )),
