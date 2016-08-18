@@ -46,6 +46,6 @@ observe({
                                            )
                              )
   plot <- plot %>% add_tooltip(function(epdata){epdata$tooltip}, "hover")
-  plot <- plot %>% set_options(width = 900, height = 400, renderer = "canvas")
+  plot <- plot %>% set_options(width = "auto", height = 400, renderer = "canvas")
   plot <- plot %>% bind_shiny(plot_id = "ggvis")
 })

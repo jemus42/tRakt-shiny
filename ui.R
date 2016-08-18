@@ -42,7 +42,6 @@ shinyUI(
           )
         ),
         hr(),
-        # TODO: Make this default to device width somehow ¯\_(ツ)_/¯
         tabsetPanel(id = "mainPanel", selected = "tab_plot_ggvis",
           tabPanel(title = "Plot", value = "tab_plot_ggvis", icon = icon("bar-chart-o"),
                    ggvisOutput(plot_id = "ggvis")
