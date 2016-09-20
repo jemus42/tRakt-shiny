@@ -11,7 +11,7 @@ shinyUI(
        tags$meta(name = "twitter:description", content="Graph trakt.tv shows"),
        tags$meta(name = "twitter:creator", content="@jemus42"),
        tags$meta(name = "twitter:image:src", content=""),
-       tags$meta(name = "twitter:domain", content="http://trakt.jemu.name"),
+       tags$meta(name = "twitter:domain", content="https://trakt.jemu.name"),
        tags$meta(name = "twitter:app:name:iphone", content=""),
        tags$meta(name = "twitter:app:name:ipad", content=""),
        tags$meta(name = "twitter:app:name:googleplay", content=""),
@@ -87,7 +87,10 @@ shinyUI(
         )
       )),
       hr(),
-      includeMarkdown("text/footer.md"),
+     fluidRow(
+       column(6,
+              includeMarkdown("text/footer.md"))
+     ),
       # Clumsiest way of hiding a debug input element ever
       conditionalPanel(condition = "false", 
                        checkboxInput(inputId = "debug", label = ".", value = F),
