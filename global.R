@@ -108,3 +108,24 @@ get_season_ratings <- function(show.episodes = NULL, show.seasons = NULL){
   seasons$season <- factor(seasons$season, ordered = T)
   return(seasons)
 }
+
+
+#### JS for button clicks ####
+
+jscode <- '
+  $(function() {
+    var $els = $("[data-proxy-click]");
+      $.each(
+      $els,
+        function(idx, el) {
+          var $el = $(el);
+            var $proxy = $("#" + $el.data("proxyClick"));
+              $el.keydown(function (e) {
+              if (e.keyCode == 13) {
+            $proxy.click();
+          }
+        });
+      }
+    );
+  });
+  '

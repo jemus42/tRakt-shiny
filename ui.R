@@ -21,7 +21,8 @@ shinyUI(
        tags$meta(name = "twitter:app:id:iphone", content=""),
        tags$meta(name = "twitter:app:id:ipad", content=""),
        tags$meta(name = "twitter:app:id:googleplay", content=""),
-       tags$meta(name="google-site-verification", content="fbD3_htmdCUtmrjbI1dAZbsS0sN-T10_U3xAN7W791Y")
+       tags$meta(name="google-site-verification", content="fbD3_htmdCUtmrjbI1dAZbsS0sN-T10_U3xAN7W791Y"),
+       tags$script(HTML(jscode))
      ),
       
       #### Episode information ####
@@ -62,10 +63,15 @@ shinyUI(
       wellPanel(fluidRow(
         column(4,
           h3(icon("search"), "Show Selection"),
-          textInput(inputId = "show_query", label = "Search a show on trakt.tv", value = ""),
+          tagAppendAttributes(
+            textInput(inputId = "show_query", label = "Search a show on trakt.tv", value = ""),
+            `data-proxy-click` = "get_show"
+          ),  
           br(),
+          tagAppendAttributes(
           selectizeInput(inputId = "shows_cached", label = "Or select a cached show", 
                          choices = "Loading cache…", selected = NULL),
+          `data-proxy-click` = "get_show"),
           actionButton(inputId = "get_show", label = "PLOTERIZZLE", icon = icon("play"))
         ),
         column(4, h3(icon("cogs"), "Plot Options"),
