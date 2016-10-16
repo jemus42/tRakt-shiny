@@ -20,7 +20,8 @@ shinyUI(
        tags$meta(name = "twitter:app:url:googleplay", content=""),
        tags$meta(name = "twitter:app:id:iphone", content=""),
        tags$meta(name = "twitter:app:id:ipad", content=""),
-       tags$meta(name = "twitter:app:id:googleplay", content="")
+       tags$meta(name = "twitter:app:id:googleplay", content=""),
+       tags$meta(name="google-site-verification", content="fbD3_htmdCUtmrjbI1dAZbsS0sN-T10_U3xAN7W791Y")
      ),
       
       #### Episode information ####
