@@ -178,7 +178,7 @@ shinyServer(function(input, output, session){
     show           <- show()
     if (is.null(show)){return(NULL)}
     # Get image link, and use https
-    banner         <- sub("http:", "https:", show$info$images$poster$medium)
+    banner         <- get_fanart_poster(show$info$ids$tvdb)
     image          <- tags$img(src = banner, width = 250, class = "img-responsive img-thumbnail")
     #return(list(src = show$images$poster, class = "img-rounded", width = 250))
   })

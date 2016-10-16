@@ -109,6 +109,15 @@ get_season_ratings <- function(show.episodes = NULL, show.seasons = NULL){
   return(seasons)
 }
 
+#### Get posters from fanart.tv ####
+
+get_fanart_poster <- function(tvdbid, api_key = "113407042401248f50123d1c112abf0d") {
+  
+  query <- paste0("http://webservice.fanart.tv/v3/tv/", tvdbid, "?api_key=", api_key)
+  ret <- httr::content(httr::GET(query))
+  
+  return(ret$tvposter[[6]]$url)
+}
 
 #### JS for button clicks ####
 
