@@ -22,7 +22,8 @@ shinyUI(
        tags$meta(name = "twitter:app:id:ipad", content=""),
        tags$meta(name = "twitter:app:id:googleplay", content=""),
        tags$meta(name="google-site-verification", content="fbD3_htmdCUtmrjbI1dAZbsS0sN-T10_U3xAN7W791Y"),
-       tags$script(HTML(jscode))
+       tags$script(HTML(jscode)),
+       includeHTML("html/piwik.html")
      ),
       
       #### Episode information ####
