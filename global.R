@@ -2,24 +2,24 @@
 source("dependencies/package-check.R")
 
 ## Set API key ##
-if (is.null(getOption("trakt.client.id"))){
+if (is.null(getOption("trakt.client.id"))) {
   get_trakt_credentials()
 }
 
 #### Set/find/create/save cache dir ####
 cacheDir <- "cache"
-if (!file.exists(cacheDir)){
+if (!file.exists(cacheDir)) {
   dir.create(cacheDir)
 }
 
 cache_titles <- function(showindex, cache_dir){
   titles <- file.path(cache_dir, "showtitles.rds")
-  if (!file.exists(titles)){
+  if (!file.exists(titles)) {
     showindex$requests <- 1
     saveRDS(showindex, file = titles)
   } else {
     temp <- readRDS(file = titles)
-    if (!(showindex$id %in% temp$id)){
+    if (!(showindex$id %in% temp$id)) {
       showindex$requests <- 1
       temp               <- rbind(temp, showindex)
       temp$title         <- as.character(temp$title)
@@ -35,8 +35,8 @@ cache_titles <- function(showindex, cache_dir){
 ## Fix cache index
 fix_cached_index <- function(cacheDir = "cache"){
   cached <- sub(".rds", "", dir(cacheDir), ignore.case = T)
-  for (id in cached){
-    if (id == "showtitles"){next}
+  for (id in cached) {
+    if (id == "showtitles") { next }
     show  <- trakt.show.summary(id)
     index <- data.frame(title = show$title, id = show$ids$slug)
     cache_titles(index, cacheDir)
@@ -66,33 +66,22 @@ btn.scale.y.choices <- c("Rating" = "rating",
                          "Votes"  = "votes")
 
 table.episodes.columns <- c("epnum", "epid", "title", "first_aired.string", "rating", "votes")
-table.episodes.names   <- c("#", "Episode ID", "Title", "Airdate", "Rating (%)", "Votes")
+table.episodes.names   <- c("#", "Episode ID", "Title", "Airdate", "Rating", "Votes")
 
 table.seasons.columns  <- c("season", "episode_count", "rating", "votes", "avg.rating.season", "rating.sd", "top.rating.episode", "lowest.rating.episode")
 table.seasons.names    <- c("Season", "Episodes", "Rating", "Votes", "Average Rating", "Episode sd", "Highest Rating", "Lowest Rating")
 
 #### Helper functions ####
 make_tooltip <- function(show.episodes, keyvar = "tooltip"){
-  strings <- paste0("<strong>",             show.episodes$epid, "</strong><br />",
-               "<strong>Title:</strong> ",  show.episodes$title, "<br />",
-               "<strong>Aired:</strong> ",  show.episodes$first_aired.string, "<br />",
-               "<strong>Rating:</strong> ", show.episodes$rating, "<br />",
-               "<strong>Votes:</strong> ",  show.episodes$votes)
-  
+  strings <- paste0("<strong>",                  show.episodes$epid, "</strong><br />",
+                    "<strong>Title:</strong> ",  show.episodes$title, "<br />",
+                    "<strong>Aired:</strong> ",  show.episodes$first_aired.string, "<br />",
+                    "<strong>Rating:</strong> ", show.episodes$rating, "<br />",
+                    "<strong>Votes:</strong> ",  show.episodes$votes)
+        
   show.episodes[[keyvar]] <- strings
   return(show.episodes)
 }
-
-## Check number of flips
-# How often a show has been flipped on http://tisch.ding.si
-# Disabled/not used because errors
-# get_flipcount <- function(showname = NULL){
-#   showname <- gsub(" ", "+", showname)
-#   baseURL  <- "http://api.l3vi.de/flips.json?flippable="
-#   query    <- paste0(baseURL, showname)
-#   response <- jsonlite::fromJSON(query)
-#   return(response)
-# }
 
 ## Get season average ratings etc
 get_season_ratings <- function(show.episodes = NULL, show.seasons = NULL){
@@ -115,8 +104,13 @@ get_fanart_poster <- function(tvdbid, api_key = "113407042401248f50123d1c112abf0
   
   query <- paste0("https://webservice.fanart.tv/v3/tv/", tvdbid, "?api_key=", api_key)
   ret <- httr::content(httr::GET(query))
+  ret_url <- ret$tvposter[[6]]$url
   
-  return(ret$tvposter[[6]]$url)
+  if (is.character(ret_url) & nchar(ret_url) > 10) {
+    return(ret_url)
+  } else {
+    message("Possibly broken fanart: ", tvdbid)
+  }
 }
 
 #### JS for button clicks ####
