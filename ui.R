@@ -7,22 +7,6 @@ shinyUI(
     tabPanel("Main",
       icon = icon("tasks"),
       tags$head(
-        tags$meta(name = "twitter:card", content = "summary"),
-        tags$meta(name = "twitter:site", content = "@jemus42"),
-        tags$meta(name = "twitter:title", content = "tRakt"),
-        tags$meta(name = "twitter:description", content = "Graph trakt.tv shows"),
-        tags$meta(name = "twitter:creator", content = "@jemus42"),
-        tags$meta(name = "twitter:image:src", content = ""),
-        tags$meta(name = "twitter:domain", content = "https://trakt.jemu.name"),
-        tags$meta(name = "twitter:app:name:iphone", content = ""),
-        tags$meta(name = "twitter:app:name:ipad", content = ""),
-        tags$meta(name = "twitter:app:name:googleplay", content = ""),
-        tags$meta(name = "twitter:app:url:iphone", content = ""),
-        tags$meta(name = "twitter:app:url:ipad", content = ""),
-        tags$meta(name = "twitter:app:url:googleplay", content = ""),
-        tags$meta(name = "twitter:app:id:iphone", content = ""),
-        tags$meta(name = "twitter:app:id:ipad", content = ""),
-        tags$meta(name = "twitter:app:id:googleplay", content = ""),
         tags$meta(name = "google-site-verification", content = "fbD3_htmdCUtmrjbI1dAZbsS0sN-T10_U3xAN7W791Y"),
         tags$script(HTML(jscode)),
         includeHTML("html/piwik.html")
@@ -30,10 +14,8 @@ shinyUI(
 
       #### Episode information ####
       ## Show this when the actionButton was not clicked yet, marking the 'inactive' state
-      conditionalPanel(
-        condition = "input.isActive == false",
-        wellPanel(includeMarkdown("text/intro.md"))
-      ),
+      # Used to be a clunky conditionalPanel, now just use shinyjs
+      wellPanel(id = "intro-wellpanel", includeMarkdown("text/intro.md")),
       ## Show this only when the actionButton was clicked, marking the 'active' state
       conditionalPanel(
         condition = "input.isActive && output.show_name != ''",
@@ -51,10 +33,10 @@ shinyUI(
         ),
         hr(),
         tabsetPanel(
-          id = "mainPanel", selected = "tab_plot_ggvis",
+          id = "mainPanel", selected = "tab_plot",
           tabPanel(
-            title = "Plot", value = "tab_plot_ggvis", icon = icon("bar-chart-o"),
-            ggvisOutput(plot_id = "ggvis")
+            title = "Plot", value = "tab_plot", icon = icon("bar-chart-o"),
+            plotlyOutput(outputId = "episodeplot")
           ),
           tabPanel(
             title = "Episodes", value = "tab_data_episodes", icon = icon("table"),
@@ -75,13 +57,8 @@ shinyUI(
           4,
           h3(icon("search"), "Show Selection"),
           tagAppendAttributes(
-            textInput(inputId = "show_query", label = "Search a show on trakt.tv", value = ""),
-            `data-proxy-click` = "get_show"
-          ),
-          br(),
-          tagAppendAttributes(
             selectizeInput(
-              inputId = "shows_cached", label = "Or select a cached show",
+              inputId = "shows_cached", label = "Select a show or enter a show title",
               choices = "Loading cache…", selected = NULL
             ),
             `data-proxy-click` = "get_show"
@@ -123,20 +100,8 @@ shinyUI(
       )),
       hr(),
       fluidRow(
-        column(
-          6,
-          includeMarkdown("text/footer.md")
+        column(6, includeMarkdown("text/footer.md")
         )
-      ),
-      # Clumsiest way of hiding a debug input element ever
-      conditionalPanel(
-        condition = "false",
-        checkboxInput(inputId = "debug", label = ".", value = F),
-        checkboxInput(inputId = "isActive", label = ".", value = F)
-      ),
-      conditionalPanel(
-        condition = "input.debug",
-        plotOutput(outputId = "usage_stats", width = "100%")
       )
     ),
     tabPanel(
