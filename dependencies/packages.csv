@@ -4,7 +4,11 @@ tRakt, github, jemus42/tRakt
 shiny, CRAN, NA
 ggvis, CRAN, NA
 ggplot2, CRAN, NA
-rmarkdown, github, rstudio/rmarkdown
+rmarkdown, CRAN, NA
 plyr, CRAN, NA
 shinythemes, CRAN, NA
 DT, CRAN, NA
+plotly, CRAN, NA
+shinyjs, CRAN, NA
+dplyr, CRAN, NA
+purrr, CRAN, NA
