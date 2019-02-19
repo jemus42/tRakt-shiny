@@ -99,17 +99,18 @@ get_season_ratings <- function(show.episodes = NULL, show.seasons = NULL){
 }
 
 #### Get posters from fanart.tv ####
-
+# tvdbid <- 353764
 get_fanart_poster <- function(tvdbid, api_key = "113407042401248f50123d1c112abf0d") {
   
   query <- paste0("https://webservice.fanart.tv/v3/tv/", tvdbid, "?api_key=", api_key)
   ret <- httr::content(httr::GET(query))
-  ret_url <- ret$tvposter[[6]]$url
+  ret_url <- ret$tvposter[[1]]$url
   
   if (is.character(ret_url) & nchar(ret_url) > 10) {
     return(ret_url)
   } else {
     message("Possibly broken fanart: ", tvdbid)
+    return("")
   }
 }
 
