@@ -5,7 +5,6 @@
 # R data files from past sessions
 .Rdata
 .Rproj.user
-shinyapps
-packrat/lib*/
+
 playground.R
 shinyminimal.R

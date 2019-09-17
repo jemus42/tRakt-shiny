@@ -1,11 +1,12 @@
 #### Loading libraries ####
-source("dependencies/package-check.R")
+# if (!("devtools" %in% installed.packages())) install.packages("devtools")
+# devtools::install_deps(upgrade = "never")
 
-## Set API key ##
-if (is.null(getOption("trakt.client.id"))) {
-  get_trakt_credentials()
-}
-
+library(shiny)
+library(shinyjs)
+library(DT)
+library(plotly)
+library(tRakt)
 
 #### Setting some values ----
 ##Define some HTML characters
@@ -28,7 +29,7 @@ btn.scale.y.choices <- c(
 table.episodes.columns <- c("epnum", "epid", "title", "first_aired.string", "rating", "votes")
 table.episodes.names <- c("#", "Episode ID", "Title", "Airdate", "Rating", "Votes")
 
-table.seasons.columns <- c("season", "episode_count", "rating", "votes", "avg.rating.season", "rating.sd", "top.rating.episode", "lowest.rating.episode")
+table.seasons.columns <- c("season", "episode_count", "rating", "votes", "mean_rating", "sd_rating", "max_rating", "min_rating")
 table.seasons.names <- c("Season", "Episodes", "Rating", "Votes", "Average Rating", "Episode sd", "Highest Rating", "Lowest Rating")
 
 # Helper functions ----
@@ -51,19 +52,5 @@ get_fanart_poster <- function(tvdbid, api_key = "113407042401248f50123d1c112abf0
 # JS for button clicks ----
 
 jscode <- '
-  $(function() {
-    var $els = $("[data-proxy-click]");
-      $.each(
-      $els,
-        function(idx, el) {
-          var $el = $(el);
-            var $proxy = $("#" + $el.data("proxyClick"));
-              $el.keydown(function (e) {
-              if (e.keyCode == 13) {
-            $proxy.click();
-          }
-        });
-      }
-    );
-  });
+
   '
