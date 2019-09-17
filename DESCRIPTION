@@ -1,0 +1,29 @@
+Package: atrakttv
+Title: Shiny app for tRakt
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Lukas",
+           family = "Burk",
+           role = c("aut", "cre"),
+           email = "lukas@tadaa-data.de",
+           comment = c(ORCID = "0000-0001-7528-3795"))
+Description: Placeholder file
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    here,
+    glue,
+    dplyr,
+    tidyr,
+    purrr,
+    tRakt,
+    RSQLite,
+    dbplyr,
+    DT,
+    plotly,
+    shinyjs,
+    shiny,
+    shinythemes,
+    rmarkdown
+Remotes: jemus42/tRakt
