@@ -1,30 +1,30 @@
 #### Shiny Server ####
-library(dplyr)
-library(glue)
-
-library(RSQLite)
-# library(DBI)
-
-con <- dbConnect(RSQLite::SQLite(), "cache/tRakt.db")
-
 shinyServer(function(input, output, session) {
+  
+  cache_db <- dbConnect(RSQLite::SQLite(), "cache/tRakt.db")
+  # on.exit(dbDisconnect(cache_db), add = TRUE)
   
   #### Caching observer ####
   observe({
-    cached_shows <- tbl(con, "shows") %>% collect()
+    cached_shows <- tbl(cache_db, "shows") %>% collect()
     
-    show_ids <- cached_shows$show_id
+    show_ids <- cached_shows$trakt
     names(show_ids) <- as.character(glue("{cached_shows$title} ({cached_shows$year})"))
     
     updateSelectizeInput(
-      session, "shows_cached", choices = show_ids, selected = NULL
+      session, "shows_cached", choices = show_ids, selected = ""
     )
   })
   
   show_info <- eventReactive(input$get_show, {
     cat("show reactive", input$shows_cached, "\n")
+    
+    input_show <- as.integer(input$shows_cached)
+    
+    cat("input$show:", input_show, "\n")
+    
     tbl(con, "shows") %>%
-      filter(show_id == !!input$shows_cached) %>%
+      filter(trakt == input_show) %>%
       collect()
   })
   
