@@ -55,56 +55,37 @@ shinyUI(
       hr(),
 
       #### Control panel ####
-      wellPanel(fluidRow(
-        column(
-          4,
-          h3(icon("search"), "Show Selection"),
-          tagAppendAttributes(
-            selectizeInput(
-              inputId = "shows_cached", label = "Select a show or enter a show title",
-              choices = NULL, selected = NULL, 
-              options = list(
-                create = TRUE,
-                placeholder = "Select a show from the cache"
-              )
+      wellPanel(
+        fluidRow(
+          column(
+            8, offset = 2,
+            h3(icon("search"), "Show Selection"),
+            tagAppendAttributes(
+              textInput(
+                inputId = "show_searchbox",
+                label = "Search a new show",
+                value = "",
+                placeholder = "Something like \"the simpsons\" should do"
+              ),
+              `data-proxy-click` = "get_show"
             ),
-            `data-proxy-click` = "get_show"
-          ),
-          actionButton(inputId = "get_show", label = "PLOTERIZZLE", icon = icon("play"))
-        ),
-        column(
-          4, h3(icon("cogs"), "Plot Options"),
-          selectInput(
-            inputId = "btn_scale_x_variable", label = "Select timeline format:",
-            choices = btn.scale.x.choices, selected = "epnum"
-          ),
-          selectInput(
-            inputId = "btn_scale_y_variable", label = "Select target variable:",
-            choices = btn.scale.y.choices, selected = "rating"
-          )
-        ),
-        column(
-          4, h3(icon("cogs"), "Display Options"),
-          conditionalPanel(
-            condition = "input.btn_scale_y_variable != 'rating' ",
-            checkboxInput(
-              inputId = "btn_scale_y_zero", label = "Start y axis at zero",
-              value = FALSE
-            )
-          ),
-          conditionalPanel(
-            condition = "input.btn_scale_y_variable == 'rating' ",
-            checkboxInput(
-              inputId = "btn_scale_y_range", label = "Scale Ratings 0 - 100%",
-              value = FALSE
-            )
-          ), br(),
-          checkboxGroupInput(
-            inputId = "btn_trendlines", label = "Trendlines", inline = T,
-            choices = c("Show", "Season"), selected = NULL
+            tagAppendAttributes(
+              selectizeInput(
+                inputId = "shows_cached", label = "Select from cache",
+                choices = NULL, selected = NULL, 
+                options = list(
+                  create = TRUE,
+                  placeholder = "Shows people searched for before",
+                  maxOptions = 5,
+                  maxItems = 1
+                )
+              ),
+              `data-proxy-click` = "get_show"
+            ),
+            actionButton(inputId = "get_show", label = "PLOTERIZZLE", icon = icon("play"))
           )
         )
-      )),
+      ),
       hr(),
       fluidRow(
         column(6, includeMarkdown("text/footer.md"))

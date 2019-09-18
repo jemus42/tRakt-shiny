@@ -4,33 +4,29 @@
 
 library(shiny)
 library(shinyjs)
-library(DT)
-library(plotly)
+library(shinythemes)
+# library(DT)
+# library(plotly)
 library(tRakt)
+library(RSQLite)
+library(dplyr)
+library(glue)
+
+# Database connection -----
+cache_db <- function() {
+  
+  if (Sys.info()["login"] == "Lukas" & Sys.info()["sysname"] == "Darwin") {
+    dbConnect(odbc::odbc(), "tRakt", timeout = 10)
+  } else {
+    dbConnect(RSQLite::SQLite(), "cache/tRakt.db")
+  }
+}
 
 #### Setting some values ----
-##Define some HTML characters
+## Define some HTML characters
 bullet <- HTML("&#8226;")
 mu     <- HTML("&#956;")
 sigma  <- HTML("&#963;")
-
-# UI elements 
-btn.scale.x.choices <- c(
-  "Total Episode Numbers" = "epnum",
-  "Episodes per Season" = "episode",
-  "Airdate" = "first_aired"
-)
-
-btn.scale.y.choices <- c(
-  "Rating" = "rating",
-  "Votes" = "votes"
-)
-
-table.episodes.columns <- c("epnum", "epid", "title", "first_aired.string", "rating", "votes")
-table.episodes.names <- c("#", "Episode ID", "Title", "Airdate", "Rating", "Votes")
-
-table.seasons.columns <- c("season", "episode_count", "rating", "votes", "mean_rating", "sd_rating", "max_rating", "min_rating")
-table.seasons.names <- c("Season", "Episodes", "Rating", "Votes", "Average Rating", "Episode sd", "Highest Rating", "Lowest Rating")
 
 # Helper functions ----
 
@@ -48,9 +44,3 @@ get_fanart_poster <- function(tvdbid, api_key = "113407042401248f50123d1c112abf0
     return("")
   }
 }
-
-# JS for button clicks ----
-
-jscode <- '
-
-  '
