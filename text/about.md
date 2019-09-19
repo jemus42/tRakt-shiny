@@ -17,12 +17,3 @@ We'll see.
 ## Who
 
 [Them](https://github.com/jemus42/tRakt-shiny/graphs/contributors)
-
-## Also
-
-* [shiny](http://shiny.rstudio.com)
-* [ggvis](http://ggvis.rstudio.com)
-* [rmarkdown](http://rmarkdown.rstudio.com)
-
-And directly or indirectly pretty much everything [RStudio](http://rstudio.com) 
-or [Hadley Wickham](http://had.co.nz/) ever released.

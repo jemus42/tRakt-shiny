@@ -1,21 +1,16 @@
-tRakt-shiny
-===========
+# tRakt-shiny
 
-This is `tRakt-shiny` (dummy name) version `0.6.5`. 
+This is `tRakt-shiny` (dummy name) version `1.0.0`. 
 
-Using the [trakt.tv](https://trakt.tv) API to graph show data and whatevs.  
-To run it, use `shiny::runGitHub(username = "jemus42", repo = "tRakt-shiny")`.  
-Note that this only works with trakt.tv API credentials set. See [tRakt](https://github.com/jemus42/tRakt-package) for further information.
+Using the [trakt.tv](https://trakt.tv) API to graph show data and stuff.  
+To run it locally, use `shiny::runGitHub(username = "jemus42", repo = "tRakt-shiny")`,
+but you'd need to install some dependencies beforehand.
 Maybe you'd rather look at [trakt.jemu.name](https://trakt.jemu.name) to see it live™.
 
 ## Dependencies
 
-* The [tRakt](https://github.com/jemus42/tRakt)-package with its dependencies
-* [shiny](http://shiny.rstudio.com)
-* [ggvis](http://ggvis.rstudio.com)
-* [rmarkdown](http://rmarkdown.rstudio.com)
-
-When you clone this repository, `source`ing `global.R` should automatically install any missing dependency it finds.
+* [tRakt](https://github.com/jemus42/tRakt) with its dependencies
+* See `DESCRIPTION`. You can use `devtools::install_deps()` to... install... the deps.
 
 ## What this should be soon:
 

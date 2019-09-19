@@ -1,7 +1,7 @@
 #### Shiny UI ####
 shinyUI(
   navbarPage(
-    title = "tRakt", inverse = FALSE, theme = shinytheme("flatly"),
+    title = glue("tRakt v{desc::desc_get_version()}"), inverse = FALSE, theme = shinytheme("flatly"),
     #### Main view ####
     tabPanel("Main",
       icon = icon("tasks"),
@@ -77,7 +77,7 @@ shinyUI(
       ),
       hr(),
       fluidRow(
-        column(6, includeMarkdown("text/footer.md"))
+        column(10, offset = 1, includeMarkdown("text/footer.md"))
       )
     ),
     tabPanel(

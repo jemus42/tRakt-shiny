@@ -1,6 +1,6 @@
-Package: atrakttv
+Package: attraktively
 Title: Shiny app for tRakt
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: 
     person(given = "Lukas",
            family = "Burk",
@@ -20,11 +20,9 @@ Imports:
     tRakt,
     RSQLite,
     dbplyr,
-    DT,
-    plotly,
     shinyjs,
     shiny,
     shinythemes,
-    rmarkdown,
-    cliapp
+    cliapp,
+    stringr
 Remotes: jemus42/tRakt
