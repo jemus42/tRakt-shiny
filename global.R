@@ -21,6 +21,18 @@ cache_db <- function() {
   dbConnect(RSQLite::SQLite(), "cache/tRakt.db")
 }
 
+cache_db_con <- cache_db()
+
+source(here::here("db_helpers.R"))
+
+
+# on.exit(dbDisconnect(cache_db_con), add = TRUE)
+
+cache_shows_tbl    <- tbl(cache_db_con, "shows")
+cache_posters_tbl  <- tbl(cache_db_con, "posters")
+cache_seasons_tbl  <- tbl(cache_db_con, "seasons")
+cache_episodes_tbl <- tbl(cache_db_con, "episodes")
+
 #### Setting some values ----
 ## Define some HTML characters
 # bullet <- HTML("&#8226;")
@@ -62,5 +74,5 @@ get_fanart_poster <- function(tvdbid, api_key = "113407042401248f50123d1c112abf0
   }
 }
 
-get_fanart_poster("76738")
+# get_fanart_poster("76738")
 # 77712

@@ -1,32 +1,35 @@
 #### Shiny Server ####
-cache_db <- cache_db()
-# on.exit(dbDisconnect(cache_db), add = TRUE)
-
-cache_shows_tbl    <- tbl(cache_db, "shows")
-cache_posters_tbl  <- tbl(cache_db, "posters")
-cache_seasons_tbl  <- tbl(cache_db, "seasons")
-cache_episodes_tbl <- tbl(cache_db, "episodes")
-
 shinyServer(function(input, output, session) {
   
   #### Caching observer ####
   observe({
-    cached_shows <- cache_shows_tbl %>% collect()
+    cached_shows <- cache_shows_tbl %>% 
+      collect() %>%
+      arrange(desc(cache_date))
     
-    show_ids <- cached_shows$show_id
+    show_ids <- paste0("cache:", cached_shows$show_id)
     names(show_ids) <- as.character(glue("{cached_shows$title} ({cached_shows$year})"))
     
     updateSelectizeInput(
-      session, "shows_cached", choices = show_ids, selected = ""
+      session, "shows_cached", choices = show_ids, selected = sample(show_ids, 1)
     )
   })
   
   show_info <- eventReactive(input$get_show, {
-    cat("show reactive", input$shows_cached, "\n")
-    
-    input_show <- as.integer(input$shows_cached)
-    
-    cat("input$show:", input_show, "\n")
+
+    if (stringr::str_detect(input$shows_cached, "^cache:")) {
+      cli_alert_info("cached show detected {input$shows_cached}")
+      
+      input_show <- input$shows_cached %>%
+        stringr::str_extract(., "\\d+")
+      
+    } else {
+      input_show <- input$shows_cached %>%
+        stringr::str_remove(., "^cache:") %>%
+        cache_add_show()
+      
+      cli_alert_info("input_show after caching attempt is {input_show}")
+    }
     
     show_tmp <- cache_shows_tbl %>% filter(show_id == input_show)
     
@@ -37,7 +40,7 @@ shinyServer(function(input, output, session) {
     
     show_tmp %>%
       left_join(
-        tbl(cache_db, "posters") %>%
+        cache_posters_tbl %>%
           select(show_id, show_poster),
         by = "show_id"
       ) %>%
@@ -46,21 +49,21 @@ shinyServer(function(input, output, session) {
   
   output$show_overview <- renderUI({
     show <- show_info()
-    cat("show_name renderUI", show$title, "\n")
+    # cat("show_name renderUI", show$title, "\n")
 
     fluidRow(
-      column(2, img(src = show$show_poster, width = "120px")),
+      column(2, tags$figure(img(src = show$show_poster, width = "120px"))),
       column(
         10, 
-        h2(show$title),
-        p(show$overview)
+        h2(a(href = glue("https://trakt.tv/shows/{show$slug}"), show$title)),
+        p(stringr::str_trunc(show$overview, 200, "right"))
       )
     )
   })
 
   
   observeEvent(input$get_show, {
-    cat(input$shows_cached, "\n")
+    # cat(input$shows_cached, "\n")
     
     if (input$get_show > 0) {
       # cat("input$get_show is", input$get_show, "\n")

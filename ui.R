@@ -1,13 +1,14 @@
 #### Shiny UI ####
 shinyUI(
   navbarPage(
-    title = "tRakt", inverse = FALSE, theme = shinytheme("cosmo"),
+    title = "tRakt", inverse = FALSE, theme = shinytheme("flatly"),
     #### Main view ####
     tabPanel("Main",
       icon = icon("tasks"),
       tags$head(
         tags$meta(name = "google-site-verification", content = "fbD3_htmdCUtmrjbI1dAZbsS0sN-T10_U3xAN7W791Y"),
-        includeHTML("html/proxy-click-js.html")
+        includeHTML("html/proxy-click-js.html"),
+        includeCSS("css/tRakt.css")
         #includeHTML("html/piwik.html")
       ),
 
@@ -48,23 +49,23 @@ shinyUI(
           column(
             8, offset = 2,
             h3(icon("search"), "Show Selection"),
-            tagAppendAttributes(
-              textInput(
-                inputId = "show_searchbox",
-                label = "Search a new show",
-                value = "",
-                placeholder = "Something like \"the simpsons\" should do"
-              ),
-              `data-proxy-click` = "get_show"
-            ),
+            # tagAppendAttributes(
+            #   textInput(
+            #     inputId = "show_searchbox",
+            #     label = "Search a new show",
+            #     value = "",
+            #     placeholder = "Something like \"the simpsons\" should do"
+            #   ),
+            #   `data-proxy-click` = "get_show"
+            # ),
             tagAppendAttributes(
               selectizeInput(
-                inputId = "shows_cached", label = "Select from cache",
+                inputId = "shows_cached", label = "Select from cache or enter a new one to search",
                 choices = NULL, selected = NULL, 
                 options = list(
                   create = TRUE,
-                  placeholder = "Shows people searched for before",
-                  maxOptions = 5,
+                  placeholder = "Shows people lookup up before",
+                  maxOptions = 50,
                   maxItems = 1
                 )
               ),

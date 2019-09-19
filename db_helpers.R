@@ -5,14 +5,14 @@ options(caching_debug = TRUE)
 
 # Check if a table exists in db, if not, create it
 check_cache_table <- function(table_name, reference_table) {
-  if (!(dbExistsTable(con, table_name))) {
-    dbCreateTable(con, table_name, reference_table)
+  if (!(dbExistsTable(cache_db_con, table_name))) {
+    dbCreateTable(cache_db_con, table_name, reference_table)
   }
 }
 
 is_already_cached <- function(table_name, show_id) {
-  if (dbExistsTable(con, table_name)) {
-    cached_ids <- tbl(con, table_name) %>% 
+  if (dbExistsTable(cache_db_con, table_name)) {
+    cached_ids <- tbl(cache_db_con, table_name) %>% 
       pull(show_id) %>%
       unique()
     
@@ -58,10 +58,9 @@ cache_add_show <- function(show_query = NULL, show_id = NULL, replace = FALSE) {
       select_if(~!is.list(.x))
     
     cache_add_data("shows", ret, replace = replace)
-    invisible(TRUE)
   }
   
-  invisible(FALSE)
+  invisible(ret$show_id)
 }
 
 cache_add_episodes <- function(show_id, replace = FALSE) {
@@ -125,7 +124,7 @@ cache_add_data <- function(table_name, new_data, replace = FALSE) {
     as.character()
   
   # Get ids of data already in cache
-  cached_ids <- tbl(con, table_name) %>% 
+  cached_ids <- tbl(cache_db_con, table_name) %>% 
     pull(!!sym(matching_id)) %>%
     unique()
   
@@ -141,19 +140,19 @@ cache_add_data <- function(table_name, new_data, replace = FALSE) {
     query <- glue_sql("
     DELETE FROM {table_name}
     WHERE ({`matching_id`} = {current_id});
-    ", .con = con)
+    ", .con = cache_db_con)
     
-    res <- dbSendStatement(con, query)
+    res <- dbSendStatement(cache_db_con, query)
     dbHasCompleted(res)
     dbGetRowsAffected(res)
     dbClearResult(res)
     
-    dbWriteTable(con, table_name, new_data, append = TRUE)
+    dbWriteTable(cache_db_con, table_name, new_data, append = TRUE)
   }
   
   if (!already_cached) {
     # message("Not in cache, writing")
-    dbWriteTable(con, table_name, new_data, append = TRUE)
+    dbWriteTable(cache_db_con, table_name, new_data, append = TRUE)
   }
   
   if (already_cached & !replace & getOption("caching_debug")) {
