@@ -25,5 +25,6 @@ Imports:
     shinyjs,
     shiny,
     shinythemes,
-    rmarkdown
+    rmarkdown,
+    cliapp
 Remotes: jemus42/tRakt

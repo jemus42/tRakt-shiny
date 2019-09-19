@@ -9,24 +9,22 @@ library(shinythemes)
 # library(plotly)
 library(tRakt)
 library(RSQLite)
+library(DBI)
 library(dplyr)
+library(dbplyr)
 library(glue)
+library(purrr)
 
 # Database connection -----
 cache_db <- function() {
-  
-  if (Sys.info()["login"] == "Lukas" & Sys.info()["sysname"] == "Darwin") {
-    dbConnect(odbc::odbc(), "tRakt", timeout = 10)
-  } else {
-    dbConnect(RSQLite::SQLite(), "cache/tRakt.db")
-  }
+  dbConnect(RSQLite::SQLite(), "cache/tRakt.db")
 }
 
 #### Setting some values ----
 ## Define some HTML characters
-bullet <- HTML("&#8226;")
-mu     <- HTML("&#956;")
-sigma  <- HTML("&#963;")
+# bullet <- HTML("&#8226;")
+# mu     <- HTML("&#956;")
+# sigma  <- HTML("&#963;")
 
 # Helper functions ----
 
