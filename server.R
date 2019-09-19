@@ -1,14 +1,19 @@
 #### Shiny Server ####
+cache_db <- cache_db()
+# on.exit(dbDisconnect(cache_db), add = TRUE)
+
+cache_shows_tbl    <- tbl(cache_db, "shows")
+cache_posters_tbl  <- tbl(cache_db, "posters")
+cache_seasons_tbl  <- tbl(cache_db, "seasons")
+cache_episodes_tbl <- tbl(cache_db, "episodes")
+
 shinyServer(function(input, output, session) {
-  
-  cache_db <- dbConnect(RSQLite::SQLite(), "cache/tRakt.db")
-  # on.exit(dbDisconnect(cache_db), add = TRUE)
   
   #### Caching observer ####
   observe({
-    cached_shows <- tbl(cache_db, "shows") %>% collect()
+    cached_shows <- cache_shows_tbl %>% collect()
     
-    show_ids <- cached_shows$trakt
+    show_ids <- cached_shows$show_id
     names(show_ids) <- as.character(glue("{cached_shows$title} ({cached_shows$year})"))
     
     updateSelectizeInput(
@@ -23,15 +28,34 @@ shinyServer(function(input, output, session) {
     
     cat("input$show:", input_show, "\n")
     
-    tbl(con, "shows") %>%
-      filter(trakt == input_show) %>%
+    show_tmp <- cache_shows_tbl %>% filter(show_id == input_show)
+    
+    if (!is_already_cached("posters", input_show)) {
+      tibble(show_id = input_show, show_poster = get_fanart_poster(pull(show_tmp, tvdb))) %>%
+        cache_add_data("posters", .)
+    }
+    
+    show_tmp %>%
+      left_join(
+        tbl(cache_db, "posters") %>%
+          select(show_id, show_poster),
+        by = "show_id"
+      ) %>%
       collect()
   })
   
-  output$show_name <- renderUI({
+  output$show_overview <- renderUI({
     show <- show_info()
     cat("show_name renderUI", show$title, "\n")
-    show$title
+
+    fluidRow(
+      column(2, img(src = show$show_poster, width = "120px")),
+      column(
+        10, 
+        h2(show$title),
+        p(show$overview)
+      )
+    )
   })
 
   
@@ -39,9 +63,9 @@ shinyServer(function(input, output, session) {
     cat(input$shows_cached, "\n")
     
     if (input$get_show > 0) {
-      cat("input$get_show is", input$get_show, "\n")
+      # cat("input$get_show is", input$get_show, "\n")
       hide(id = "intro-wellpanel")
-      shinyjs::show(id = "show_info")
+      shinyjs::show(id = "show_overview")
     }
   })
 })

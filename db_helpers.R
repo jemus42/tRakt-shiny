@@ -58,7 +58,10 @@ cache_add_show <- function(show_query = NULL, show_id = NULL, replace = FALSE) {
       select_if(~!is.list(.x))
     
     cache_add_data("shows", ret, replace = replace)
+    invisible(TRUE)
   }
+  
+  invisible(FALSE)
 }
 
 cache_add_episodes <- function(show_id, replace = FALSE) {

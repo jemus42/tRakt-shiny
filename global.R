@@ -14,6 +14,7 @@ library(dplyr)
 library(dbplyr)
 library(glue)
 library(purrr)
+library(cliapp)
 
 # Database connection -----
 cache_db <- function() {
@@ -33,12 +34,33 @@ cache_db <- function() {
 get_fanart_poster <- function(tvdbid, api_key = "113407042401248f50123d1c112abf0d") {
   query <- paste0("https://webservice.fanart.tv/v3/tv/", tvdbid, "?api_key=", api_key)
   ret <- httr::content(httr::GET(query))
-  ret_url <- ret$tvposter[[1]]$url
+  
+  # Try tvposter first
+  url <- ret[["tvposter"]][[1]][["url"]]
+  
+  if (rlang::has_name(ret, "tvposter")) {
+    url <- pluck(ret, "tvposter") %>% 
+      bind_rows() %>% 
+      filter(lang == "en") %>%
+      arrange(likes) %>%
+      head(1) %>%
+      pull(url)
+  } else if (rlang::has_name(ret, "seasonposter")) {
+    url <- pluck(ret, "seasonposter") %>% 
+      bind_rows() %>% 
+      filter(lang == "en") %>%
+      arrange(likes) %>%
+      head(1) %>%
+      pull(url)
+  }
 
-  if (is.character(ret_url) & nchar(ret_url) > 10) {
-    return(ret_url)
+  if (is.character(url)) {
+    url
   } else {
-    message("Possibly broken fanart: ", tvdbid)
-    return("")
+    cliapp::cli_alert_danger("No fanart: {ret$name} ({tvdbid})")
+    character(1)
   }
 }
+
+get_fanart_poster("76738")
+# 77712

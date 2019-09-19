@@ -18,19 +18,7 @@ shinyUI(
       ## Show this only when the actionButton was clicked, marking the 'active' state
 
       hidden(
-        wellPanel(
-          id = "show_info",
-          h2(htmlOutput("show_name")),
-          fluidRow(
-            column(2, htmlOutput("show_banner", inline = TRUE)),
-            column(
-              10,
-              htmlOutput("show_overview"),
-              htmlOutput("show_links"), br(),
-              htmlOutput("show_ratings")
-            )
-          )
-        )
+        wellPanel(id = "show_overview", htmlOutput("show_overview"))
       ),
       
       hidden(
