@@ -30,7 +30,11 @@ cache_add_show <- function(show_query = NULL, show_id = NULL, replace = FALSE) {
     
     ret <- trakt.search(
       show_query, type = "show", n_results = 1, extended = "full"
-    ) %>%
+    )
+    
+    if (identical(ret, tibble())) return(NULL)
+    
+    ret <- ret %>%
       select(-type, -score)
     
     already_cached <- FALSE
@@ -138,20 +142,20 @@ cache_add_data <- function(table_name, new_data, replace = FALSE) {
     }
     
     query <- glue_sql("
-    DELETE FROM {table_name}
-    WHERE ({`matching_id`} = {current_id});
+      DELETE FROM {table_name}
+      WHERE ({`matching_id`} = {current_id});
     ", .con = cache_db_con)
     
     res <- dbSendStatement(cache_db_con, query)
-    dbHasCompleted(res)
-    dbGetRowsAffected(res)
+    # dbHasCompleted(res)
+    # dbGetRowsAffected(res)
     dbClearResult(res)
     
     dbWriteTable(cache_db_con, table_name, new_data, append = TRUE)
   }
   
   if (!already_cached) {
-    # message("Not in cache, writing")
+    if (getOption("caching_debug")) cli_alert_success("Not in cache, writing")
     dbWriteTable(cache_db_con, table_name, new_data, append = TRUE)
   }
   

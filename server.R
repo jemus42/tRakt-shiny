@@ -1,7 +1,7 @@
 #### Shiny Server ####
 shinyServer(function(input, output, session) {
   
-  #### Caching observer ####
+  # Caching observer ----
   observe({
     cached_shows <- cache_shows_tbl %>% 
       collect() %>%
@@ -15,6 +15,7 @@ shinyServer(function(input, output, session) {
     )
   })
   
+  # Show info reactiveEvent ----
   show_info <- eventReactive(input$get_show, {
 
     if (stringr::str_detect(input$shows_cached, "^cache:")) {
@@ -31,7 +32,11 @@ shinyServer(function(input, output, session) {
       cli_alert_info("input_show after caching attempt is {input_show}")
     }
     
-    show_tmp <- cache_shows_tbl %>% filter(show_id == input_show)
+    if (is.null(input_show)) {
+      return(NULL)
+    } else {
+      show_tmp <- cache_shows_tbl %>% filter(show_id == input_show)
+    }
     
     if (!is_already_cached("posters", input_show)) {
       tibble(show_id = input_show, show_poster = get_fanart_poster(pull(show_tmp, tvdb))) %>%
@@ -47,21 +52,34 @@ shinyServer(function(input, output, session) {
       collect()
   })
   
+  # Show overview output ----
   output$show_overview <- renderUI({
     show <- show_info()
     # cat("show_name renderUI", show$title, "\n")
 
-    fluidRow(
-      column(2, tags$figure(img(src = show$show_poster, width = "120px"))),
-      column(
-        10, 
-        h2(a(href = glue("https://trakt.tv/shows/{show$slug}"), show$title)),
-        p(stringr::str_trunc(show$overview, 200, "right"))
+    if (!is.null(show)) {
+      fluidRow(
+        column(2, tags$figure(img(src = show$show_poster, width = "120px"))),
+        column(
+          10, 
+          h2(a(href = glue("https://trakt.tv/shows/{show$slug}"), show$title)),
+          p(stringr::str_trunc(show$overview, 200, "right"))
+        )
       )
-    )
+    } else {
+      fluidRow(
+        column(
+          10, offset = 1,
+          h2("Nothing found :("),
+          p("Try entering the show title, but like... try harder.")
+        )
+      )
+    }
+
   })
 
   
+  # get_show observer ----
   observeEvent(input$get_show, {
     # cat(input$shows_cached, "\n")
     
