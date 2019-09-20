@@ -88,7 +88,7 @@ get_fanart_poster <- function(tvdbid, api_key = "113407042401248f50123d1c112abf0
 
 label_show_status <- function(status) {
   bs3_badge <- function(badge_type, label) {
-    glue('<small><span class="label label-{badge_type}">{label}</span></small>')
+    glue('<span class="label label-{badge_type}">{label}</span>')
   }
   # bs4_badge <- function(badge_type, label) {
   #   glue('<span class="badge badge-{badge_type}">{label}</span>')
