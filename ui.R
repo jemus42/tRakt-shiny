@@ -1,7 +1,7 @@
 #### Shiny UI ####
 shinyUI(
   navbarPage(
-    title = glue("tRakt v{desc::desc_get_version()}"), inverse = FALSE, theme = shinytheme("flatly"),
+    title = app_title, inverse = FALSE, theme = shinytheme("flatly"),
     #### Main view ####
     tabPanel("Main",
       icon = icon("tasks"),
@@ -81,11 +81,7 @@ shinyUI(
       )
     ),
     tabPanel(
-      title = "About", icon = icon("question-circle"),
-      fixedPage(
-        column(6, includeMarkdown("README.md")),
-        column(6, includeMarkdown("text/about.md"))
-      )
+      title = "About", icon = icon("github"), href = "https://github.com/jemus42"
     ),
     # Didn't know where else to put it, but this one's a biggie
     useShinyjs()

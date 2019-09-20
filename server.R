@@ -57,13 +57,28 @@ shinyServer(function(input, output, session) {
     show <- show_info()
     # cat("show_name renderUI", show$title, "\n")
 
+    cli_alert_info("show status {show$status}")
+    
     if (!is.null(show)) {
       fluidRow(
-        column(2, tags$figure(img(src = show$show_poster, width = "120px"))),
+        h2(
+          a(href = glue("https://trakt.tv/shows/{show$slug}"), show$title),
+          HTML(label_show_status(show$status))
+        ),
+        column(
+          2, 
+          class = "hidden-xs",
+          tags$figure(
+            img(
+              src = show$show_poster, 
+              class = "img-responsive img-rounded"
+            )
+          )
+        ),
         column(
           10, 
-          h2(a(href = glue("https://trakt.tv/shows/{show$slug}"), show$title)),
-          p(stringr::str_trunc(show$overview, 200, "right"))
+          p(stringr::str_trunc(show$overview, 500, "right")),
+          p("Show rating:", show$rating)
         )
       )
     } else {
