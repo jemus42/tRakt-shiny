@@ -19,7 +19,7 @@ shinyServer(function(input, output, session) {
   show_info <- eventReactive(input$get_show, {
 
     if (stringr::str_detect(input$shows_cached, "^cache:")) {
-      cli_alert_info("cached show detected {input$shows_cached}")
+      # cli_alert_info("cached show detected {input$shows_cached}")
       
       input_show <- input$shows_cached %>%
         stringr::str_extract(., "\\d+")
@@ -29,7 +29,7 @@ shinyServer(function(input, output, session) {
         stringr::str_remove(., "^cache:") %>%
         cache_add_show()
       
-      cli_alert_info("input_show after caching attempt is {input_show}")
+      # cli_alert_info("input_show after caching attempt is {input_show}")
     }
     
     if (is.null(input_show)) {
@@ -57,29 +57,33 @@ shinyServer(function(input, output, session) {
     show <- show_info()
     # cat("show_name renderUI", show$title, "\n")
 
-    cli_alert_info("show status {show$status}")
+    # cli_alert_info("show status {show$status}")
     
     if (!is.null(show)) {
-      fluidRow(
+      tags$div(
         h2(
           a(href = glue("https://trakt.tv/shows/{show$slug}"), show$title),
-          HTML(label_show_status(show$status))
+          tags$small(show$status)
         ),
-        column(
-          2, 
-          class = "hidden-xs",
-          tags$figure(
-            img(
-              src = show$show_poster, 
-              class = "img-responsive img-rounded"
+        wellPanel(
+        fluidRow(
+          column(
+            2, 
+            class = "hidden-xs",
+            tags$figure(
+              img(
+                src = show$show_poster, 
+                class = "img-responsive img-rounded"
+              )
             )
+          ),
+          column(
+            10, 
+            p(stringr::str_trunc(show$overview, 500, "right")),
+            p("Show rating:", show$rating)
           )
-        ),
-        column(
-          10, 
-          p(stringr::str_trunc(show$overview, 500, "right")),
-          p("Show rating:", show$rating)
         )
+      )
       )
     } else {
       fluidRow(

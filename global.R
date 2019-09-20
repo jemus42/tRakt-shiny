@@ -25,7 +25,7 @@ cache_db <- function() {
 cache_db_con <- cache_db()
 
 source(here::here("db_helpers.R"))
-
+source(here::here("data_helpers.R"))
 # on.exit(dbDisconnect(cache_db_con), add = TRUE)
 
 cache_shows_tbl    <- tbl(cache_db_con, "shows")

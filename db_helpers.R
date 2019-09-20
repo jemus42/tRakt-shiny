@@ -27,45 +27,59 @@ is_already_cached <- function(table_name, show_id) {
 cache_add_show <- function(show_query = NULL, show_id = NULL, replace = FALSE) {
   
   if (!is.null(show_query)) {
+
+    res <- cache_add_show_query(show_query = show_query, replace = replace)
     
-    ret <- trakt.search(
-      show_query, type = "show", n_results = 1, extended = "full"
-    )
-    
-    if (identical(ret, tibble())) return(NULL)
-    
-    ret <- ret %>%
-      select(-type, -score)
-    
-    already_cached <- FALSE
-    
+    if (is.null(res)) {
+      return(NULL)
+    }
+        
   } else if (!is.null(show_id)) {
     
     show_id <- as.character(show_id)
     already_cached <- is_already_cached("shows", show_id)
     
     if ((already_cached & replace) | (!already_cached)) {
+      
       ret <- trakt.shows.summary(show_id, extended = "full")
+      ret <- cleanup_show_summary(ret)
+      cache_add_data("shows", ret, replace = replace)
+      
     } else if (getOption("caching_debug")) {
       cli_alert_info("Show '{show_id}' already cached, not downloading")
     }
+    
+    invisible(show_id)
+    
   } else {
     stop("Gotta pick one yo")
   }
+}
+
+
+cache_add_show_query <- function(show_query, replace = FALSE) {
+  
+  ret <- trakt.search(
+    show_query, type = "show", n_results = 1, extended = "full"
+  )
+  
+  if (identical(ret, tibble())) return(NULL)
+  
+  ret <- cleanup_show_summary(ret)
+  
+  already_cached <- is_already_cached("shows", ret$show_id)
   
   if ((already_cached & replace) | (!already_cached)) {
-    ret <- ret %>%
-      mutate(
-        genres = map_chr(genres, paste0, collapse = ", ")
-      ) %>%
-      rename(show_id = trakt) %>%
-      select_if(~!is.list(.x))
-    
+
     cache_add_data("shows", ret, replace = replace)
+    
+  } else if (getOption("caching_debug")) {
+    cli_alert_info("Show '{show_id}' already cached, not updating")
   }
   
   invisible(ret$show_id)
 }
+
 
 cache_add_episodes <- function(show_id, replace = FALSE) {
   
