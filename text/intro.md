@@ -1,7 +1,7 @@
 ## Hi there.
 <p class = "lead">This is `tRakt` or `tRakt_shiny` or whatever (naming stuff is hard).</p>
 
-<p class = "lead">It's a tool to look up tv shows from <a href = 'http://trakt.tv'>trakt.tv</a> <sup><small>which y'all should use anyway</small></sup> and receive some more or less fancy data, including plots with reasonable amounts of fancyness.</p>
+<p class = "lead">It's a tool to look up tv shows from <a href = 'http://trakt.tv'>trakt.tv</a> and receive some more or less fancy data, including plots with reasonable amounts of fancyness.</p>
 
 ### How do you even stuff
 
@@ -10,4 +10,9 @@
 * You can fiddle around with the plot with the inputs on the right
 * Or just look at the dataTables, idunno
 
-<small>Also, pls tell me about bugs 'n stuff, k?</small>
+
+### Or even better
+
+Try the new version at [attrakttv.tadaa-data.de](https://attrakttv.tadaa-data.de/).  
+
+It's tremendously less terrible from the back-end side, and hopefully a lot better on the user experience side.
